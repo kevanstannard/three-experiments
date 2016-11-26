@@ -1,0 +1,43 @@
+{
+  "name": "three",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "gulp serve --app",
+    "build": "gulp build --app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevanstannard/three.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/kevanstannard/three/issues"
+  },
+  "homepage": "https://github.com/kevanstannard/three#readme",
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "eslint": "^3.11.0",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.7",
+    "lodash": "^4.17.2",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
+    "yargs": "^6.4.0"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": "airbnb-base",
+    "rules": {},
+    "globals": {}
+  }
+}
