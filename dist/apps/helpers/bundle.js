@@ -42,20 +42,38 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(1);
-
-
-/***/ },
-/* 1 */
 /***/ function(module, exports) {
 
 	"use strict";
 	
-	var point = { x: 0, y: 0 };
+	var SCREEN_WIDTH = window.innerWidth;
+	var SCREEN_HEIGHT = window.innerHeight;
+	var VIEW_ANGLE = 45;
+	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+	var NEAR = 0.1;
+	var FAR = 20000;
 	
-	console.log(point);
+	var origin = new THREE.Vector3(0, 0, 0);
+	
+	var scene = new THREE.Scene();
+	
+	var gridHelper = new THREE.GridHelper(100, 10);
+	scene.add(gridHelper);
+	
+	var axisHelper = new THREE.AxisHelper(100);
+	scene.add(axisHelper);
+	
+	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+	camera.position.set(200, 200, 200);
+	camera.lookAt(origin);
+	scene.add(camera);
+	
+	var renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	
+	renderer.render(scene, camera);
+	
+	document.body.appendChild(renderer.domElement);
 
 /***/ }
 /******/ ]);

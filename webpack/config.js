@@ -1,12 +1,22 @@
-// Ref:
-// https://github.com/webpack/webpack-with-common-libs/blob/master/gulpfile.js
-
-import _ from 'lodash';
+import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const rootDir = path.resolve(__dirname, '..');
+const appsDir = path.resolve(__dirname, '..', 'src', 'apps');
 const distDir = path.resolve(__dirname, '..', 'dist');
+
+// function getApps() {
+//   return new Promise((resolve, reject) => {
+//     fs.readdir(appsDir, function(error, items) {
+//       if (error) {
+//         return reject(error);
+//       }
+//       return resolve(items);
+//     });
+//   });
+// }
 
 function transformIndex(config, app, threePath) {
   return function(content, path) {
@@ -19,21 +29,37 @@ function transformIndex(config, app, threePath) {
   }
 }
 
-export default function(app, threePath) {
-  const appPath = path.join(rootDir, `src/apps/${app}`);
-  const appConfig = require(`${appPath}/config.js`).default;
+export default function(apps, { threePath }) {
+  const entries = {};
+  const plugins = [];
+  apps.forEach(app => {
+    const appPath = path.join(rootDir, `src/apps/${app}`);
+    const appConfig = require(`${appPath}/config.js`).default;
+    // Entry
+    entries[app] = appPath;
+    // Copy plugin
+    const plugin = new CopyWebpackPlugin([
+      {
+        from: path.join(rootDir, 'src/index.html'),
+        to: path.join(rootDir, `dist/apps/${app}/index.html`),
+        transform: transformIndex(appConfig, app, threePath),
+      },
+    ]);
+    plugins.push(plugin);
+  });
+  // Also copy the libs
+  plugins.push(new CopyWebpackPlugin([
+    {
+      from: path.join(rootDir, 'src/lib'),
+      to: path.join(rootDir, `dist/lib`),
+    },
+  ]));
   return {
-    entry: {
-      app: [`./src/apps/${app}/index.js`],
-    },
+    entry: entries,
+    plugins: plugins,
     output: {
-      path: path.resolve(rootDir, `dist/${app}`),
-      filename: 'bundle.js',
-    },
-    resolve: {
-      root: [
-        path.resolve(rootDir, 'src/lib'),
-      ],
+      path: path.resolve(rootDir, 'dist/apps'),
+      filename: '[name]/bundle.js',
     },
     module: {
       loaders: [
@@ -47,13 +73,5 @@ export default function(app, threePath) {
         },
       ],
     },
-    plugins: [
-      new CopyWebpackPlugin([
-        {
-          from: path.join(rootDir, 'src/index.html'),
-          transform: transformIndex(appConfig, app, threePath),
-        },
-      ]),
-    ]
   };
 }

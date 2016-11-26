@@ -2,10 +2,9 @@
   "name": "three",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "serve": "gulp serve --app",
-    "build": "gulp build --app"
+    "serve": "gulp serve",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +27,7 @@
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
     "gulp-util": "^3.0.7",
     "lodash": "^4.17.2",
     "webpack": "^1.13.3",
