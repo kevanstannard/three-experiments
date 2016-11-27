@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Hello</title>
+  <title>Hello World</title>
   <style>
     * {
       box-sizing: border-box;
@@ -17,23 +17,28 @@
       position: absolute;
       width: 100%;
       padding: 10px;
-      color: grey;
+      color: lightGrey;
+      text-shadow: 1px 1px 1px #000;
     }
     .infoBar a {
+      color: lightGrey;
+    }
+    .viewSourceLink {
       float: right;
-      color: grey;
     }
   </style>
 </head>
 <body>
   <div class="infoBar">
-    Hello
-    <a href="https://github.com/kevanstannard/three/tree/master/src/apps/hello/index.js">View Source</a>
+    <a href="../../../">Home</a> &rarr; Hello World
+    <a class="viewSourceLink" href="https://github.com/kevanstannard/three/tree/master/src/apps/hello-world/index.js">View Source</a>
   </div>
   
     <script src="../../lib/three/r82/three.min.js"></script>
   
     <script src="../../lib/three/r82/controls/OrbitControls.js"></script>
+  
+    <script src="../../lib/threex/THREEx.WindowResize.js"></script>
   
   <script src="bundle.js"></script>
 </body>

@@ -17,18 +17,21 @@
       position: absolute;
       width: 100%;
       padding: 10px;
-      color: grey;
+      color: lightGrey;
+      text-shadow: 1px 1px 1px #000;
     }
     .infoBar a {
+      color: lightGrey;
+    }
+    .viewSourceLink {
       float: right;
-      color: grey;
     }
   </style>
 </head>
 <body>
   <div class="infoBar">
-    <%= title %>
-    <a href="https://github.com/kevanstannard/three/tree/master/src/apps/<%= app %>/index.js">View Source</a>
+    <a href="../../../">Home</a> &rarr; <%= title %>
+    <a class="viewSourceLink" href="https://github.com/kevanstannard/three/tree/master/src/apps/<%= app %>/index.js">View Source</a>
   </div>
   <% scripts.forEach(function(script) { %>
     <script src="<%= script %>"></script>

@@ -6,6 +6,7 @@
   },
   "globals": {
     "THREE": true,
+    "THREEx": true,
     "window": true,
     "document": true,
     "requestAnimationFrame": true

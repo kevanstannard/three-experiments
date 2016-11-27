@@ -8,6 +8,7 @@ function createScripts(appConfig) {
   const scripts = [];
   scripts.push(`../../lib/three/${appConfig.threeVersion}/three.min.js`);
   scripts.push(`../../lib/three/${appConfig.threeVersion}/controls/OrbitControls.js`);
+  scripts.push('../../lib/threex/THREEx.WindowResize.js');
   return scripts;
 }
 
