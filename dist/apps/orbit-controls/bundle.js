@@ -56,10 +56,9 @@
 	var scene = void 0;
 	var camera = void 0;
 	var renderer = void 0;
+	var controls = void 0;
 	var axisHelper = void 0;
-	var geometry = void 0;
-	var material = void 0;
-	var mesh = void 0;
+	var gridHelper = void 0;
 	
 	function init() {
 	  scene = new THREE.Scene();
@@ -67,28 +66,24 @@
 	  axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
 	
+	  gridHelper = new THREE.GridHelper(100, 10);
+	  scene.add(gridHelper);
+	
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(500, 500, 500);
+	  camera.position.set(200, 200, 200);
 	  camera.lookAt(new THREE.Vector3(0, 0, 0));
-	
-	  geometry = new THREE.BoxGeometry(200, 200, 200);
-	  material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-	
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
 	
 	  renderer = new THREE.WebGLRenderer();
 	  renderer.setSize(window.innerWidth, window.innerHeight);
+	
+	  controls = new THREE.OrbitControls(camera, renderer.domElement);
 	
 	  document.body.appendChild(renderer.domElement);
 	}
 	
 	function animate() {
 	  requestAnimationFrame(animate);
-	
-	  mesh.rotation.x += 0.01;
-	  mesh.rotation.y += 0.02;
-	
+	  controls.update();
 	  renderer.render(scene, camera);
 	}
 	

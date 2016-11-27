@@ -5,7 +5,7 @@ const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
 const NEAR = 0.1;
 const FAR = 20000;
 
-const origin = new THREE.Vector3(0,0,0);
+const origin = new THREE.Vector3(0, 0, 0);
 
 const scene = new THREE.Scene();
 

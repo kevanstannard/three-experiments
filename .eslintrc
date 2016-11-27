@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "rules": {
+    "import/no-extraneous-dependencies": "off"
+  },
+  "globals": {
+    "THREE": true,
+    "window": true,
+    "document": true,
+    "requestAnimationFrame": true
+  }
+}

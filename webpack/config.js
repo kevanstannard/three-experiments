@@ -1,48 +1,41 @@
-import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const rootDir = path.resolve(__dirname, '..');
-const appsDir = path.resolve(__dirname, '..', 'src', 'apps');
-const distDir = path.resolve(__dirname, '..', 'dist');
 
-// function getApps() {
-//   return new Promise((resolve, reject) => {
-//     fs.readdir(appsDir, function(error, items) {
-//       if (error) {
-//         return reject(error);
-//       }
-//       return resolve(items);
-//     });
-//   });
-// }
-
-function transformIndex(config, app, threePath) {
-  return function(content, path) {
-    const template = _.template(content);
-    return template({
-      app,
-      title: config.title,
-      threePath: threePath(config.threeVersion),
-    });
-  }
+function createScripts(appConfig) {
+  const scripts = [];
+  scripts.push(`../../lib/three/${appConfig.threeVersion}/three.min.js`);
+  scripts.push(`../../lib/three/${appConfig.threeVersion}/controls/OrbitControls.js`);
+  return scripts;
 }
 
-export default function(apps, { threePath }) {
-  const entries = {};
+function transformIndex(app, config) {
+  const scripts = createScripts(config);
+  return (content) => {
+    const template = _.template(content);
+    return template({
+      ...config,
+      app,
+      scripts,
+    });
+  };
+}
+
+export default function (apps) {
+  const entry = {};
   const plugins = [];
-  apps.forEach(app => {
+  apps.forEach((app) => {
     const appPath = path.join(rootDir, `src/apps/${app}`);
+    // eslint-disable-next-line global-require, import/no-dynamic-require
     const appConfig = require(`${appPath}/config.js`).default;
-    // Entry
-    entries[app] = appPath;
-    // Copy plugin
+    entry[app] = appPath;
     const plugin = new CopyWebpackPlugin([
       {
         from: path.join(rootDir, 'src/index.html'),
         to: path.join(rootDir, `dist/apps/${app}/index.html`),
-        transform: transformIndex(appConfig, app, threePath),
+        transform: transformIndex(app, appConfig),
       },
     ]);
     plugins.push(plugin);
@@ -51,12 +44,12 @@ export default function(apps, { threePath }) {
   plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/lib'),
-      to: path.join(rootDir, `dist/lib`),
+      to: path.join(rootDir, 'dist/lib'),
     },
   ]));
   return {
-    entry: entries,
-    plugins: plugins,
+    entry,
+    plugins,
     output: {
       path: path.resolve(rootDir, 'dist/apps'),
       filename: '[name]/bundle.js',

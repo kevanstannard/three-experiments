@@ -1,5 +1,5 @@
 export default {
-  title: 'Hello',
+  title: 'Orbit Controls',
   threeVersion: 'r82',
   public: true,
 };

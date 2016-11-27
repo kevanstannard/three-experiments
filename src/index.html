@@ -28,9 +28,11 @@
 <body>
   <div class="infoBar">
     <%= title %>
-    <a href="https://github.com/kevanstannard/three/tree/master/src/apps/<%= app %>">View Source</a>
+    <a href="https://github.com/kevanstannard/three/tree/master/src/apps/<%= app %>/index.js">View Source</a>
   </div>
-  <script src="<%= threePath %>"></script>
+  <% scripts.forEach(function(script) { %>
+    <script src="<%= script %>"></script>
+  <% }); %>
   <script src="./bundle.js"></script>
 </body>
 </html>

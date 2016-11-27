@@ -3,7 +3,7 @@ import path from 'path';
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import clean from 'gulp-clean';
-import yargs from 'yargs';
+import express from 'express';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
@@ -11,17 +11,9 @@ import webpackConfig from './webpack/config';
 
 const APPS_DIR = path.join(__dirname, 'src/apps');
 
-function threeCDN(threeVersion) {
-  return `https://cdnjs.cloudflare.com/ajax/libs/three.js/${threeVersion}/three.min.js`
-}
-
-function threeLocal(threeVersion) {
-  return `../../lib/three/${threeVersion}/three.min.js`
-}
-
 function getApps() {
   return new Promise((resolve, reject) => {
-    fs.readdir(APPS_DIR, function(error, items) {
+    fs.readdir(APPS_DIR, (error, items) => {
       if (error) {
         return reject(error);
       }
@@ -30,10 +22,9 @@ function getApps() {
   });
 }
 
-function buildApps(apps) {
+function build(apps) {
   return new Promise((resolve, reject) => {
-    const configOptions = { threePath: threeLocal };
-    const config = webpackConfig(apps, configOptions);
+    const config = webpackConfig(apps);
     config.devtool = 'sourcemap';
     config.debug = true;
     const compiler = webpack(config);
@@ -42,23 +33,22 @@ function buildApps(apps) {
         return reject(error);
       }
       gutil.log('[webpack:build-all]', stats.toString({ colors: true }));
-      resolve(config);
+      return resolve(config);
     });
   });
 }
 
-function serveApps(apps) {
+function serve(apps) {
   return new Promise((resolve, reject) => {
-    const configOptions = { threePath: threeLocal };
-    const config = webpackConfig(apps, configOptions);
+    const config = webpackConfig(apps);
     config.devtool = 'sourcemap';
     config.debug = true;
     const compiler = webpack(config);
     const devServerConfig = {
-      contentBase: [
-        `./dist`,
-        `./src/static`,
-      ],
+      publicPath: '/dist/apps/',
+      setup: (app) => {
+        app.use('/dist/lib', express.static('./src/lib'));
+      },
     };
     new WebpackDevServer(compiler, devServerConfig)
       .listen(8080, 'localhost', (error) => {
@@ -67,25 +57,25 @@ function serveApps(apps) {
         }
         gutil.log('[webpack:serve-all]', 'http://localhost:8080/');
         return resolve();
-      }
+      },
     );
   });
 }
 
 gulp.task('clean', () =>
-	gulp
-		.src('./dist', { read: false })
-		.pipe(clean())
+  gulp
+    .src('./dist', { read: false })
+    .pipe(clean()),
 );
 
 gulp.task('build', ['clean'], (callback) => {
   getApps()
-    .then(buildApps)
+    .then(build)
     .catch(callback);
 });
 
 gulp.task('serve', (callback) => {
   getApps()
-    .then(serveApps)
+    .then(serve)
     .catch(callback);
 });
