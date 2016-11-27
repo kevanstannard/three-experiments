@@ -21,17 +21,17 @@
     }
     .infoBar a {
       float: right;
-      color: grey;
     }
     .apps {
       padding: 10px;
       margin: 0;
+      color: grey;
     }
     .apps li {
       margin-bottom: 10px;
     }
     .apps a {
-      color: grey;
+      color: white;
       text-decoration: none;
     }
   </style>
@@ -41,15 +41,14 @@
     Three.js Examples
   </div>
   <ul class="apps">
-  
-    <li><a href="dist/apps/box-wireframe/index.html">Box Wireframe</a></li>
-  
-    <li><a href="dist/apps/hello/index.html">Hello</a></li>
-  
-    <li><a href="dist/apps/helpers/index.html">Helpers</a></li>
-  
-    <li><a href="dist/apps/orbit-controls/index.html">Orbit Controls</a></li>
-  
+  <% apps.forEach(function(app) { %>
+    <li>
+      <a href="dist/apps/<%= app.id %>/index.html"><%= app.title %></a>
+      <% if (app.description) { %>
+        - <%= app.description %>
+      <% } %>
+    </li>
+  <% }); %>
   <ul>
 </body>
 </html>

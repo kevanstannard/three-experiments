@@ -25,37 +25,34 @@ function getApps() {
 function build(apps) {
   return new Promise((resolve, reject) => {
     const config = webpackConfig(apps);
-    config.devtool = 'sourcemap';
-    config.debug = true;
     const compiler = webpack(config);
     compiler.run((error, stats) => {
       if (error) {
         return reject(error);
       }
-      gutil.log('[webpack:build-all]', stats.toString({ colors: true }));
+      gutil.log('[webpack:build]', stats.toString({ colors: true }));
       return resolve(config);
     });
   });
 }
 
 function serve(apps) {
+  const PORT = 8080;
+  const HOST = 'localhost';
   return new Promise((resolve, reject) => {
     const config = webpackConfig(apps);
-    config.devtool = 'sourcemap';
-    config.debug = true;
     const compiler = webpack(config);
     const devServerConfig = {
-      publicPath: '/dist/apps/',
       setup: (app) => {
         app.use('/dist/lib', express.static('./src/lib'));
       },
     };
     new WebpackDevServer(compiler, devServerConfig)
-      .listen(8080, 'localhost', (error) => {
+      .listen(PORT, HOST, (error) => {
         if (error) {
           return reject(error);
         }
-        gutil.log('[webpack:serve-all]', 'http://localhost:8080/');
+        gutil.log('[webpack:serve]', `http://${HOST}:${PORT}/`);
         return resolve();
       },
     );
@@ -64,7 +61,7 @@ function serve(apps) {
 
 gulp.task('clean', () =>
   gulp
-    .src('./dist', { read: false })
+    .src(['./dist', './index.html'], { read: false })
     .pipe(clean()),
 );
 

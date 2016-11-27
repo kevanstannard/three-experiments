@@ -11,7 +11,7 @@ function createScripts(appConfig) {
   return scripts;
 }
 
-function transformIndex(app, config) {
+function transformIndexApp(app, config) {
   const scripts = createScripts(config);
   return (content) => {
     const template = _.template(content);
@@ -23,36 +23,58 @@ function transformIndex(app, config) {
   };
 }
 
+function transformIndexApps(appConfigs) {
+  return (content) => {
+    const template = _.template(content);
+    return template({ apps: appConfigs });
+  };
+}
+
 export default function (apps) {
   const entry = {};
   const plugins = [];
+  const appConfigs = [];
   apps.forEach((app) => {
     const appPath = path.join(rootDir, `src/apps/${app}`);
     // eslint-disable-next-line global-require, import/no-dynamic-require
     const appConfig = require(`${appPath}/config.js`).default;
+    if (appConfig.public) {
+      appConfig.id = app;
+      appConfigs.push(appConfig);
+    }
     entry[app] = appPath;
     const plugin = new CopyWebpackPlugin([
       {
-        from: path.join(rootDir, 'src/index.html'),
+        from: path.join(rootDir, 'src/index-app.html'),
         to: path.join(rootDir, `dist/apps/${app}/index.html`),
-        transform: transformIndex(app, appConfig),
+        transform: transformIndexApp(app, appConfig),
       },
     ]);
     plugins.push(plugin);
   });
-  // Also copy the libs
+  // Copy the libs
   plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/lib'),
       to: path.join(rootDir, 'dist/lib'),
     },
   ]));
+  // Create the main index file
+  plugins.push(new CopyWebpackPlugin([
+    {
+      from: path.join(rootDir, 'src/index-apps.html'),
+      to: path.join(rootDir, 'index.html'),
+      transform: transformIndexApps(appConfigs),
+    },
+  ]));
   return {
     entry,
     plugins,
+    devtool: 'sourcemap',
+    debug: true,
     output: {
-      path: path.resolve(rootDir, 'dist/apps'),
-      filename: '[name]/bundle.js',
+      path: rootDir,
+      filename: 'dist/apps/[name]/bundle.js',
     },
     module: {
       loaders: [
