@@ -5,24 +5,58 @@ const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
 const NEAR = 0.1;
 const FAR = 20000;
 
+let controls;
+let renderer;
+let scene;
+let camera;
+
 const origin = new THREE.Vector3(0, 0, 0);
 
-const scene = new THREE.Scene();
+function renderGridHelper() {
+  const gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
+}
 
-const gridHelper = new THREE.GridHelper(100, 10);
-scene.add(gridHelper);
+function renderAxisHelper() {
+  const axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
+}
 
-const axisHelper = new THREE.AxisHelper(100);
-scene.add(axisHelper);
+function renderArrowHelper() {
+  const arrorDir = new THREE.Vector3(3, 2, 1).normalize();
+  const arrowLength = 100;
+  const arrowColor = 0xffff00;
+  const arrowHelper = new THREE.ArrowHelper(arrorDir, origin, arrowLength, arrowColor);
+  scene.add(arrowHelper);
+}
 
-const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-camera.position.set(200, 200, 200);
-camera.lookAt(origin);
-scene.add(camera);
+function init() {
+  scene = new THREE.Scene();
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+  renderGridHelper();
+  renderAxisHelper();
+  renderArrowHelper();
 
-renderer.render(scene, camera);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(origin);
+  scene.add(camera);
 
-document.body.appendChild(renderer.domElement);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  THREEx.WindowResize(renderer, camera);
+
+  document.body.appendChild(renderer.domElement);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+init();
+animate();

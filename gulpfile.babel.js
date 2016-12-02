@@ -43,6 +43,7 @@ function serve(apps) {
     const config = webpackConfig(apps, 'serve');
     const compiler = webpack(config);
     const devServerConfig = {
+      stats: { colors: true },
       setup: (app) => {
         app.use('/dist/lib', express.static('./src/lib'));
       },

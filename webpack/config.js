@@ -72,7 +72,7 @@ export default function (apps, buildType) {
     entry,
     plugins,
     devtool: 'inline-source-map',
-    debug: true,
+    debug: false,
     output: {
       path: rootDir,
       filename: 'dist/apps/[name]/bundle.js',
@@ -86,6 +86,10 @@ export default function (apps, buildType) {
           query: {
             presets: ['es2015', 'stage-0'],
           },
+        },
+        {
+          test: /\.json$/,
+          loader: 'json',
         },
       ],
     },
