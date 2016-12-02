@@ -32,24 +32,35 @@ function init() {
   camera.position.set(200, 200, 200);
   camera.lookAt(origin);
 
-  geometry = new THREE.SphereGeometry(1, 2, 2);
+  geometry = new THREE.SphereGeometry(1, 32, 32);
   material = new THREE.MeshLambertMaterial({ color: 0xffffff });
 
   // https://en.wikipedia.org/wiki/Spherical_coordinate_system
   // http://stackoverflow.com/questions/969798/plotting-a-point-on-the-edge-of-a-sphere
 
-  const r = 100;
-  const s0 = 0;
-  const s1 = Math.PI / 2;
-  const t0 = 0;
-  const t1 = Math.PI / 2;
-  const delta = 0.1;
+  const radius = 100;
+  const intervals = 10;
 
-  for (let s = s0; s <= s1; s += delta) {
-    for (let t = t0; t <= t1; t += delta) {
-      const x = r * Math.cos(s) * Math.sin(t);
-      const y = r * Math.sin(s) * Math.sin(t);
-      const z = r * Math.cos(t);
+  // phi is the angle on the xy plane
+  // [0, 2PI]
+  const phi0 = Math.PI * (0 / 4);
+  const phi1 = Math.PI * (2 / 4);
+  const phiDelta = (phi1 - phi0) / intervals;
+
+  // theta is the angle from the z axis
+  // [0, PI]
+  const theta0 = Math.PI * (0 / 2);
+  const theta1 = Math.PI * (2 / 4);
+  const thetaDelta = (theta1 - theta0) / intervals;
+
+  // let count = 0;
+  for (let phi = phi0; phi <= phi1; phi += phiDelta) {
+    for (let theta = theta0; theta <= theta1; theta += thetaDelta) {
+      // count += 1;
+      // console.log(count);
+      const x = radius * Math.sin(theta) * Math.cos(phi);
+      const y = radius * Math.sin(theta) * Math.sin(phi);
+      const z = radius * Math.cos(theta);
       mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(x, y, z);
       scene.add(mesh);

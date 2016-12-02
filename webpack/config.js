@@ -71,7 +71,7 @@ export default function (apps, buildType) {
   return {
     entry,
     plugins,
-    devtool: 'sourcemap',
+    devtool: 'inline-source-map',
     debug: true,
     output: {
       path: rootDir,
