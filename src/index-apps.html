@@ -34,6 +34,9 @@
       color: white;
       text-decoration: none;
     }
+    .apps .private a {
+      color: darkGreen;
+    }
   </style>
 </head>
 <body>
@@ -42,7 +45,10 @@
   </div>
   <ul class="apps">
   <% apps.forEach(function(app) { %>
-    <li>
+    <%
+      const appClass = app.public ? 'public' : 'private';
+    %>
+    <li class="<%= appClass %>">
       <a href="dist/apps/<%= app.id %>/index.html"><%= app.title %></a>
       <% if (app.description) { %>
         - <%= app.description %>

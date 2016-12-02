@@ -31,7 +31,7 @@ function transformIndexApps(appConfigs) {
   };
 }
 
-export default function (apps) {
+export default function (apps, buildType) {
   const entry = {};
   const plugins = [];
   const appConfigs = [];
@@ -39,7 +39,7 @@ export default function (apps) {
     const appPath = path.join(rootDir, `src/apps/${app}`);
     // eslint-disable-next-line global-require, import/no-dynamic-require
     const appConfig = require(`${appPath}/config.js`).default;
-    if (appConfig.public) {
+    if (appConfig.public || buildType === 'serve') {
       appConfig.id = app;
       appConfigs.push(appConfig);
     }

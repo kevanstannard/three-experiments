@@ -24,7 +24,7 @@ function getApps() {
 
 function build(apps) {
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(apps);
+    const config = webpackConfig(apps, 'build');
     const compiler = webpack(config);
     compiler.run((error, stats) => {
       if (error) {
@@ -40,7 +40,7 @@ function serve(apps) {
   const PORT = 8080;
   const HOST = 'localhost';
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(apps);
+    const config = webpackConfig(apps, 'serve');
     const compiler = webpack(config);
     const devServerConfig = {
       setup: (app) => {
