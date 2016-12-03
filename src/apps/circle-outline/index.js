@@ -1,4 +1,4 @@
-// See:
+// Ref:
 // https://github.com/mrdoob/three.js/wiki/Drawing-lines
 
 const SCREEN_WIDTH = window.innerWidth;
@@ -13,12 +13,28 @@ let camera;
 let renderer;
 let axisHelper;
 let gridHelper;
-let geometry;
-let material;
-let line;
 let controls;
+let line;
 
 const origin = new THREE.Vector3(0, 0, 0);
+
+function CircleLineGeometry(radius, segments, thetaStart, thetaLength) {
+  const args = {
+    radius: radius || 50,
+    segments: segments || 8,
+    thetaStart: thetaStart || 0,
+    thetaLength: thetaLength || (2 * Math.PI),
+  };
+  const geometry = new THREE.Geometry();
+  const delta = ((args.thetaStart + args.thetaLength) - args.thetaStart) / args.segments;
+  for (let i = 0; i <= args.segments; i += 1) {
+    const angle = args.thetaStart + (delta * i);
+    const x = args.radius * Math.cos(angle);
+    const y = args.radius * Math.sin(angle);
+    geometry.vertices.push(new THREE.Vector3(x, y, 0));
+  }
+  return geometry;
+}
 
 function init() {
   scene = new THREE.Scene();
@@ -33,23 +49,13 @@ function init() {
   camera.position.set(100, 100, 100);
   camera.lookAt(origin);
 
-  material = new THREE.LineBasicMaterial({ color: 0xffff00 });
-
-  geometry = new THREE.Geometry();
-
   const radius = 50;
   const segments = 32;
   const thetaStart = 0;
-  const thetaLength = (2 * Math.PI) * (1 / 2);
+  const thetaLength = 2 * Math.PI;
 
-  const delta = ((thetaStart + thetaLength) - thetaStart) / segments;
-  for (let i = 0; i <= segments; i += 1) {
-    const angle = thetaStart + (delta * i);
-    const x = radius * Math.cos(angle);
-    const y = radius * Math.sin(angle);
-    geometry.vertices.push(new THREE.Vector3(x, y, 0));
-  }
-
+  const geometry = new CircleLineGeometry(radius, segments, thetaStart, thetaLength);
+  const material = new THREE.LineBasicMaterial({ color: 0xffff00 });
   line = new THREE.Line(geometry, material);
   scene.add(line);
 
@@ -63,9 +69,14 @@ function init() {
   document.body.appendChild(renderer.domElement);
 }
 
+function update() {
+  line.rotation.y += 0.01;
+  controls.update();
+}
+
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+  update();
   renderer.render(scene, camera);
 }
 
