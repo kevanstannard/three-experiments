@@ -23,10 +23,15 @@ function renderAxisHelper() {
 }
 
 function renderArrowHelper() {
-  const arrorDir = new THREE.Vector3(3, 2, 1).normalize();
+  const arrowDir = new THREE.Vector3(3, 2, 1).normalize();
   const arrowLength = 100;
   const arrowColor = 0xffff00;
-  const arrowHelper = new THREE.ArrowHelper(arrorDir, origin, arrowLength, arrowColor);
+  const headLength = 12;
+  const headWidth = 4;
+  const arrowHelper = new THREE.ArrowHelper(
+    arrowDir, origin, arrowLength, arrowColor,
+    headLength, headWidth,
+  );
   scene.add(arrowHelper);
 }
 

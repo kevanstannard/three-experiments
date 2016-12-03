@@ -41,6 +41,7 @@ function serve(apps) {
   const HOST = 'localhost';
   return new Promise((resolve, reject) => {
     const config = webpackConfig(apps, 'serve');
+    // console.log(config);
     const compiler = webpack(config);
     const devServerConfig = {
       stats: { colors: true },

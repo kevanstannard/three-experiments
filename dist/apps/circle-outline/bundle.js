@@ -47,88 +47,73 @@
 	"use strict";
 	
 	// See:
-	// https://www.youtube.com/watch?v=k3adBAnDpos
-	// http://stackoverflow.com/questions/17558085/three-js-orthographic-camera
+	// https://github.com/mrdoob/three.js/wiki/Drawing-lines
 	
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
-	
-	// View size is how much vertical space to fit in the view
-	// This is in world coordinates
-	var VIEW_SIZE = 600;
-	
-	// The aspect ratio provides information about how wide our view should
-	// be compared to how tall it should be
-	var ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+	var VIEW_ANGLE = 45;
+	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+	var NEAR = 1;
+	var FAR = 10000;
 	
 	var scene = void 0;
 	var camera = void 0;
 	var renderer = void 0;
 	var axisHelper = void 0;
 	var gridHelper = void 0;
+	var geometry = void 0;
+	var material = void 0;
+	var line = void 0;
 	var controls = void 0;
-	var ambientLight = void 0;
-	var light = void 0;
 	
 	var origin = new THREE.Vector3(0, 0, 0);
 	
 	function init() {
 	  scene = new THREE.Scene();
 	
-	  gridHelper = new THREE.GridHelper(230, 3);
+	  gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
 	
-	  axisHelper = new THREE.AxisHelper(230);
+	  axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
 	
-	  var boxSize = 100;
-	  var gapSize = 50;
-	  var gridSize = 3;
+	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+	  camera.position.set(100, 100, 100);
+	  camera.lookAt(origin);
 	
-	  var areaSize = boxSize * gridSize + gapSize * (gridSize - 1);
-	  var start = -(areaSize / 2) + boxSize / 2;
-	  var end = areaSize / 2 + boxSize / 2;
+	  material = new THREE.LineBasicMaterial({ color: 0xffff00 });
 	
-	  for (var x = start; x <= end; x += boxSize + gapSize) {
-	    for (var z = start; z <= end; z += boxSize + gapSize) {
-	      var height = 1 + Math.random() * 199;
-	      var geometry = new THREE.BoxGeometry(100, height, 100);
-	      var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
-	      var mesh = new THREE.Mesh(geometry, material);
-	      mesh.position.set(x, height / 2, z);
-	      scene.add(mesh);
-	    }
+	  geometry = new THREE.Geometry();
+	
+	  var radius = 50;
+	  var segments = 32;
+	  var thetaStart = 0;
+	  var thetaLength = 2 * Math.PI * (1 / 2);
+	
+	  var delta = (thetaStart + thetaLength - thetaStart) / segments;
+	  for (var i = 0; i <= segments; i += 1) {
+	    var angle = thetaStart + delta * i;
+	    var x = radius * Math.cos(angle);
+	    var y = radius * Math.sin(angle);
+	    geometry.vertices.push(new THREE.Vector3(x, y, 0));
 	  }
 	
-	  ambientLight = new THREE.AmbientLight(0x444444);
-	  scene.add(ambientLight);
+	  line = new THREE.Line(geometry, material);
+	  scene.add(line);
 	
-	  light = new THREE.DirectionalLight(0xffffff, 1, 1000);
-	  light.position.set(100, 300, 600);
-	  scene.add(light);
-	
-	  camera = new THREE.OrthographicCamera(-(ASPECT_RATIO * VIEW_SIZE) / 2, ASPECT_RATIO * VIEW_SIZE / 2, VIEW_SIZE / 2, -(VIEW_SIZE / 2), -1000, 1000);
-	
-	  camera.position.set(300, 300, 300);
-	
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
+	  renderer = new THREE.WebGLRenderer();
 	  renderer.setSize(window.innerWidth, window.innerHeight);
 	
 	  controls = new THREE.OrbitControls(camera, renderer.domElement);
-	  controls.target.set(origin.x, origin.y, origin.z);
 	
 	  THREEx.WindowResize(renderer, camera);
 	
 	  document.body.appendChild(renderer.domElement);
 	}
 	
-	function update() {
-	  controls.update();
-	}
-	
 	function animate() {
 	  requestAnimationFrame(animate);
-	  update();
+	  controls.update();
 	  renderer.render(scene, camera);
 	}
 	

@@ -1,5 +1,8 @@
 /* eslint no-prototype-builtins: "off" */
 
+import { loadFonts } from 'lib/fonts';
+import CircleLineGeometry from './CircleLineGeometry';
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -10,14 +13,30 @@ const FAR = 10000;
 let scene;
 let camera;
 let renderer;
-// let geometry;
-// let material;
-// let mesh;
 let controls;
 let pointLight;
 let ambientLight;
+let fonts;
 
+const labels = [];
 const origin = new THREE.Vector3(0, 0, 0);
+
+function load() {
+  return loadFonts()
+    .then((theFonts) => {
+      fonts = theFonts;
+    });
+}
+
+function renderLabel(text, position) {
+  const props = { font: fonts.helvetiker_regular, size: 12, height: 1 };
+  const geometry = new THREE.TextGeometry(text, props);
+  const material = new THREE.MeshBasicMaterial();
+  const label = new THREE.Mesh(geometry, material);
+  label.position.set(position.x, position.y, position.z);
+  labels.push(label);
+  scene.add(label);
+}
 
 function renderGrid() {
   const gridSize = 100;
@@ -38,15 +57,21 @@ function renderGrid() {
 }
 
 function renderAxis(v, color, labelText) {
+  const axisLength = 250;
+  const labelDistance = axisLength * 1.1;
+
   const dir = v.normalize();
-  const axis = new THREE.ArrowHelper(dir, origin, 250, color, 10, 5);
+  const axis = new THREE.ArrowHelper(dir, origin, axisLength, color, 10, 5);
   scene.add(axis);
 
-  const labelProps = { font: 'droid sans', size: 12, curveSegments: 32 };
-  const labelGeometry = new THREE.TextGeometry(labelText, labelProps);
-  const labelMaterial = new THREE.MeshBasicMaterial();
-  const label = new THREE.Mesh(labelGeometry, labelMaterial);
-  scene.add(label);
+  renderLabel(
+    labelText,
+    new THREE.Vector3(
+      dir.x * labelDistance,
+      dir.y * labelDistance,
+      dir.z * labelDistance,
+    ),
+  );
 }
 
 function renderAxes() {
@@ -58,153 +83,126 @@ function renderAxes() {
 
   const zAxis = new THREE.Vector3(0, 0, 1);
   renderAxis(zAxis, 0x0000ff, 'z');
-
-  // const axisHelper = new THREE.AxisHelper(100);
-  // scene.add(axisHelper);
 }
 
-// function roundRect(ctx, x, y, w, h, r) {
-//   ctx.beginPath();
-//   ctx.moveTo(x + r, y);
-//   ctx.lineTo(x + w - r, y);
-//   ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-//   ctx.lineTo(x + w, y + h - r);
-//   ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-//   ctx.lineTo(x + r, y + h);
-//   ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-//   ctx.lineTo(x, y + r);
-//   ctx.quadraticCurveTo(x, y, x + r, y);
-//   ctx.closePath();
-//   ctx.fill();
-//   ctx.stroke();
-// }
+function renderVector(vector) {
+  const v = vector.clone();
+  const arrowLength = v.length();
+  const arrowDir = v.normalize();
+  const arrowColor = 0xffff00;
+  const headLength = 12;
+  const headWidth = 4;
+  const arrowHelper = new THREE.ArrowHelper(
+    arrowDir, origin, arrowLength, arrowColor,
+    headLength, headWidth,
+  );
+  scene.add(arrowHelper);
+}
 
-// function makeTextSprite(message, parameters = {}) {
-//   const fontface = parameters.hasOwnProperty('fontface')
-//       ? parameters.fontface
-//       : 'Arial';
-//
-//   const fontsize = parameters.hasOwnProperty('fontsize')
-//       ? parameters.fontsize
-//       : 18;
-//
-//   const borderThickness = parameters.hasOwnProperty('borderThickness')
-//       ? parameters.borderThickness
-//       : 4;
-//
-//   const borderColor = parameters.hasOwnProperty('borderColor')
-//       ? parameters.borderColor
-//       : {
-//         r: 0,
-//         g: 0,
-//         b: 0,
-//         a: 1.0,
-//       };
-//
-//   const backgroundColor = parameters.hasOwnProperty('backgroundColor')
-//       ? parameters.backgroundColor
-//       : {
-//         r: 255,
-//         g: 255,
-//         b: 255,
-//         a: 1.0,
-//       };
-//
-//   const spriteAlignment = THREE.SpriteAlignment.topLeft;
-//
-//   const canvas = document.createElement('canvas');
-//   const context = canvas.getContext('2d');
-//   // context.font = 'Bold ' + fontsize + 'px ' + fontface;
-//   context.font = `Bold ${fontsize}px ${fontface}`;
-//
-//   // get size data (height depends only on font size)
-//   const metrics = context.measureText(message);
-//   const textWidth = metrics.width;
-//
-//   // background color
-//   const bgColor = backgroundColor;
-//   context.fillStyle = `rgba(${bgColor.r},${bgColor.g},${bgColor.b},${bgColor.a})`;
-//
-//   // border color
-//   const bColor = borderColor;
-//   context.strokeStyle = `rgba(${bColor.r},${bColor.g},${bColor.b},${bColor.a})`;
-//
-//   context.lineWidth = borderThickness;
-//   roundRect(
-//     context,
-//     borderThickness / 2,
-//     borderThickness / 2,
-//     textWidth + borderThickness,
-//     fontsize * 1.4 + borderThickness,
-//     6,
-//   );
-//   // 1.4 is extra height factor for text below baseline: g,j,p,q.
-//
-//   // text color
-//   context.fillStyle = 'rgba(0, 0, 0, 1.0)';
-//
-//   context.fillText(message, borderThickness, fontsize + borderThickness);
-//
-//   // canvas contents will be used for a texture
-//   const texture = new THREE.Texture(canvas);
-//   texture.needsUpdate = true;
-//
-//   const spriteMaterial = new THREE.SpriteMaterial({
-//     map: texture,
-//     useScreenCoordinates: false,
-//     alignment: spriteAlignment,
-//   });
-//
-//   const sprite = new THREE.Sprite(spriteMaterial);
-//   sprite.scale.set(100, 50, 1.0);
-//
-//   return sprite;
-// }
+function renderLine(from, to) {
+  const material = new THREE.LineDashedMaterial({
+    color: 0xffffff,
+    linewidth: 2,
+    dashSize: 2,
+    gapSize: 3,
+    transparent: true,
+    opacity: 0.5,
+  });
+
+  // Three JS dashed line material not showing
+  // http://stackoverflow.com/questions/35523961/three-js-dashed-line-material-not-showing
+  const geometry = new THREE.Geometry();
+  geometry.vertices.push(from, to);
+  geometry.computeLineDistances();
+
+  const line = new THREE.Line(geometry, material);
+
+  scene.add(line);
+}
+
+function renderCoordinate() {
+  const radius = 200;
+  const theta = Math.PI * (2 / 8); // Angle from x axis
+  const phi = Math.PI * (2 / 8); // Angle from z axis
+  const x = radius * Math.sin(phi) * Math.cos(theta);
+  const y = radius * Math.sin(phi) * Math.sin(theta);
+  const z = radius * Math.cos(phi);
+
+  const pointNormal = new THREE.Vector3(x, y, z).normalize();
+  const point = pointNormal.clone().setLength(radius);
+  renderVector(point);
+
+  const xyPoint = new THREE.Vector3(x, y, 0);
+  renderLine(origin, xyPoint);
+
+  renderLine(point, xyPoint);
+
+  const angleRadius = 40;
+
+  // theta angle line
+  const thetaAngleGeometry = new CircleLineGeometry(angleRadius, 32, 0, theta);
+  const thetaAngleMaterial = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
+  const thetaAngleLine = new THREE.Line(thetaAngleGeometry, thetaAngleMaterial);
+  scene.add(thetaAngleLine);
+
+  // // phi angle line
+  // // const m1 = (new THREE.Matrix4()).makeRotationY(Math.PI / 2);
+  // // const m2 = (new THREE.Matrix4()).makeRotationZ(-phi / 2);
+  // const phiAngleGeometry = new CircleLineGeometry(angleRadius, 32, 0, Math.PI * 2);
+  // // phiAngleGeometry.applyMatrix(m1);
+  // // phiAngleGeometry.applyMatrix(m2);
+  // const phiAngleMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 });
+  // const phiAngleLine = new THREE.Line(phiAngleGeometry, phiAngleMaterial);
+  // // phiAngleLine.rotation.y = Math.PI / 2;
+  // // phiAngleLine.rotation.z = phi;
+  // scene.add(phiAngleLine);
+  //
+  // const a = new THREE.Vector3(0, 0, 1);
+  // const b = pointNormal;
+  // const c = origin;
+  //
+  // const ab = a.clone().sub(b);
+  // const ac = a.clone().sub(c);
+  // const d = new THREE.Vector3();
+  // d.crossVectors(ab, ac);
+  // console.log('d', d);
+  //
+  // // Find the normal
+  // const v1 = new THREE.Vector3(0, 0, 1);
+  // const v2 = pointNormal;
+  // const normal = new THREE.Vector3();
+  // normal.crossVectors(v1, v2);
+  //
+  // // zzz
+  // const arrowLength = 100;
+  // const arrowColor = 0x00ff00;
+  // const arrowHelper = new THREE.ArrowHelper(normal, origin, arrowLength, arrowColor);
+  // scene.add(arrowHelper);
+  //
+  //
+  // // console.log(normal);
+  //
+  // const axis = new THREE.Vector3(0, 0, 1);
+  // phiAngleLine.quaternion.setFromUnitVectors(axis, normal);
+  //
+  // // ???
+  // // const v1 = new THREE.Vector3(0, 0, 1);
+  // // const v2 = point;
+  // // const quaternion = new THREE.Quaternion().setFromUnitVectors(v1, v2);
+  // // const matrix = new THREE.Matrix4().makeRotationFromQuaternion(quaternion);
+  // // phiAngleLine.applyMatrix(matrix);
+}
 
 function init() {
   scene = new THREE.Scene();
 
-  renderGrid();
-  renderAxes();
-
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(400, 400, 400);
+  camera.position.set(300, 100, 300);
   camera.lookAt(origin);
 
-  // geometry = new THREE.SphereGeometry(1, 32, 32);
-  // material = new THREE.MeshLambertMaterial({ color: 0xffffff });
-
-  // https://en.wikipedia.org/wiki/Spherical_coordinate_system
-  // http://stackoverflow.com/questions/969798/plotting-a-point-on-the-edge-of-a-sphere
-
-  // const radius = 100;
-  // const intervals = 10;
-  //
-  // // phi is the angle on the xy plane
-  // // [0, 2PI]
-  // const phi0 = Math.PI * (0 / 4);
-  // const phi1 = Math.PI * (2 / 4);
-  // const phiDelta = (phi1 - phi0) / intervals;
-  //
-  // // theta is the angle from the z axis
-  // // [0, PI]
-  // const theta0 = Math.PI * (0 / 2);
-  // const theta1 = Math.PI * (2 / 4);
-  // const thetaDelta = (theta1 - theta0) / intervals;
-  //
-  // // let count = 0;
-  // for (let phi = phi0; phi <= phi1; phi += phiDelta) {
-  //   for (let theta = theta0; theta <= theta1; theta += thetaDelta) {
-  //     // count += 1;
-  //     // console.log(count);
-  //     const x = radius * Math.sin(theta) * Math.cos(phi);
-  //     const y = radius * Math.sin(theta) * Math.sin(phi);
-  //     const z = radius * Math.cos(theta);
-  //     mesh = new THREE.Mesh(geometry, material);
-  //     mesh.position.set(x, y, z);
-  //     scene.add(mesh);
-  //   }
-  // }
+  renderGrid();
+  renderAxes();
+  renderCoordinate();
 
   ambientLight = new THREE.AmbientLight(0x444444);
   scene.add(ambientLight);
@@ -213,7 +211,7 @@ function init() {
   pointLight.position.set(50, 50, 50);
   scene.add(pointLight);
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -225,9 +223,14 @@ function init() {
 
 function animate() {
   requestAnimationFrame(animate);
+  labels.forEach((label) => {
+    label.lookAt(camera.position);
+  });
   controls.update();
   renderer.render(scene, camera);
 }
 
-init();
-animate();
+load().then(() => {
+  init();
+  animate();
+});

@@ -71,11 +71,16 @@ export default function (apps, buildType) {
   return {
     entry,
     plugins,
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     debug: false,
     output: {
       path: rootDir,
       filename: 'dist/apps/[name]/bundle.js',
+    },
+    resolve: {
+      root: [
+        path.resolve('./src'),
+      ],
     },
     module: {
       loaders: [
