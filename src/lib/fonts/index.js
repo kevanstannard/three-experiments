@@ -1,3 +1,5 @@
+const fontLoader = new THREE.FontLoader();
+
 const fonts = [
   'gentilis_bold',
   'gentilis_regular',
@@ -7,13 +9,26 @@ const fonts = [
   'optimer_regular',
 ];
 
-const fontMap = fonts.reduce((acc, fontId) => {
-  // Webpack loads and bundles these fonts at build time,
-  // they are not loaded at run time.
-  const fontDefinition = require(`./fonts/${fontId}.typeface.json`);
-  const font = new THREE.Font(fontDefinition);
-  acc[fontId] = font;
-  return acc;
-}, {});
+export function loadFont(url) {
+  return new Promise((resolve) => {
+    fontLoader.load(url, resolve);
+  });
+}
 
-export default fontMap;
+export function loadFonts() {
+  const promises = fonts.map((id) => {
+    const url = `../../lib/fonts/fonts/${id}.typeface.json`;
+    return loadFont(url).then((font) => {
+      return { id, font };
+    });
+  });
+  return Promise
+    .all(promises)
+    .then((results) => {
+      const map = results.reduce((acc, result) => {
+        acc[result.id] = result.font;
+        return acc;
+      }, {});
+      return map;
+    });
+}

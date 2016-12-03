@@ -1,7 +1,7 @@
 // References
 // https://github.com/mrdoob/three.js/tree/master/examples/fonts
 
-import fonts from '../../lib/fonts';
+import { loadFonts } from '../../lib/fonts';
 
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
@@ -17,10 +17,11 @@ let axisHelper;
 let controls;
 let pointLight;
 let ambientLight;
+let fonts;
 
 const origin = new THREE.Vector3(0, 0, 0);
 
-const FONT_SIZE = 28;
+const FONT_SIZE = 36;
 
 function createText(text, fontId) {
   const params = {
@@ -32,6 +33,13 @@ function createText(text, fontId) {
   const material = new THREE.MeshLambertMaterial({ color: 0x888888 });
   const mesh = new THREE.Mesh(geometry, material);
   return mesh;
+}
+
+function load() {
+  return loadFonts()
+    .then((theFonts) => {
+      fonts = theFonts;
+    });
 }
 
 function init() {
@@ -62,7 +70,7 @@ function init() {
   scene.add(pointLight);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 0, 200);
+  camera.position.set(200, 200, 200);
   camera.lookAt(origin);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -81,5 +89,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-init();
-animate();
+load().then(() => {
+  init();
+  animate();
+});

@@ -1,8 +1,6 @@
 // References
 // https://github.com/mrdoob/three.js/tree/master/examples/fonts
 
-import fonts from '../../lib/fonts';
-
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -18,7 +16,23 @@ let controls;
 let pointLight;
 let ambientLight;
 
+const fonts = {};
 const origin = new THREE.Vector3(0, 0, 0);
+const fontLoader = new THREE.FontLoader();
+
+function loadFont(fontId) {
+  return new Promise((resolve) => {
+    const fontUrl = `../../lib/fonts/fonts/${fontId}.typeface.json`;
+    fontLoader.load(fontUrl, (font) => {
+      fonts[fontId] = font;
+      resolve();
+    });
+  });
+}
+
+function load() {
+  return loadFont('helvetiker_regular');
+}
 
 function init() {
   scene = new THREE.Scene();
@@ -63,5 +77,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-init();
-animate();
+load().then(() => {
+  init();
+  animate();
+});
