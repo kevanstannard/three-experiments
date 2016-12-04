@@ -96,7 +96,10 @@ function init() {
   texture.magFilter = THREE.NearestFilter;
   texture.minFilter = THREE.LinearMipMapLinearFilter;
 
-  const material = new THREE.MeshLambertMaterial({ map: texture });
+  const material = new THREE.MeshLambertMaterial({
+    map: texture,
+    side: THREE.DoubleSide,
+  });
   mesh = new THREE.Mesh(geometry, material);
 
   scene = new THREE.Scene();

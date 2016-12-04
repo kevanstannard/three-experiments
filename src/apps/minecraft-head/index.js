@@ -40,7 +40,10 @@ function init() {
   steveTexture.magFilter = THREE.NearestFilter;
   steveTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
-  const steveMaterial = new THREE.MeshLambertMaterial({ map: steveTexture });
+  const steveMaterial = new THREE.MeshLambertMaterial({
+    map: steveTexture,
+    side: THREE.DoubleSide,
+  });
   steve = new THREE.Mesh(headGeometry, steveMaterial);
   steve.position.set(-10, 5, 0);
   scene.add(steve);
@@ -50,7 +53,10 @@ function init() {
   alexTexture.magFilter = THREE.NearestFilter;
   alexTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
-  const alexMaterial = new THREE.MeshLambertMaterial({ map: alexTexture });
+  const alexMaterial = new THREE.MeshLambertMaterial({
+    map: alexTexture,
+    side: THREE.DoubleSide,
+  });
   alex = new THREE.Mesh(headGeometry, alexMaterial);
   alex.position.set(10, 5, 0);
   scene.add(alex);
