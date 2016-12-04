@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _fonts = __webpack_require__(1);
+	var _fonts = __webpack_require__(2);
 
 	var SCREEN_WIDTH = window.innerWidth; // References
 	// https://github.com/mrdoob/three.js/tree/master/examples/fonts
@@ -140,7 +140,8 @@
 	});
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';

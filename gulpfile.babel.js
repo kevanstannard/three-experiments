@@ -46,7 +46,8 @@ function serve(apps) {
     const devServerConfig = {
       stats: { colors: true },
       setup: (app) => {
-        app.use('/dist/lib', express.static('./src/lib'));
+        app.use('/dist', express.static('./src'));
+        // app.use('/dist/apps', express.static('./src/apps'));
       },
     };
     new WebpackDevServer(compiler, devServerConfig)

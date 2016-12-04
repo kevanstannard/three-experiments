@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -37,6 +38,10 @@ export default function (apps, buildType) {
   const appConfigs = [];
   apps.forEach((app) => {
     const appPath = path.join(rootDir, `src/apps/${app}`);
+    // Ensure we have a directory
+    if (!fs.lstatSync(appPath).isDirectory()) {
+      return;
+    }
     // eslint-disable-next-line global-require, import/no-dynamic-require
     const appConfig = require(`${appPath}/config.js`).default;
     if (appConfig.public || buildType === 'serve') {

@@ -144,53 +144,6 @@ function renderCoordinate() {
   const thetaAngleMaterial = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
   const thetaAngleLine = new THREE.Line(thetaAngleGeometry, thetaAngleMaterial);
   scene.add(thetaAngleLine);
-
-  // // phi angle line
-  // // const m1 = (new THREE.Matrix4()).makeRotationY(Math.PI / 2);
-  // // const m2 = (new THREE.Matrix4()).makeRotationZ(-phi / 2);
-  // const phiAngleGeometry = new CircleLineGeometry(angleRadius, 32, 0, Math.PI * 2);
-  // // phiAngleGeometry.applyMatrix(m1);
-  // // phiAngleGeometry.applyMatrix(m2);
-  // const phiAngleMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 });
-  // const phiAngleLine = new THREE.Line(phiAngleGeometry, phiAngleMaterial);
-  // // phiAngleLine.rotation.y = Math.PI / 2;
-  // // phiAngleLine.rotation.z = phi;
-  // scene.add(phiAngleLine);
-  //
-  // const a = new THREE.Vector3(0, 0, 1);
-  // const b = pointNormal;
-  // const c = origin;
-  //
-  // const ab = a.clone().sub(b);
-  // const ac = a.clone().sub(c);
-  // const d = new THREE.Vector3();
-  // d.crossVectors(ab, ac);
-  // console.log('d', d);
-  //
-  // // Find the normal
-  // const v1 = new THREE.Vector3(0, 0, 1);
-  // const v2 = pointNormal;
-  // const normal = new THREE.Vector3();
-  // normal.crossVectors(v1, v2);
-  //
-  // // zzz
-  // const arrowLength = 100;
-  // const arrowColor = 0x00ff00;
-  // const arrowHelper = new THREE.ArrowHelper(normal, origin, arrowLength, arrowColor);
-  // scene.add(arrowHelper);
-  //
-  //
-  // // console.log(normal);
-  //
-  // const axis = new THREE.Vector3(0, 0, 1);
-  // phiAngleLine.quaternion.setFromUnitVectors(axis, normal);
-  //
-  // // ???
-  // // const v1 = new THREE.Vector3(0, 0, 1);
-  // // const v2 = point;
-  // // const quaternion = new THREE.Quaternion().setFromUnitVectors(v1, v2);
-  // // const matrix = new THREE.Matrix4().makeRotationFromQuaternion(quaternion);
-  // // phiAngleLine.applyMatrix(matrix);
 }
 
 function init() {
