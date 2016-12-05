@@ -1,15 +1,59 @@
+// UV Mapping
+//
+// UV mapping is the process of taking an image and assigning parts of that
+// image to individual faces of our 3D object.
+//
+// UV vectors are used to specify parts of a texture that may be applied
+// to faces in a geometry.
+//
+// UV coordinates of an image look like this:
+//
+//
+//   (0,1)     (1,1)
+//     +---------+
+//     |         |
+//   v |         |
+//     |         |
+//     +---------+
+//   (0,0)  u  (1,0)
+//
+//
+// Suppose our texture had 4 sub-images:
+//
+//
+//   (0,1)        (1,1)
+//     +------+-----+
+//     |   A  |  B  |
+//     |      |     |
+//   v +------+-----+
+//     |   C  |  D  |
+//     |      |     |
+//     +------+-----+
+//   (0,0)    u   (1,0)
+//
+//
+// The corners of the "A" image would be:
+//   Top Left:     (0, 1)
+//   Bottom Left:  (0, 0.5)
+//   Bottom Right: (0.5, 0.5)
+//   Top Right:    (0.5, 0)
+//
+
+// Default width and height of a Minecraft skin
 const SKIN_WIDTH = 64;
 const SKIN_HEIGHT = 64;
 
 function faceVectors(x, y, w, h) {
-  // Convert to u/v orientation in pixels
+  // Convert skin coordinates that have (0, 0) in the top left corner
+  // into a UV orientation that has (0, 0) in the bottom left corner.
   const uvPix = {
     x,
     y: SKIN_HEIGHT - y,
     w,
     h,
   };
-  // Convert to u/v coordinates
+  // Convert from pixel coordinates (e.g. 0 to 64)
+  // into to UV coordinates (e.g. from 0 to 1)
   const uv = {
     x: uvPix.x / SKIN_WIDTH,
     y: uvPix.y / SKIN_HEIGHT,
@@ -18,10 +62,10 @@ function faceVectors(x, y, w, h) {
   };
   // Convert to points
   const points = {
-    p1: { x: uv.x, y: uv.y },
-    p2: { x: uv.x, y: uv.y - uv.h },
-    p3: { x: uv.x + uv.w, y: uv.y - uv.h },
-    p4: { x: uv.x + uv.w, y: uv.y },
+    p1: { x: uv.x, y: uv.y }, // Top left
+    p2: { x: uv.x, y: uv.y - uv.h }, // Bottom left
+    p3: { x: uv.x + uv.w, y: uv.y - uv.h }, // Bottom right
+    p4: { x: uv.x + uv.w, y: uv.y }, // Top right
   };
   // Create vectors
   const vectors = [

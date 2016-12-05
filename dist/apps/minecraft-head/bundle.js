@@ -91,7 +91,10 @@
 	  steveTexture.magFilter = THREE.NearestFilter;
 	  steveTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
-	  var steveMaterial = new THREE.MeshLambertMaterial({ map: steveTexture });
+	  var steveMaterial = new THREE.MeshLambertMaterial({
+	    map: steveTexture,
+	    side: THREE.DoubleSide
+	  });
 	  steve = new THREE.Mesh(headGeometry, steveMaterial);
 	  steve.position.set(-10, 5, 0);
 	  scene.add(steve);
@@ -101,7 +104,10 @@
 	  alexTexture.magFilter = THREE.NearestFilter;
 	  alexTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
-	  var alexMaterial = new THREE.MeshLambertMaterial({ map: alexTexture });
+	  var alexMaterial = new THREE.MeshLambertMaterial({
+	    map: alexTexture,
+	    side: THREE.DoubleSide
+	  });
 	  alex = new THREE.Mesh(headGeometry, alexMaterial);
 	  alex.position.set(10, 5, 0);
 	  scene.add(alex);
@@ -152,18 +158,62 @@
 	  value: true
 	});
 	exports.default = MinecraftHeadGeometry;
+	// UV Mapping
+	//
+	// UV mapping is the process of taking an image and assigning parts of that
+	// image to individual faces of our 3D object.
+	//
+	// UV vectors are used to specify parts of a texture that may be applied
+	// to faces in a geometry.
+	//
+	// UV coordinates of an image look like this:
+	//
+	//
+	//   (0,1)     (1,1)
+	//     +---------+
+	//     |         |
+	//   v |         |
+	//     |         |
+	//     +---------+
+	//   (0,0)  u  (1,0)
+	//
+	//
+	// Suppose our texture had 4 sub-images:
+	//
+	//
+	//   (0,1)        (1,1)
+	//     +------+-----+
+	//     |   A  |  B  |
+	//     |      |     |
+	//   v +------+-----+
+	//     |   C  |  D  |
+	//     |      |     |
+	//     +------+-----+
+	//   (0,0)    u   (1,0)
+	//
+	//
+	// The corners of the "A" image would be:
+	//   Top Left:     (0, 1)
+	//   Bottom Left:  (0, 0.5)
+	//   Bottom Right: (0.5, 0.5)
+	//   Top Right:    (0.5, 0)
+	//
+
+	// Default width and height of a Minecraft skin
 	var SKIN_WIDTH = 64;
 	var SKIN_HEIGHT = 64;
 
 	function faceVectors(x, y, w, h) {
-	  // Convert to u/v orientation in pixels
+	  // Convert skin coordinates that have (0, 0) in the top left corner
+	  // into a UV orientation that has (0, 0) in the bottom left corner.
 	  var uvPix = {
 	    x: x,
 	    y: SKIN_HEIGHT - y,
 	    w: w,
 	    h: h
 	  };
-	  // Convert to u/v coordinates
+	  // Convert from pixel coordinates (e.g. 0 to 64)
+	  // into to UV coordinates (e.g. from 0 to 1)
 	  var uv = {
 	    x: uvPix.x / SKIN_WIDTH,
 	    y: uvPix.y / SKIN_HEIGHT,
@@ -172,11 +222,10 @@
 	  };
 	  // Convert to points
 	  var points = {
-	    p1: { x: uv.x, y: uv.y },
-	    p2: { x: uv.x, y: uv.y - uv.h },
-	    p3: { x: uv.x + uv.w, y: uv.y - uv.h },
-	    p4: { x: uv.x + uv.w, y: uv.y }
-	  };
+	    p1: { x: uv.x, y: uv.y }, // Top left
+	    p2: { x: uv.x, y: uv.y - uv.h }, // Bottom left
+	    p3: { x: uv.x + uv.w, y: uv.y - uv.h }, // Bottom right
+	    p4: { x: uv.x + uv.w, y: uv.y } };
 	  // Create vectors
 	  var vectors = [new THREE.Vector2(points.p1.x, points.p1.y), new THREE.Vector2(points.p2.x, points.p2.y), new THREE.Vector2(points.p3.x, points.p3.y), new THREE.Vector2(points.p4.x, points.p4.y)];
 	  return vectors;

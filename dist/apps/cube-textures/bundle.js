@@ -139,7 +139,10 @@
 	  texture.magFilter = THREE.NearestFilter;
 	  texture.minFilter = THREE.LinearMipMapLinearFilter;
 
-	  var material = new THREE.MeshLambertMaterial({ map: texture });
+	  var material = new THREE.MeshLambertMaterial({
+	    map: texture,
+	    side: THREE.DoubleSide
+	  });
 	  mesh = new THREE.Mesh(geometry, material);
 
 	  scene = new THREE.Scene();

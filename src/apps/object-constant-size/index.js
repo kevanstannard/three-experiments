@@ -69,26 +69,70 @@ function init() {
 }
 
 function resetMeshSize(mesh, meshSize, meshScale) {
+/*
+        Cam
+        | \
+        |  \
+        |   \
+      Obj1   \
+              \
+               \
+              Obj2
+
+  Obj1 size = 10
+  Obj2 size = 20
+
+  Distance Cam to Obj1 = 30
+  Distance Cam to Obj2 = 60
+
+  tan(theta/2) = radius / distance
+  radius = tan(theta/2) * distance
+  size = 2 * tan(theta/2) * distance
+
+  Examples:
+
+    View Angle = 45
+    FOV = 0.7853981634
+
+    Mesh Size  10     20
+    Distance   30     60
+    Size       24.85  49.71
+    Scale      2.49   2.49
+
+*/
+
   // Determine the distance of the camera to the object
   const distance = camera.position.distanceTo(mesh.position);
 
-  // Calculate what the current frustrum radius/size.
-  const frustrumRadius = 2 * Math.tan(fov / 2) * distance;
+  // Calculate a stanard size based on the object distance.
+  // We want to scale all objects at this distance to this size.
+  const standardSize = 2 * Math.tan(fov / 2) * distance;
 
   // We want our object to remain the same size relative to the current
-  // frustrum size.
+  // standard size.
   //
   // For example:
-  //   Suppose frustrum size is 100, and object size is 20
-  //   then ratio (or scale) = 100 / 20 = 5.0
+  //   Suppose the standard size is 100, and object size is 20
+  //   then the ratio (or scale) = 100 / 20 = 5.0
   //
-  //   Suppose frustrum size changes to 200, and object size is 20
-  //   then ratio (or scale) = 200 / 20 = 10.0
+  //   Suppose the standard size changes to 200 (due to the camera moving away),
+  //   and object size is 20, then the ratio (or scale) = 200 / 20 = 10.0
   //
-  // But this scale value alone will cause the object to fill
-  // the screen, so we need a scale value to get it back to a
-  // more useful size.
-  const scale = (frustrumRadius / meshSize) * meshScale;
+  // But this scale value will just standardise the object size
+  // so that it fills the screen.
+  //
+  // For example:
+  //   With standard size 100, object size 20 then
+  //     scale = 100 / 20 = 5.0
+  //
+  //   When we scale our object, we get it's new size
+  //     size = 20 * 5.0 = 100
+  //
+  //   So our object is now the same size as the standard
+  //
+  // Lastly we need a scale value to convert the object back to a standard size.
+
+  const scale = (standardSize / meshSize) * meshScale;
   mesh.scale.set(scale, scale, scale);
 }
 
