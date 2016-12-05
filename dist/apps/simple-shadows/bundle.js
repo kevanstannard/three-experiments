@@ -58,43 +58,146 @@
 	var renderer = void 0;
 	var axisHelper = void 0;
 	var gridHelper = void 0;
-	var geometry = void 0;
-	var material = void 0;
-	var mesh = void 0;
+	var box = void 0;
+	// let geometry;
+	// let material;
+	// let mesh;
 	var controls = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
+	var redLight = void 0;
+	var blueLight = void 0;
+	// let ambientLight;
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
 	function init() {
+	  //
+	  //
+	  // SCENE
+	  //
+	  //
+
 	  scene = new THREE.Scene();
+
+	  //
+	  //
+	  // GRID HELPER
+	  //
+	  //
 
 	  gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
 
+	  //
+	  //
+	  // AXIS HELPER
+	  //
+	  //
+
 	  axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
+
+	  //
+	  //
+	  // CAMERA
+	  //
+	  //
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 	  camera.position.set(200, 200, 200);
 	  camera.lookAt(origin);
 
-	  geometry = new THREE.BoxGeometry(50, 50, 50);
-	  material = new THREE.MeshLambertMaterial({ color: 0x888888 });
+	  //
+	  //
+	  // FLOOR
+	  //
+	  //
 
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
+	  var floorGeometry = new THREE.PlaneGeometry(200, 200);
+	  var floorMaterial = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide });
+	  var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	  floor.position.y = -0.1;
+	  floor.rotation.x = -Math.PI / 2;
 
-	  ambientLight = new THREE.AmbientLight(0x444444);
-	  scene.add(ambientLight);
+	  // Indicate which objects can receive shadows
+	  floor.receiveShadow = true;
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 50, 50);
-	  scene.add(pointLight);
+	  scene.add(floor);
+
+	  //
+	  //
+	  // BOX
+	  //
+	  //
+
+	  var boxGeometry = new THREE.BoxGeometry(20, 20, 20);
+	  var boxMaterial = new THREE.MeshLambertMaterial();
+	  box = new THREE.Mesh(boxGeometry, boxMaterial);
+	  box.position.y = 40;
+
+	  // Indicate which objects can cast shadows
+	  box.castShadow = true;
+	  box.receiveShadow = false;
+
+	  scene.add(box);
+
+	  //
+	  //
+	  // LIGHTS
+	  //
+	  //
+
+	  // Indicate the lights that can cast shadows
+
+	  redLight = new THREE.PointLight(0xff0000, 1, 500);
+	  redLight.castShadow = true;
+	  redLight.position.set(-50, 100, 50);
+	  scene.add(redLight);
+
+	  blueLight = new THREE.PointLight(0x0000ff, 1, 500);
+	  blueLight.castShadow = true;
+	  blueLight.position.set(50, 100, -50);
+	  scene.add(blueLight);
+
+	  //
+	  //
+	  // HELPERS
+	  //
+	  //
+
+	  var sphereSize = 4;
+
+	  var redPointLightHelper = new THREE.PointLightHelper(redLight, sphereSize);
+	  scene.add(redPointLightHelper);
+
+	  var bluePointLightHelper = new THREE.PointLightHelper(blueLight, sphereSize);
+	  scene.add(bluePointLightHelper);
+
+	  // const redLightShadowHelper = new THREE.CameraHelper(redLight.shadow.camera);
+	  // scene.add(redLightShadowHelper);
+
+	  // const blueLightShadowHelper = new THREE.CameraHelper(blueLight.shadow.camera);
+	  // scene.add(blueLightShadowHelper);
+
+	  //
+	  //
+	  // RENDERER
+	  //
+	  //
 
 	  renderer = new THREE.WebGLRenderer();
 	  renderer.setSize(window.innerWidth, window.innerHeight);
+
+	  // Enable shadows
+	  renderer.shadowMap.enabled = true;
+
+	  // Antialias the shadows
+	  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	  //
+	  //
+	  // ORBIT CONTROLS
+	  //
+	  //
 
 	  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -104,8 +207,9 @@
 	}
 
 	function update() {
-	  mesh.rotation.x += 0.01;
-	  mesh.rotation.y += 0.02;
+	  box.rotation.x += 0.01;
+	  box.rotation.y += 0.01;
+	  box.rotation.z += 0.01;
 	  controls.update();
 	}
 

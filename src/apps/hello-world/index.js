@@ -55,14 +55,15 @@ function init() {
   document.body.appendChild(renderer.domElement);
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-
+function update() {
   mesh.rotation.x += 0.01;
   mesh.rotation.y += 0.02;
-
   controls.update();
+}
 
+function animate() {
+  requestAnimationFrame(animate);
+  update();
   renderer.render(scene, camera);
 }
 
