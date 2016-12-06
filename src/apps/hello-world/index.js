@@ -45,7 +45,7 @@ function init() {
   pointLight.position.set(50, 50, 50);
   scene.add(pointLight);
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
