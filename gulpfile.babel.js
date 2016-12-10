@@ -9,11 +9,11 @@ import WebpackDevServer from 'webpack-dev-server';
 
 import webpackConfig from './webpack/config';
 
-const APPS_DIR = path.join(__dirname, 'src/apps');
+const EXPERIMENTS_DIR = path.join(__dirname, 'src/experiments');
 
-function getApps() {
+function getExperiments() {
   return new Promise((resolve, reject) => {
-    fs.readdir(APPS_DIR, (error, items) => {
+    fs.readdir(EXPERIMENTS_DIR, (error, items) => {
       if (error) {
         return reject(error);
       }
@@ -22,9 +22,9 @@ function getApps() {
   });
 }
 
-function build(apps) {
+function build(experiments) {
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(apps, 'build');
+    const config = webpackConfig(experiments, 'build');
     const compiler = webpack(config);
     compiler.run((error, stats) => {
       if (error) {
@@ -36,18 +36,17 @@ function build(apps) {
   });
 }
 
-function serve(apps) {
+function serve(experiments) {
   const PORT = 8080;
   const HOST = 'localhost';
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(apps, 'serve');
+    const config = webpackConfig(experiments, 'serve');
     // console.log(config);
     const compiler = webpack(config);
     const devServerConfig = {
       stats: { colors: true },
-      setup: (app) => {
-        app.use('/dist', express.static('./src'));
-        // app.use('/dist/apps', express.static('./src/apps'));
+      setup: (experiment) => {
+        experiment.use('/dist', express.static('./src'));
       },
     };
     new WebpackDevServer(compiler, devServerConfig)
@@ -69,13 +68,13 @@ gulp.task('clean', () =>
 );
 
 gulp.task('build', ['clean'], (callback) => {
-  getApps()
+  getExperiments()
     .then(build)
     .catch(callback);
 });
 
 gulp.task('serve', (callback) => {
-  getApps()
+  getExperiments()
     .then(serve)
     .catch(callback);
 });
