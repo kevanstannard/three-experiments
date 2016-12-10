@@ -11,9 +11,11 @@ let renderer;
 let axisHelper;
 let gridHelper;
 let box;
+let floor;
 let controls;
 let redLight;
 let blueLight;
+let greenLight;
 
 const origin = new THREE.Vector3(0, 0, 0);
 
@@ -33,6 +35,8 @@ function init() {
   //
 
   gridHelper = new THREE.GridHelper(100, 10);
+  gridHelper.material.transparent = true;
+  gridHelper.material.opacity = 0.25;
   scene.add(gridHelper);
 
   //
@@ -60,16 +64,18 @@ function init() {
   //
   //
 
-  const floorGeometry = new THREE.PlaneGeometry(200, 200);
-  const floorMaterial = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide });
-  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-  floor.position.y = -0.1;
-  floor.rotation.x = -Math.PI / 2;
-
-  // Indicate which objects can receive shadows
-  floor.receiveShadow = true;
-
-  scene.add(floor);
+  const loader = new THREE.TextureLoader();
+  loader.load('images/green-eye.png', (texture) => {
+    const floorGeometry = new THREE.PlaneGeometry(200, 200);
+    const floorMaterial = new THREE.MeshLambertMaterial({
+      side: THREE.DoubleSide,
+      map: texture,
+      transparent: true,
+    });
+    floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.receiveShadow = true;
+    scene.add(floor);
+  });
 
   //
   //
@@ -78,11 +84,9 @@ function init() {
   //
 
   const boxGeometry = new THREE.BoxGeometry(20, 20, 20);
-  const boxMaterial = new THREE.MeshLambertMaterial();
+  const boxMaterial = new THREE.MeshStandardMaterial();
   box = new THREE.Mesh(boxGeometry, boxMaterial);
   box.position.y = 40;
-
-  // Indicate which objects can cast shadows
   box.castShadow = true;
   box.receiveShadow = false;
 
@@ -94,17 +98,23 @@ function init() {
   //
   //
 
-  // Indicate the lights that can cast shadows
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
 
-  redLight = new THREE.PointLight(0xff0000, 1, 500);
+  redLight = new THREE.PointLight(0xff0000, 2, 500);
   redLight.castShadow = true;
   redLight.position.set(-50, 100, 50);
   scene.add(redLight);
 
-  blueLight = new THREE.PointLight(0x0000ff, 1, 500);
+  blueLight = new THREE.PointLight(0x0000ff, 2, 500);
   blueLight.castShadow = true;
   blueLight.position.set(50, 100, -50);
   scene.add(blueLight);
+
+  greenLight = new THREE.PointLight(0x00ff00, 1, 500);
+  greenLight.castShadow = true;
+  greenLight.position.set(50, 100, 50);
+  scene.add(greenLight);
 
   //
   //
@@ -117,14 +127,26 @@ function init() {
   const redPointLightHelper = new THREE.PointLightHelper(redLight, sphereSize);
   scene.add(redPointLightHelper);
 
+  const redLightShadowHelper = new THREE.CameraHelper(redLight.shadow.camera);
+  redLightShadowHelper.material.transparent = true;
+  redLightShadowHelper.material.opacity = 0.25;
+  scene.add(redLightShadowHelper);
+
   const bluePointLightHelper = new THREE.PointLightHelper(blueLight, sphereSize);
   scene.add(bluePointLightHelper);
 
-  const redLightShadowHelper = new THREE.CameraHelper(redLight.shadow.camera);
-  scene.add(redLightShadowHelper);
-
   const blueLightShadowHelper = new THREE.CameraHelper(blueLight.shadow.camera);
+  blueLightShadowHelper.material.transparent = true;
+  blueLightShadowHelper.material.opacity = 0.25;
   scene.add(blueLightShadowHelper);
+
+  const greenPointLightHelper = new THREE.PointLightHelper(greenLight, sphereSize);
+  scene.add(greenPointLightHelper);
+
+  const greenLightShadowHelper = new THREE.CameraHelper(greenLight.shadow.camera);
+  greenLightShadowHelper.material.transparent = true;
+  greenLightShadowHelper.material.opacity = 0.25;
+  scene.add(greenLightShadowHelper);
 
   //
   //
@@ -132,7 +154,7 @@ function init() {
   //
   //
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   // Enable shadows
@@ -154,10 +176,21 @@ function init() {
   document.body.appendChild(renderer.domElement);
 }
 
+const radius = 0.25;
+let angle = 0;
+
 function update() {
   box.rotation.x += 0.01;
   box.rotation.y += 0.01;
   box.rotation.z += 0.01;
+
+  if (floor) {
+    angle += 0.01;
+    floor.rotation.x = (Math.PI / 2) + (radius * Math.cos(angle));
+    floor.rotation.y = radius * Math.sin(angle);
+    floor.rotation.z += 0.01;
+  }
+
   controls.update();
 }
 
