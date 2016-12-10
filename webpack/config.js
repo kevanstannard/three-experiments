@@ -6,8 +6,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 const rootDir = path.resolve(__dirname, '..');
 
 function createScripts(experimentConfig) {
+  const threeFile = experimentConfig.debug ? 'three.js' : 'three.min.js';
   const scripts = [];
-  scripts.push(`../../lib/three/${experimentConfig.threeVersion}/three.min.js`);
+  scripts.push(`../../lib/three/${experimentConfig.threeVersion}/${threeFile}`);
   scripts.push(`../../lib/three/${experimentConfig.threeVersion}/controls/OrbitControls.js`);
   scripts.push('../../lib/threex/THREEx.WindowResize.js');
   return scripts;

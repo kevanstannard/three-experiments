@@ -30,7 +30,7 @@ function init() {
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-  ambientLight = new THREE.AmbientLight(0x444444);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
   pointLight = new THREE.PointLight(0xffffff, 1, 1000);
