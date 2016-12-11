@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -58,13 +58,16 @@
 	var renderer = void 0;
 	var axisHelper = void 0;
 	var gridHelper = void 0;
-	var controls = void 0;
 	var pointLight = void 0;
 	var ambientLight = void 0;
+	var keyboard = void 0;
+	var mesh = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
 	function init() {
+	  keyboard = new KeyboardState();
+
 	  scene = new THREE.Scene();
 
 	  gridHelper = new THREE.GridHelper(100, 10);
@@ -75,7 +78,7 @@
 
 	  var geometry = new THREE.BoxGeometry(50, 50, 50);
 	  var material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-	  var mesh = new THREE.Mesh(geometry, material);
+	  mesh = new THREE.Mesh(geometry, material);
 	  scene.add(mesh);
 
 	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -86,13 +89,11 @@
 	  scene.add(pointLight);
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
+	  camera.position.set(0, 200, 200);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
 	  renderer.setSize(window.innerWidth, window.innerHeight);
-
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	  THREEx.WindowResize(renderer, camera);
 
@@ -100,7 +101,21 @@
 	}
 
 	function update() {
-	  controls.update();
+	  keyboard.update();
+	  // keyboard.debug();
+
+	  if (keyboard.pressed('A')) {
+	    mesh.position.x -= 1;
+	  }
+	  if (keyboard.pressed('D')) {
+	    mesh.position.x += 1;
+	  }
+	  if (keyboard.pressed('W')) {
+	    mesh.position.z -= 1;
+	  }
+	  if (keyboard.pressed('S')) {
+	    mesh.position.z += 1;
+	  }
 	}
 
 	function animate() {

@@ -44,7 +44,9 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
+
+	/* eslint-disable no-console */
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -59,7 +61,6 @@
 	var axisHelper = void 0;
 	var gridHelper = void 0;
 	var controls = void 0;
-	var pointLight = void 0;
 	var ambientLight = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
@@ -73,17 +74,31 @@
 	  axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-	  var mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
+	  var image = document.createElement('img');
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  image.onload = function () {
+	    var texture = new THREE.Texture();
+	    texture.image = image;
+	    texture.needsUpdate = true;
+
+	    var geometry = new THREE.BoxGeometry(100, 100, 100);
+	    var material = new THREE.MeshLambertMaterial({
+	      side: THREE.DoubleSide,
+	      map: texture,
+	      transparent: true
+	    });
+	    var mesh = new THREE.Mesh(geometry, material);
+	    scene.add(mesh);
+	  };
+
+	  image.onerror = function (error) {
+	    console.log('Error:', error);
+	  };
+
+	  image.src = 'images/hippo.svg';
+
+	  ambientLight = new THREE.AmbientLight(0xffffff, 1);
 	  scene.add(ambientLight);
-
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 50, 50);
-	  scene.add(pointLight);
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 	  camera.position.set(200, 200, 200);
