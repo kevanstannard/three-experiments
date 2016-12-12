@@ -60,15 +60,17 @@
 	var renderer = void 0;
 	var gridHelper = void 0;
 	var controls = void 0;
-	// let pointLight;
-	// let ambientLight;
 	var tree = void 0;
-
-	// const origin = new THREE.Vector3(0, 0, 0);
 
 	function Tree() {
 	  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 6;
 	  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
+
+	  this.depth = depth;
+	  this.size = size;
+	  this.growth = 0;
+	  this.hasBranches = this.depth > 1;
+	  this.branches = null;
 
 	  var geometry = new THREE.BoxGeometry(size / 8, size, size / 8);
 
@@ -76,58 +78,54 @@
 	  geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, size / 2, 0));
 
 	  var material = new THREE.MeshNormalMaterial({ wireframe: true });
-	  // const material = new THREE.MeshStandardMaterial({
-	  //   color: 0x2194ce,
-	  //   metalness: 0.5,
-	  //   roughness: 0,
-	  //   shading: THREE.SmoothShading,
-	  // });
-	  // const material = new THREE.MeshPhongMaterial({
-	  //   color: 0x888888,
-	  //   shininess: 100,
-	  //   shading: THREE.FlatShading,
-	  // });
 	  THREE.Mesh.call(this, geometry, material);
-
-	  this.branches = [];
-
-	  var top = new THREE.Vector3(0, size, 0);
-
-	  if (depth > 1) {
-	    var branchSize = size * 0.7;
-
-	    var branch1 = new Tree(depth - 1, branchSize);
-	    branch1.position.set(top.x, top.y, top.z);
-	    branch1.rotateZ(Math.PI * (1 / 4));
-	    branch1.rotation.y = 2 * Math.PI / 3 * 0;
-	    this.add(branch1);
-	    this.branches.push(branch1);
-
-	    var branch2 = new Tree(depth - 1, branchSize);
-	    branch2.position.set(top.x, top.y, top.z);
-	    branch2.rotateZ(Math.PI * (1 / 4));
-	    branch2.rotation.y = 2 * Math.PI / 3 * 1;
-	    this.add(branch2);
-	    this.branches.push(branch2);
-
-	    var branch3 = new Tree(depth - 1, branchSize);
-	    branch3.position.set(top.x, top.y, top.z);
-	    branch3.rotateZ(Math.PI * (1 / 4));
-	    branch3.rotation.y = 2 * Math.PI / 3 * 2;
-	    this.add(branch3);
-	    this.branches.push(branch3);
-	  }
 	}
 
 	Tree.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
 
 	  constructor: Tree,
 
+	  addBranches: function addBranches() {
+	    var top = new THREE.Vector3(0, this.size, 0);
+	    var branchSize = this.size * 0.7;
+	    var branchDepth = this.depth - 1;
+
+	    this.branches = [];
+
+	    var branch1 = new Tree(branchDepth, branchSize);
+	    branch1.position.set(top.x, top.y, top.z);
+	    branch1.rotateZ(Math.PI * (1 / 4));
+	    branch1.rotation.y = 2 * Math.PI / 3 * 0;
+	    this.add(branch1);
+	    this.branches.push(branch1);
+
+	    var branch2 = new Tree(branchDepth, branchSize);
+	    branch2.position.set(top.x, top.y, top.z);
+	    branch2.rotateZ(Math.PI * (1 / 4));
+	    branch2.rotation.y = 2 * Math.PI / 3 * 1;
+	    this.add(branch2);
+	    this.branches.push(branch2);
+
+	    var branch3 = new Tree(branchDepth, branchSize);
+	    branch3.position.set(top.x, top.y, top.z);
+	    branch3.rotateZ(Math.PI * (1 / 4));
+	    branch3.rotation.y = 2 * Math.PI / 3 * 2;
+	    this.add(branch3);
+	    this.branches.push(branch3);
+	  },
 	  update: function update() {
-	    this.branches.forEach(function (branch) {
-	      branch.rotation.y += 0.001;
-	      branch.update();
-	    });
+	    if (this.growth < 1) {
+	      this.growth += 0.005;
+	      this.scale.y = this.growth;
+	    } else if (this.hasBranches) {
+	      if (!this.branches) {
+	        this.addBranches();
+	      }
+	      this.branches.forEach(function (branch) {
+	        branch.rotation.y += 0.005;
+	        branch.update();
+	      });
+	    }
 	  }
 	});
 
