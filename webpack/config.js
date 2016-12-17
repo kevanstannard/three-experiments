@@ -12,6 +12,7 @@ function createScripts(experimentConfig) {
   scripts.push(`../../lib/three/${experimentConfig.threeVersion}/controls/OrbitControls.js`);
   scripts.push('../../lib/threex/THREEx.WindowResize.js');
   scripts.push('../../lib/input/KeyboardState.js');
+  scripts.push('../../lib/dat/dat.gui.min.js');
   return scripts;
 }
 
