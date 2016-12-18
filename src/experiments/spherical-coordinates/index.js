@@ -1,6 +1,6 @@
 /* eslint no-prototype-builtins: "off" */
 
-import { loadFonts } from 'lib/fonts';
+import { loadFonts } from '../../modules/fonts';
 import CircleLineGeometry from './CircleLineGeometry';
 
 const SCREEN_WIDTH = window.innerWidth;

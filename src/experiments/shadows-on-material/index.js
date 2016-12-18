@@ -65,7 +65,7 @@ function init() {
   //
 
   const loader = new THREE.TextureLoader();
-  loader.load('images/green-eye.png', (texture) => {
+  loader.load('../../assets/textures/misc/green-eye.png', (texture) => {
     const floorGeometry = new THREE.PlaneGeometry(200, 200);
     const floorMaterial = new THREE.MeshLambertMaterial({
       side: THREE.DoubleSide,

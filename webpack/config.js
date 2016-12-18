@@ -5,25 +5,16 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const rootDir = path.resolve(__dirname, '..');
 
-function createScripts(experimentConfig) {
-  const threeFile = experimentConfig.debug ? 'three.js' : 'three.min.js';
-  const scripts = [];
-  scripts.push(`../../lib/three/${experimentConfig.threeVersion}/${threeFile}`);
-  scripts.push(`../../lib/three/${experimentConfig.threeVersion}/controls/OrbitControls.js`);
-  scripts.push('../../lib/threex/THREEx.WindowResize.js');
-  scripts.push('../../lib/input/KeyboardState.js');
-  scripts.push('../../lib/dat/dat.gui.min.js');
-  return scripts;
-}
-
 function transformIndexExperiment(experiment, config) {
-  const scripts = createScripts(config);
+  const scripts = config.scripts || [];
+  const styles = config.styles || [];
   return (content) => {
     const template = _.template(content);
     return template({
       ...config,
       experiment,
       scripts,
+      styles,
     });
   };
 }
@@ -61,11 +52,25 @@ export default function (experiments, buildType) {
     ]);
     plugins.push(plugin);
   });
+  // Copy the assets
+  plugins.push(new CopyWebpackPlugin([
+    {
+      from: path.join(rootDir, 'src/assets'),
+      to: path.join(rootDir, 'dist/assets'),
+    },
+  ]));
   // Copy the libs
   plugins.push(new CopyWebpackPlugin([
     {
-      from: path.join(rootDir, 'src/lib'),
-      to: path.join(rootDir, 'dist/lib'),
+      from: path.join(rootDir, 'src/libs'),
+      to: path.join(rootDir, 'dist/libs'),
+    },
+  ]));
+  // Copy the modules
+  plugins.push(new CopyWebpackPlugin([
+    {
+      from: path.join(rootDir, 'src/modules'),
+      to: path.join(rootDir, 'dist/modules'),
     },
   ]));
   // Create the main index file

@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _MinecraftHeadGeometry = __webpack_require__(1);
+	var _MinecraftHeadGeometry = __webpack_require__(2);
 
 	var _MinecraftHeadGeometry2 = _interopRequireDefault(_MinecraftHeadGeometry);
 
@@ -87,7 +87,7 @@
 	  var headGeometry = new _MinecraftHeadGeometry2.default(10);
 
 	  // Pixellated texture
-	  var steveTexture = textureLoader.load('skins/steve.png');
+	  var steveTexture = textureLoader.load('../../assets/textures/minecraft/skins/steve.png');
 	  steveTexture.magFilter = THREE.NearestFilter;
 	  steveTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
@@ -100,7 +100,7 @@
 	  scene.add(steve);
 
 	  // Pixellated texture
-	  var alexTexture = textureLoader.load('skins/alex.png');
+	  var alexTexture = textureLoader.load('../../assets/textures/minecraft/skins/alex.png');
 	  alexTexture.magFilter = THREE.NearestFilter;
 	  alexTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
@@ -149,7 +149,8 @@
 	animate();
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	"use strict";

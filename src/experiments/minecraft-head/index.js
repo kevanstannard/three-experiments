@@ -36,7 +36,7 @@ function init() {
   const headGeometry = new MinecraftHeadGeometry(10);
 
   // Pixellated texture
-  const steveTexture = textureLoader.load('skins/steve.png');
+  const steveTexture = textureLoader.load('../../assets/textures/minecraft/skins/steve.png');
   steveTexture.magFilter = THREE.NearestFilter;
   steveTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
@@ -49,7 +49,7 @@ function init() {
   scene.add(steve);
 
   // Pixellated texture
-  const alexTexture = textureLoader.load('skins/alex.png');
+  const alexTexture = textureLoader.load('../../assets/textures/minecraft/skins/alex.png');
   alexTexture.magFilter = THREE.NearestFilter;
   alexTexture.minFilter = THREE.LinearMipMapLinearFilter;
 

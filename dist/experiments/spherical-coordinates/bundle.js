@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _fonts = __webpack_require__(2);
+	var _fonts = __webpack_require__(1);
 
 	var _CircleLineGeometry = __webpack_require__(7);
 
@@ -231,8 +231,7 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -240,8 +239,14 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.loadFont = loadFont;
 	exports.loadFonts = loadFonts;
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var fontLoader = new THREE.FontLoader();
 
 	var fonts = ['gentilis_bold', 'gentilis_regular', 'helvetiker_bold', 'helvetiker_regular', 'optimer_bold', 'optimer_regular'];
@@ -254,21 +259,21 @@
 
 	function loadFonts() {
 	  var promises = fonts.map(function (id) {
-	    var url = '../../lib/fonts/fonts/' + id + '.typeface.json';
+	    var url = '../../modules/fonts/fonts/' + id + '.typeface.json';
 	    return loadFont(url).then(function (font) {
 	      return { id: id, font: font };
 	    });
 	  });
 	  return Promise.all(promises).then(function (results) {
 	    var map = results.reduce(function (acc, result) {
-	      acc[result.id] = result.font;
-	      return acc;
+	      return _extends({}, acc, _defineProperty({}, result.id, result.font));
 	    }, {});
 	    return map;
 	  });
 	}
 
 /***/ },
+/* 2 */,
 /* 3 */,
 /* 4 */,
 /* 5 */,

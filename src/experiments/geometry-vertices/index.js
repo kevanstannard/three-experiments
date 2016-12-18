@@ -1,3 +1,5 @@
+import { loadFonts } from '../../modules/fonts';
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -13,25 +15,15 @@ let gridHelper;
 let controls;
 let pointLight;
 let ambientLight;
+let fonts;
 let box;
 
 const origin = new THREE.Vector3(0, 0, 0);
 
-const fonts = {};
-const fontLoader = new THREE.FontLoader();
-
-function loadFont(fontId) {
-  return new Promise((resolve) => {
-    const fontUrl = `../../lib/fonts/fonts/${fontId}.typeface.json`;
-    fontLoader.load(fontUrl, (font) => {
-      fonts[fontId] = font;
-      resolve();
-    });
-  });
-}
-
 function load() {
-  return loadFont('helvetiker_regular');
+  return loadFonts().then((theFonts) => {
+    fonts = theFonts;
+  });
 }
 
 function VerticesAnimation(geometry) {

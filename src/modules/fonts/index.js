@@ -17,18 +17,17 @@ export function loadFont(url) {
 
 export function loadFonts() {
   const promises = fonts.map((id) => {
-    const url = `../../lib/fonts/fonts/${id}.typeface.json`;
-    return loadFont(url).then((font) => {
-      return { id, font };
-    });
+    const url = `../../modules/fonts/fonts/${id}.typeface.json`;
+    return loadFont(url).then(font => ({ id, font }));
   });
   return Promise
     .all(promises)
     .then((results) => {
-      const map = results.reduce((acc, result) => {
-        acc[result.id] = result.font;
-        return acc;
-      }, {});
+      const map = results.reduce((acc, result) => ({
+        ...acc,
+        [result.id]: result.font,
+      })
+      , {});
       return map;
     });
 }

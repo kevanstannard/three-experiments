@@ -1,6 +1,11 @@
 export default {
   title: 'Orbit Controls',
   description: 'Simple example showing orbit controls',
-  threeVersion: 'r82',
   public: true,
+  scripts: [
+    '../../libs/three/r83/three.min.js',
+    '../../libs/three/r83/controls/OrbitControls.js',
+    '../../libs/threex/THREEx.WindowResize.js',
+  ],
+  styles: [],
 };

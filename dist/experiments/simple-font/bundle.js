@@ -70,7 +70,7 @@
 
 	function loadFont(fontId) {
 	  return new Promise(function (resolve) {
-	    var fontUrl = '../../lib/fonts/fonts/' + fontId + '.typeface.json';
+	    var fontUrl = '../../modules/fonts/fonts/' + fontId + '.typeface.json';
 	    fontLoader.load(fontUrl, function (font) {
 	      fonts[fontId] = font;
 	      resolve();

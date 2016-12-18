@@ -1,7 +1,7 @@
 // References
 // https://github.com/mrdoob/three.js/tree/master/examples/fonts
 
-import { loadFonts } from '../../lib/fonts';
+import { loadFonts } from '../../modules/fonts';
 
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;

@@ -22,7 +22,7 @@ const fontLoader = new THREE.FontLoader();
 
 function loadFont(fontId) {
   return new Promise((resolve) => {
-    const fontUrl = `../../lib/fonts/fonts/${fontId}.typeface.json`;
+    const fontUrl = `../../modules/fonts/fonts/${fontId}.typeface.json`;
     fontLoader.load(fontUrl, (font) => {
       fonts[fontId] = font;
       resolve();

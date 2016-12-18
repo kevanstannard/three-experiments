@@ -133,7 +133,7 @@
 
 	  var textureLoader = new THREE.TextureLoader();
 
-	  var texture = textureLoader.load('steve.png');
+	  var texture = textureLoader.load('../../assets/textures/minecraft/skins/steve.png');
 
 	  // Keep the texture pixellated
 	  texture.magFilter = THREE.NearestFilter;

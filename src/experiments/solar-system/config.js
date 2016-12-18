@@ -1,6 +1,11 @@
 export default {
   title: 'Solar System',
   description: 'The sun, planets and some moons',
-  threeVersion: 'r82',
   public: false,
+  scripts: [
+    '../../libs/three/r83/three.min.js',
+    '../../libs/three/r83/controls/OrbitControls.js',
+    '../../libs/threex/THREEx.WindowResize.js',
+  ],
+  styles: [],
 };
