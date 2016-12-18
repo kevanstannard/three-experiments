@@ -2,42 +2,7 @@
 <html>
 <head>
   <title>Three.js Examples</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background-color: black;
-      font-family: sans-serif;
-      font-size: 12px;
-      padding: 0;
-      margin: 0;
-    }
-    .infoBar {
-      background-color: #222;
-      width: 100%;
-      padding: 10px;
-      color: grey;
-    }
-    .infoBar a {
-      float: right;
-    }
-    .experiments {
-      padding: 10px;
-      margin: 0;
-      color: grey;
-    }
-    .experiments li {
-      margin-bottom: 10px;
-    }
-    .experiments a {
-      color: white;
-      text-decoration: none;
-    }
-    .experiments .private a {
-      color: darkGreen;
-    }
-  </style>
+  <link rel="stylesheet" href="dist/assets/styles/experiments.css">
 </head>
 <body>
   <div class="infoBar">
@@ -50,11 +15,24 @@
     %>
     <li class="<%= experimentClass %>">
       <a href="dist/experiments/<%= experiment.id %>/index.html"><%= experiment.title %></a>
+      <% if (experiment.tags) { %>
+        <%
+          const tagsArray = experiment.tags.split(',');
+          console.log(tagsArray);
+        %>
+        <% tagsArray.forEach(function(tag) { %>
+          <span class="tag"><%= tag %></span>
+        <% }); %>
+      <% } %>
       <% if (experiment.description) { %>
         - <%= experiment.description %>
       <% } %>
     </li>
   <% }); %>
   <ul>
+<div id="experiments" />
+<script>
+window.experiments = <%= JSON.stringify(experiments, null, 2) %>;
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Three.js Examples",
   "scripts": {
-    "serve": "gulp serve",
+    "dev": "gulp dev",
     "build": "gulp build"
   },
   "repository": {

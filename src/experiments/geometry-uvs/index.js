@@ -17,18 +17,6 @@ let plane;
 const origin = new THREE.Vector3(0, 0, 0);
 
 const textures = {};
-const fonts = {};
-const fontLoader = new THREE.FontLoader();
-
-function loadFont(fontId) {
-  return new Promise((resolve) => {
-    const fontUrl = `../../lib/fonts/fonts/${fontId}.typeface.json`;
-    fontLoader.load(fontUrl, (font) => {
-      fonts[fontId] = font;
-      resolve();
-    });
-  });
-}
 
 function loadTexture(id, url) {
   return new Promise((resolve) => {
@@ -42,8 +30,7 @@ function loadTexture(id, url) {
 
 function load() {
   const promises = [];
-  promises.push(loadFont('helvetiker_regular'));
-  promises.push(loadTexture('free', 'free.jpg'));
+  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));
   return Promise.all(promises);
 }
 

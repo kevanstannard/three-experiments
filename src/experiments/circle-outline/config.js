@@ -1,6 +1,7 @@
 export default {
   title: 'Circle Outline',
   description: 'Simple example of an outlined circle (not filled in)',
+  tags: 'Circle, Geometry',
   public: true,
   scripts: [
     '../../libs/three/r83/three.min.js',

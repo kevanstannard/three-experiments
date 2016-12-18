@@ -52,35 +52,28 @@ export default function (experiments, buildType) {
     ]);
     plugins.push(plugin);
   });
-  // Copy the assets
+
+  // Copy the static files
   plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/assets'),
       to: path.join(rootDir, 'dist/assets'),
     },
-  ]));
-  // Copy the libs
-  plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/libs'),
       to: path.join(rootDir, 'dist/libs'),
     },
-  ]));
-  // Copy the modules
-  plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/modules'),
       to: path.join(rootDir, 'dist/modules'),
     },
-  ]));
-  // Create the main index file
-  plugins.push(new CopyWebpackPlugin([
     {
       from: path.join(rootDir, 'src/index-experiments.html'),
       to: path.join(rootDir, 'index.html'),
       transform: transformIndexExperiments(experimentConfigs),
     },
   ]));
+
   return {
     entry,
     plugins,

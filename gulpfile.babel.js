@@ -36,7 +36,7 @@ function build(experiments) {
   });
 }
 
-function serve(experiments) {
+function dev(experiments) {
   const PORT = 8080;
   const HOST = 'localhost';
   return new Promise((resolve, reject) => {
@@ -73,8 +73,8 @@ gulp.task('build', ['clean'], (callback) => {
     .catch(callback);
 });
 
-gulp.task('serve', (callback) => {
+gulp.task('dev', (callback) => {
   getExperiments()
-    .then(serve)
+    .then(dev)
     .catch(callback);
 });

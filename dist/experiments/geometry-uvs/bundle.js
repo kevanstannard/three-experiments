@@ -65,18 +65,6 @@
 	var origin = new THREE.Vector3(0, 0, 0);
 
 	var textures = {};
-	var fonts = {};
-	var fontLoader = new THREE.FontLoader();
-
-	function loadFont(fontId) {
-	  return new Promise(function (resolve) {
-	    var fontUrl = '../../lib/fonts/fonts/' + fontId + '.typeface.json';
-	    fontLoader.load(fontUrl, function (font) {
-	      fonts[fontId] = font;
-	      resolve();
-	    });
-	  });
-	}
 
 	function loadTexture(id, url) {
 	  return new Promise(function (resolve) {
@@ -90,8 +78,7 @@
 
 	function load() {
 	  var promises = [];
-	  promises.push(loadFont('helvetiker_regular'));
-	  promises.push(loadTexture('free', 'free.jpg'));
+	  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));
 	  return Promise.all(promises);
 	}
 
