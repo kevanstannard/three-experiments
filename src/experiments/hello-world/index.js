@@ -10,11 +10,35 @@ let camera;
 let renderer;
 let axisHelper;
 let gridHelper;
-let controls;
+let orbitControls;
 let pointLight;
 let ambientLight;
+let mesh;
+let controls;
+let stats;
 
 const origin = new THREE.Vector3(0, 0, 0);
+
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
+
+function initControls() {
+  controls = {
+    xRotation: 0,
+    yRotation: 0,
+    zRotation: 0,
+  };
+  const gui = new dat.GUI();
+  gui.add(controls, 'xRotation', 0, Math.PI * 2);
+  gui.add(controls, 'yRotation', 0, Math.PI * 2);
+  gui.add(controls, 'zRotation', 0, Math.PI * 2);
+}
 
 function init() {
   scene = new THREE.Scene();
@@ -26,15 +50,15 @@ function init() {
   scene.add(axisHelper);
 
   const geometry = new THREE.BoxGeometry(50, 50, 50);
-  const material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-  const mesh = new THREE.Mesh(geometry, material);
+  const material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+  mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
   ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
   pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(50, 50, 50);
+  pointLight.position.set(50, 200, -100);
   scene.add(pointLight);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -44,15 +68,24 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
   THREEx.WindowResize(renderer, camera);
 
   document.body.appendChild(renderer.domElement);
+
+  initStats();
+  initControls();
 }
 
 function update() {
-  controls.update();
+  mesh.rotation.set(
+    mesh.rotation.x = controls.xRotation,
+    mesh.rotation.y = controls.yRotation,
+    mesh.rotation.z = controls.zRotation,
+  );
+  stats.update();
+  orbitControls.update();
 }
 
 function animate() {

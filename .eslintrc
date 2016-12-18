@@ -14,6 +14,8 @@
     "KeyboardState": true,
     "window": true,
     "document": true,
-    "requestAnimationFrame": true
+    "requestAnimationFrame": true,
+    "dat": true,
+    "Stats": true,
   }
 }

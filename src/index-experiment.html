@@ -11,8 +11,9 @@
 <body>
   <div class="infoBar">
     <a href="../../../">Home</a> &rarr; <%= title %>
-    <a class="viewSourceLink" href="https://github.com/kevanstannard/three/tree/master/src/experiments/<%= experiment %>/index.js">View Source</a>
+    <a class="viewSourceLink" href="https://github.com/kevanstannard/three/tree/master/src/experiments/<%= experiment %>/index.js">(View Source)</a>
   </div>
+  <div id="stats" class="stats"></div>
   <% scripts.forEach(function(script) { %>
     <script src="<%= script %>"></script>
   <% }); %>

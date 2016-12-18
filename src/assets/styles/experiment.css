@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   background-color: black;
   font-family: sans-serif;
@@ -9,6 +10,7 @@ body {
   margin: 0;
   overflow: hidden;
 }
+
 .infoBar {
   position: absolute;
   width: 100%;
@@ -16,9 +18,20 @@ body {
   color: lightGrey;
   text-shadow: 1px 1px 1px #000;
 }
+
 .infoBar a {
   color: lightGrey;
 }
-.viewSourceLink {
-  float: right;
+
+.infoBar a.viewSourceLink {
+  font-size: 10px;
+  color: grey;
+}
+
+.stats {
+  position: absolute;
+  top: 30px;
+}
+.stats div {
+  position: relative;
 }
