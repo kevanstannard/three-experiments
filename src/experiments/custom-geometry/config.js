@@ -1,7 +1,7 @@
 export default {
-  title: 'Hello World',
-  description: 'Simple Hello World application with common elements for a scene',
-  tags: 'Cube',
+  title: 'Custom Geometry',
+  description: 'Simple experiment with a custom geometry',
+  tags: 'Geometry',
   public: true,
   scripts: [
     '../../libs/three/r83/three.min.js',
