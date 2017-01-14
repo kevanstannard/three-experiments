@@ -58,38 +58,36 @@
 	var renderer = void 0;
 	var axisHelper = void 0;
 	var gridHelper = void 0;
-	// let geometry;
-	// let material;
-	// let mesh;
-	var controls = void 0;
+	var guiControls = void 0;
 	var pointLight = void 0;
-	// let ambientLight;
+	var fog = void 0;
 
-	// const origin = new THREE.Vector3(0, 0, 0);
+	var origin = new THREE.Vector3(0, 0, 0);
+
+	function initControls() {
+	  guiControls = {
+	    fogEnabled: true,
+	    fogNear: 1,
+	    fogFar: 500
+	  };
+	  var gui = new dat.GUI();
+	  gui.add(guiControls, 'fogEnabled');
+	  gui.add(guiControls, 'fogNear', 1, 500);
+	  gui.add(guiControls, 'fogFar', 1, 500);
+	}
 
 	function init() {
 	  scene = new THREE.Scene();
+	  scene.background = new THREE.Color(0xffffff);
 
-	  gridHelper = new THREE.GridHelper(10, 10);
+	  gridHelper = new THREE.GridHelper(500, 20);
 	  scene.add(gridHelper);
 
-	  axisHelper = new THREE.AxisHelper(10);
+	  axisHelper = new THREE.AxisHelper(500);
 	  scene.add(axisHelper);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(15, 10, 15);
-	  // camera.lookAt(origin);
-
-	  // geometry = new THREE.BoxGeometry(50, 50, 50);
-	  // material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-	  // mesh = new THREE.Mesh(geometry, material);
-	  // scene.add(mesh);
-
-	  // ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
-	  // scene.add(ambientLight);
-
-	  pointLight = new THREE.PointLight(0xffffff, 1, 500);
-	  pointLight.position.set(10, 10, 10);
+	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+	  pointLight.position.set(100, 100, 100);
 	  scene.add(pointLight);
 
 	  var texture = new THREE.Texture();
@@ -99,31 +97,57 @@
 	    texture.needsUpdate = true;
 	  });
 
-	  var loader = new THREE.OBJLoader();
-	  loader.load('../../assets/objects/minecraft-tree.obj', function (object) {
-	    // object.traverse((child) => {
-	    //   if (child instanceof THREE.Mesh) {
-	    //     child.material.map = texture;
-	    //   }
-	    // });
-	    object.position.set(0, 4, 0);
-	    object.scale.set(0.01, 0.01, 0.01);
-	    scene.add(object);
-	    camera.lookAt(object.position);
-	  });
+	  var numBoxes = 10;
+	  var boxSize = 40;
+	  var delta = Math.PI * 2 / numBoxes;
 
-	  renderer = new THREE.WebGLRenderer();
+	  var lastBox = void 0;
+
+	  for (var count = 0; count < 5; count += 1) {
+	    var radius = (count + 1) * 100;
+	    for (var angle = 0; angle < Math.PI * 2; angle += delta) {
+	      var x = radius * Math.cos(angle);
+	      var z = radius * Math.sin(angle);
+	      var y = 0;
+	      var geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+	      var material = new THREE.MeshLambertMaterial({ map: texture });
+	      var mesh = new THREE.Mesh(geometry, material);
+	      mesh.position.set(x, y, z);
+	      mesh.lookAt(origin);
+	      scene.add(mesh);
+	      lastBox = mesh;
+	    }
+	  }
+
+	  var cameraHeight = boxSize;
+
+	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+	  camera.position.set(0, cameraHeight, 0);
+	  camera.lookAt(new THREE.Vector3(lastBox.position.x, cameraHeight, lastBox.position.z));
+
+	  fog = new THREE.Fog(0xffffff, 1, 300);
+	  scene.fog = fog;
+
+	  renderer = new THREE.WebGLRenderer({ antialias: true });
 	  renderer.setSize(window.innerWidth, window.innerHeight);
-
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	  THREEx.WindowResize(renderer, camera);
 
 	  document.body.appendChild(renderer.domElement);
+
+	  initControls();
 	}
 
 	function update() {
-	  controls.update();
+	  camera.rotation.y += 0.001;
+	  // orbitControls.update();
+	  if (guiControls.fogEnabled) {
+	    scene.fog = fog;
+	    scene.fog.near = guiControls.fogNear;
+	    scene.fog.far = guiControls.fogFar;
+	  } else {
+	    scene.fog = null;
+	  }
 	}
 
 	function animate() {

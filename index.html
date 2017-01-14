@@ -145,6 +145,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/load-obj/index.html">Load OBJ</a>
+      
+        
+        
+          <span class="tag">OBJ</span>
+        
+          <span class="tag"> Loader</span>
+        
+      
+      
+        - Loads and displays a simple OBJ object
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/minecraft-head/index.html">Minecraft Head</a>
       
       
@@ -251,6 +267,34 @@
       
       
         - Example of shadows on transparent material
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/simple-dark-fog/index.html">Simple Dark Fog</a>
+      
+        
+        
+          <span class="tag">Fog</span>
+        
+      
+      
+        - Simple black fog example
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/simple-fog/index.html">Simple Fog</a>
+      
+        
+        
+          <span class="tag">Fog</span>
+        
+      
+      
+        - Simple fog example
       
     </li>
   
@@ -460,6 +504,20 @@ window.experiments = [
     "id": "keyboard-move"
   },
   {
+    "title": "Load OBJ",
+    "description": "Loads and displays a simple OBJ object",
+    "tags": "OBJ, Loader",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r83/three.min.js",
+      "../../libs/three/r83/controls/OrbitControls.js",
+      "../../libs/three/r83/loaders/OBJLoader.js",
+      "../../libs/threex/THREEx.WindowResize.js"
+    ],
+    "styles": [],
+    "id": "load-obj"
+  },
+  {
     "title": "Minecraft Head",
     "description": "Example of cube texture mapping with a Minecraft head geometry",
     "public": true,
@@ -596,6 +654,40 @@ window.experiments = [
     ],
     "styles": [],
     "id": "shadows-on-material"
+  },
+  {
+    "title": "Simple Dark Fog",
+    "description": "Simple black fog example",
+    "tags": "Fog",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r83/three.min.js",
+      "../../libs/three/r83/controls/OrbitControls.js",
+      "../../libs/three/r83/loaders/OBJLoader.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "simple-dark-fog"
+  },
+  {
+    "title": "Simple Fog",
+    "description": "Simple fog example",
+    "tags": "Fog",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r83/three.min.js",
+      "../../libs/three/r83/controls/OrbitControls.js",
+      "../../libs/three/r83/loaders/OBJLoader.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "simple-fog"
   },
   {
     "title": "Simple Font",

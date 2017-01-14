@@ -57,73 +57,117 @@
 	var camera = void 0;
 	var renderer = void 0;
 	var axisHelper = void 0;
-	var gridHelper = void 0;
+	// let gridHelper;
 	// let geometry;
 	// let material;
 	// let mesh;
-	var controls = void 0;
+	var orbitControls = void 0;
+	var guiControls = void 0;
 	var pointLight = void 0;
-	// let ambientLight;
+	var ambientLight = void 0;
+	var fog = void 0;
 
-	// const origin = new THREE.Vector3(0, 0, 0);
+	var origin = new THREE.Vector3(0, 0, 0);
+
+	function initControls() {
+	  guiControls = {
+	    fogEnabled: true,
+	    fogNear: 1,
+	    fogFar: 1000
+	  };
+	  var gui = new dat.GUI();
+	  gui.add(guiControls, 'fogEnabled');
+	  gui.add(guiControls, 'fogNear', 1, 500);
+	  gui.add(guiControls, 'fogFar', 501, 1500);
+	}
 
 	function init() {
 	  scene = new THREE.Scene();
 
-	  gridHelper = new THREE.GridHelper(10, 10);
-	  scene.add(gridHelper);
+	  // gridHelper = new THREE.GridHelper(200, 10);
+	  // scene.add(gridHelper);
 
-	  axisHelper = new THREE.AxisHelper(10);
+	  axisHelper = new THREE.AxisHelper(200);
 	  scene.add(axisHelper);
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(15, 10, 15);
-	  // camera.lookAt(origin);
+	  camera.position.set(500, 200, 500);
+	  camera.lookAt(origin);
 
 	  // geometry = new THREE.BoxGeometry(50, 50, 50);
 	  // material = new THREE.MeshLambertMaterial({ color: 0x888888 });
 	  // mesh = new THREE.Mesh(geometry, material);
 	  // scene.add(mesh);
 
-	  // ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
-	  // scene.add(ambientLight);
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  scene.add(ambientLight);
 
 	  pointLight = new THREE.PointLight(0xffffff, 1, 500);
-	  pointLight.position.set(10, 10, 10);
+	  pointLight.position.set(200, 200, 200);
 	  scene.add(pointLight);
 
-	  var texture = new THREE.Texture();
-	  var textureLoader = new THREE.ImageLoader();
-	  textureLoader.load('../../assets/textures/misc/uv_grid_sm.jpg', function (image) {
-	    texture.image = image;
-	    texture.needsUpdate = true;
-	  });
+	  var boxSize = 50;
+	  var gapSize = 40;
+	  var gridSize = 9;
 
-	  var loader = new THREE.OBJLoader();
-	  loader.load('../../assets/objects/minecraft-tree.obj', function (object) {
-	    // object.traverse((child) => {
-	    //   if (child instanceof THREE.Mesh) {
-	    //     child.material.map = texture;
-	    //   }
-	    // });
-	    object.position.set(0, 4, 0);
-	    object.scale.set(0.01, 0.01, 0.01);
-	    scene.add(object);
-	    camera.lookAt(object.position);
-	  });
+	  var areaSize = boxSize * gridSize + gapSize * (gridSize - 1);
+	  var start = -(areaSize / 2) + boxSize / 2;
+	  var end = areaSize / 2 + boxSize / 2;
+
+	  for (var x = start; x <= end; x += boxSize + gapSize) {
+	    for (var z = start; z <= end; z += boxSize + gapSize) {
+	      var geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+	      var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
+	      var mesh = new THREE.Mesh(geometry, material);
+	      mesh.position.set(x, 0, z);
+	      scene.add(mesh);
+	    }
+	  }
+
+	  // const texture = new THREE.Texture();
+	  // const textureLoader = new THREE.ImageLoader();
+	  // textureLoader.load('../../assets/textures/misc/uv_grid_sm.jpg', (image) => {
+	  //   texture.image = image;
+	  //   texture.needsUpdate = true;
+	  // });
+
+	  // const loader = new THREE.OBJLoader();
+	  // loader.load('../../assets/objects/minecraft-tree.obj', (object) => {
+	  //   // object.traverse((child) => {
+	  //   //   if (child instanceof THREE.Mesh) {
+	  //   //     child.material.map = texture;
+	  //   //   }
+	  //   // });
+	  //   object.position.set(0, 4, 0);
+	  //   object.scale.set(0.01, 0.01, 0.01);
+	  //   scene.add(object);
+	  //   camera.lookAt(object.position);
+	  // });
+
+	  fog = new THREE.Fog(0x000000, 1, 2000);
+	  scene.fog = fog;
 
 	  renderer = new THREE.WebGLRenderer();
 	  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
+	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	  THREEx.WindowResize(renderer, camera);
 
 	  document.body.appendChild(renderer.domElement);
+
+	  initControls();
 	}
 
 	function update() {
-	  controls.update();
+	  orbitControls.update();
+	  if (guiControls.fogEnabled) {
+	    scene.fog = fog;
+	    scene.fog.near = guiControls.fogNear;
+	    scene.fog.far = guiControls.fogFar;
+	  } else {
+	    scene.fog = null;
+	  }
 	}
 
 	function animate() {
