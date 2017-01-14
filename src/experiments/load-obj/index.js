@@ -15,34 +15,54 @@ let gridHelper;
 // let mesh;
 let controls;
 let pointLight;
-let ambientLight;
+// let ambientLight;
 
-const origin = new THREE.Vector3(0, 0, 0);
+// const origin = new THREE.Vector3(0, 0, 0);
 
 function init() {
   scene = new THREE.Scene();
 
-  gridHelper = new THREE.GridHelper(100, 10);
+  gridHelper = new THREE.GridHelper(10, 10);
   scene.add(gridHelper);
 
-  axisHelper = new THREE.AxisHelper(100);
+  axisHelper = new THREE.AxisHelper(10);
   scene.add(axisHelper);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
+  camera.position.set(15, 10, 15);
+  // camera.lookAt(origin);
 
   // geometry = new THREE.BoxGeometry(50, 50, 50);
   // material = new THREE.MeshLambertMaterial({ color: 0x888888 });
   // mesh = new THREE.Mesh(geometry, material);
   // scene.add(mesh);
 
-  ambientLight = new THREE.AmbientLight(0x444444);
-  scene.add(ambientLight);
+  // ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+  // scene.add(ambientLight);
 
-  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(50, 50, 50);
+  pointLight = new THREE.PointLight(0xffffff, 1, 500);
+  pointLight.position.set(10, 10, 10);
   scene.add(pointLight);
+
+  const texture = new THREE.Texture();
+  const textureLoader = new THREE.ImageLoader();
+  textureLoader.load('../../assets/textures/misc/uv_grid_sm.jpg', (image) => {
+    texture.image = image;
+    texture.needsUpdate = true;
+  });
+
+  const loader = new THREE.OBJLoader();
+  loader.load('../../assets/objects/minecraft-tree.obj', (object) => {
+    // object.traverse((child) => {
+    //   if (child instanceof THREE.Mesh) {
+    //     child.material.map = texture;
+    //   }
+    // });
+    object.position.set(0, 4, 0);
+    object.scale.set(0.01, 0.01, 0.01);
+    scene.add(object);
+    camera.lookAt(object.position);
+  });
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
