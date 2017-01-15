@@ -1,5 +1,5 @@
 export default {
-  title: 'Interactive Cube',
+  title: 'Interactive Cubes',
   description: 'Simple example of interacting with objects in a scene',
   tags: 'Cube, Mouse, RayCaster',
   public: true,

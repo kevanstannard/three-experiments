@@ -81,8 +81,7 @@
 	  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 	}
 
-	function onDocumentClick(event) {
-	  event.preventDefault();
+	function onDocumentClick() {
 	  if (currentObject) {
 	    currentObject.animate = {
 	      radius: 40,
