@@ -1,3 +1,5 @@
+import Bug from './Bug';
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -15,10 +17,28 @@ let stats;
 // let rectLight;
 // let rectLightHelper;
 const lights = [];
+const bugs = [];
 
 const origin = new THREE.Vector3(0, 0, 0);
 
+// function Wall(width, height) {
+//   const material = new THREE.MeshStandardMaterial({
+//     color: 0xffffff,
+//     metalness: 0,
+//     roughness: 1,
+//     side: THREE.DoubleSide,
+//   });
+//   const geometry = new THREE.PlaneBufferGeometry(width, height);
+//   THREE.Mesh.call(this, geometry, material);
+//   this.receiveShadow = true;
+// }
+//
+// Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+//   constructor: Wall,
+// });
+
 function Wall(width, height) {
+  THREE.Object3D.call(this);
   const material = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     metalness: 0,
@@ -26,10 +46,29 @@ function Wall(width, height) {
     side: THREE.DoubleSide,
   });
   const geometry = new THREE.PlaneBufferGeometry(width, height);
-  THREE.Mesh.call(this, geometry, material);
+  this.wall = new THREE.Mesh(geometry, material);
+  this.add(this.wall);
+
+  const numStains = Math.floor(Math.random() * 5);
+  for (let i = 0; i < numStains; i += 1) {
+    const stainSize = 50 + Math.random() * 200;
+    const stainGeometry = new THREE.CircleBufferGeometry(stainSize);
+    const stainMaterial = new THREE.MeshStandardMaterial({
+      color: 0xdddddd,
+      metalness: 0,
+      roughness: 1,
+    });
+    this.stain = new THREE.Mesh(stainGeometry, stainMaterial);
+    this.stain.position.z = 0.5;
+    this.stain.position.x = -100 + Math.random() * 200;
+    this.stain.position.y = -100 + Math.random() * 200;
+    this.add(this.stain);
+  }
+
+  // this.mesh.receiveShadow = true;
 }
 
-Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+Wall.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
   constructor: Wall,
 });
 
@@ -67,6 +106,8 @@ Room.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
 
 function Light() {
   THREE.RectAreaLight.call(this, 0xFFFFFF, 100, 5, 40);
+  // this.castShadow = true;
+
   this.helper = new THREE.RectAreaLightHelper(this);
   this.add(this.helper);
 
@@ -163,6 +204,17 @@ function init() {
   const room = new Room(roomWidth, roomHeight, roomDepth);
   scene.add(room);
 
+  for (let i = 0; i < 30; i += 1) {
+    const bug = new Bug();
+    const x = (-roomWidth / 2) + 1;
+    const y = -20 + Math.random() * 40;
+    const z = -20 + Math.random() * 40;
+    bug.position.set(x, y, z);
+    bug.rotation.y = Math.PI / 2;
+    bugs.push(bug);
+    scene.add(bug);
+  }
+
   const light1 = new Light();
   const light1Pos = {
     x: 0,
@@ -198,6 +250,8 @@ function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
   camera.position.set(75, 0, 150);
@@ -214,6 +268,7 @@ function init() {
 
 function update() {
   lights.forEach(light => light.update());
+  bugs.forEach(bug => bug.update());
   stats.update();
   orbitControls.update();
 }
