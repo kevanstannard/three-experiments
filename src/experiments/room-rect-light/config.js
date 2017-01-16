@@ -1,7 +1,7 @@
 export default {
-  title: 'Room with Point Light',
-  description: 'Simple room scene with a point light',
-  tags: 'Cube',
+  title: 'Room and Rect Light',
+  description: 'Simple scene of a room with a Rect Light',
+  tags: 'RectLight',
   public: true,
   scripts: [
     '../../libs/three/r83/three.min.js',

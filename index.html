@@ -326,15 +326,15 @@
   
     
     <li class="public">
-      <a href="dist/experiments/room-point-light/index.html">Room with Point Light</a>
+      <a href="dist/experiments/room-rect-light/index.html">Room and Rect Light</a>
       
         
         
-          <span class="tag">Cube</span>
+          <span class="tag">RectLight</span>
         
       
       
-        - Simple room scene with a point light
+        - Simple scene of a room with a Rect Light
       
     </li>
   
@@ -449,6 +449,20 @@
       
       
         - Experiment to load an SVG image
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/walls-point-light/index.html">Walls and Point Light</a>
+      
+        
+        
+          <span class="tag">PointLight</span>
+        
+      
+      
+        - Simple scene of walls and a point light
       
     </li>
   
@@ -808,9 +822,9 @@ window.experiments = [
     "id": "pulsing-circles"
   },
   {
-    "title": "Room with Point Light",
-    "description": "Simple room scene with a point light",
-    "tags": "Cube",
+    "title": "Room and Rect Light",
+    "description": "Simple scene of a room with a Rect Light",
+    "tags": "RectLight",
     "public": true,
     "scripts": [
       "../../libs/three/r83/three.min.js",
@@ -822,7 +836,7 @@ window.experiments = [
     "styles": [
       "../../libs/dat.gui/0.6.2/dat.gui.css"
     ],
-    "id": "room-point-light"
+    "id": "room-rect-light"
   },
   {
     "title": "Scene Image Background",
@@ -959,6 +973,23 @@ window.experiments = [
     ],
     "styles": [],
     "id": "svg-image"
+  },
+  {
+    "title": "Walls and Point Light",
+    "description": "Simple scene of walls and a point light",
+    "tags": "PointLight",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r83/three.min.js",
+      "../../libs/three/r83/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "walls-point-light"
   }
 ];
 </script>
