@@ -66,7 +66,7 @@ function init() {
   camera.lookAt(origin);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
   orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -88,11 +88,15 @@ function update() {
   orbitControls.update();
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  update();
+function render() {
   renderer.render(scene, camera);
 }
 
+function tick() {
+  update();
+  render();
+  requestAnimationFrame(tick);
+}
+
 init();
-animate();
+tick();
