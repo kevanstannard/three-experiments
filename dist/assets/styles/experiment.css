@@ -17,6 +17,7 @@ body {
   padding: 10px;
   color: lightGrey;
   text-shadow: 1px 1px 1px #000;
+  z-index: 1;
 }
 
 .infoBar a {

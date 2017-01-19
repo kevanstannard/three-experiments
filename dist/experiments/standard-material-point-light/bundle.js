@@ -56,14 +56,20 @@
 	var scene = void 0;
 	var camera = void 0;
 	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
+	// let axisHelper;
+	// let gridHelper;
 	var orbitControls = void 0;
 	var pointLight = void 0;
+	var pointLightHelper = void 0;
 	var ambientLight = void 0;
+	var material = void 0;
+	var geometry = void 0;
 	var mesh = void 0;
 	var controls = void 0;
 	var stats = void 0;
+	var bumpTexture = void 0;
+
+	var textureLoader = new THREE.TextureLoader();
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
@@ -78,39 +84,47 @@
 
 	function initControls() {
 	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
+	    metalness: 0,
+	    roughness: 0,
+	    distance: 10,
+	    bumpMap: false
 	  };
 	  var gui = new dat.GUI();
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
+	  gui.add(controls, 'metalness', 0, 1);
+	  gui.add(controls, 'roughness', 0, 1);
+	  gui.add(controls, 'distance', 10, 50);
+	  gui.add(controls, 'bumpMap');
 	}
 
 	function init() {
 	  scene = new THREE.Scene();
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+	  // gridHelper = new THREE.GridHelper(100, 10);
+	  // scene.add(gridHelper);
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+	  // axisHelper = new THREE.AxisHelper(100);
+	  // scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+	  geometry = new THREE.BoxGeometry(100, 10, 100);
+	  material = new THREE.MeshStandardMaterial({ color: 0xffffff });
 	  mesh = new THREE.Mesh(geometry, material);
 	  scene.add(mesh);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  textureLoader.load('../../assets/textures/bump/stone-001-500x500.jpg', function (texture) {
+	    bumpTexture = texture;
+	  });
+
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.03);
 	  scene.add(ambientLight);
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
+	  pointLight = new THREE.PointLight(0xffffff, 1, 200);
 	  scene.add(pointLight);
 
+	  pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
+	  scene.add(pointLightHelper);
+
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
+	  camera.position.set(100, 100, 100);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -127,7 +141,26 @@
 	}
 
 	function update() {
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
+	  var t = new Date().getTime() / 1000;
+	  var x = Math.sin(t) * controls.distance;
+	  var y = controls.distance;
+	  var z = Math.cos(t) * controls.distance;
+
+	  pointLight.position.x = x;
+	  pointLight.position.y = y;
+	  pointLight.position.z = z;
+
+	  material.metalness = controls.metalness;
+	  material.roughness = controls.roughness;
+
+	  if (controls.bumpMap && !material.bumpMap) {
+	    material.bumpMap = bumpTexture;
+	    material.needsUpdate = true;
+	  } else if (!controls.bumpMap && material.bumpMap) {
+	    material.bumpMap = null;
+	    material.needsUpdate = true;
+	  }
+
 	  stats.update();
 	  orbitControls.update();
 	}

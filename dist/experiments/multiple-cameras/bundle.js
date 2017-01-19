@@ -49,16 +49,17 @@
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+	var ASPECT = SCREEN_WIDTH / 2 / SCREEN_HEIGHT;
 
 	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
+	var camera1 = void 0;
+	var camera2 = void 0;
+	var renderer1 = void 0;
+	var renderer2 = void 0;
 	var axisHelper = void 0;
 	var gridHelper = void 0;
-	var orbitControls = void 0;
+	var orbitControls1 = void 0;
+	var orbitControls2 = void 0;
 	var pointLight = void 0;
 	var ambientLight = void 0;
 	var mesh = void 0;
@@ -102,38 +103,76 @@
 	  mesh = new THREE.Mesh(geometry, material);
 	  scene.add(mesh);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
 	  scene.add(ambientLight);
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
+	  pointLight = new THREE.PointLight(0xffff00, 2, 100);
 	  scene.add(pointLight);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
+	  var pointLightHelper = new THREE.PointLightHelper(pointLight, 20);
+	  scene.add(pointLightHelper);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	  camera1 = new THREE.PerspectiveCamera(30, ASPECT, 1, 1000);
+	  camera1.position.set(200, 200, 200);
+	  camera1.lookAt(origin);
 
-	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+	  var cameraHelper = new THREE.CameraHelper(camera1);
+	  scene.add(cameraHelper);
 
-	  THREEx.WindowResize(renderer, camera);
+	  camera2 = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, 1, 5000);
+	  camera2.position.set(2000, 400, 200);
+	  camera2.lookAt(origin);
 
-	  document.body.appendChild(renderer.domElement);
+	  renderer1 = new THREE.WebGLRenderer({ antialias: true });
+	  renderer1.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+
+	  renderer2 = new THREE.WebGLRenderer({ antialias: true });
+	  renderer2.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+
+	  orbitControls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+	  orbitControls2 = new THREE.OrbitControls(camera2, renderer2.domElement);
+
+	  THREEx.WindowResize(renderer1, camera1);
+	  THREEx.WindowResize(renderer2, camera2);
+
+	  var container1 = document.createElement('div');
+	  var container2 = document.createElement('div');
+
+	  container1.style.position = 'absolute';
+	  container1.style.top = '0px';
+	  container1.style.bottom = '0px';
+	  container1.style.left = '0px';
+	  container1.style.right = SCREEN_WIDTH / 2 - 1 + 'px';
+
+	  container2.style.position = 'absolute';
+	  container2.style.top = '0px';
+	  container2.style.bottom = '0px';
+	  container2.style.left = SCREEN_WIDTH / 2 + 'px';
+	  container2.style.right = '0px';
+
+	  document.body.appendChild(container1);
+	  document.body.appendChild(container2);
+
+	  container1.appendChild(renderer1.domElement);
+	  container2.appendChild(renderer2.domElement);
 
 	  initStats();
 	  initControls();
 	}
 
 	function update() {
+	  var t = new Date().getTime() / 1000;
+	  pointLight.position.x = 100 * Math.sin(t);
+	  pointLight.position.z = 100 * Math.cos(t);
 	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
 	  stats.update();
-	  orbitControls.update();
+	  orbitControls1.update();
+	  orbitControls2.update();
 	}
 
 	function render() {
-	  renderer.render(scene, camera);
+	  renderer1.render(scene, camera1);
+	  renderer2.render(scene, camera2);
 	}
 
 	function tick() {

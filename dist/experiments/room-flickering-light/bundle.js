@@ -40,11 +40,18 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
+
+/***/ 0:
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	var _Bug = __webpack_require__(6);
+
+	var _Bug2 = _interopRequireDefault(_Bug);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -63,10 +70,28 @@
 	// let rectLight;
 	// let rectLightHelper;
 	var lights = [];
+	var bugs = [];
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
+	// function Wall(width, height) {
+	//   const material = new THREE.MeshStandardMaterial({
+	//     color: 0xffffff,
+	//     metalness: 0,
+	//     roughness: 1,
+	//     side: THREE.DoubleSide,
+	//   });
+	//   const geometry = new THREE.PlaneBufferGeometry(width, height);
+	//   THREE.Mesh.call(this, geometry, material);
+	//   this.receiveShadow = true;
+	// }
+	//
+	// Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+	//   constructor: Wall,
+	// });
+
 	function Wall(width, height) {
+	  THREE.Object3D.call(this);
 	  var material = new THREE.MeshStandardMaterial({
 	    color: 0xffffff,
 	    metalness: 0,
@@ -74,10 +99,29 @@
 	    side: THREE.DoubleSide
 	  });
 	  var geometry = new THREE.PlaneBufferGeometry(width, height);
-	  THREE.Mesh.call(this, geometry, material);
+	  this.wall = new THREE.Mesh(geometry, material);
+	  this.add(this.wall);
+
+	  var numStains = Math.floor(Math.random() * 5);
+	  for (var i = 0; i < numStains; i += 1) {
+	    var stainSize = 50 + Math.random() * 200;
+	    var stainGeometry = new THREE.CircleBufferGeometry(stainSize);
+	    var stainMaterial = new THREE.MeshStandardMaterial({
+	      color: 0xdddddd,
+	      metalness: 0,
+	      roughness: 1
+	    });
+	    this.stain = new THREE.Mesh(stainGeometry, stainMaterial);
+	    this.stain.position.z = 0.5;
+	    this.stain.position.x = -100 + Math.random() * 200;
+	    this.stain.position.y = -100 + Math.random() * 200;
+	    this.add(this.stain);
+	  }
+
+	  // this.mesh.receiveShadow = true;
 	}
 
-	Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+	Wall.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
 	  constructor: Wall
 	});
 
@@ -115,6 +159,8 @@
 
 	function Light() {
 	  THREE.RectAreaLight.call(this, 0xFFFFFF, 100, 5, 40);
+	  // this.castShadow = true;
+
 	  this.helper = new THREE.RectAreaLightHelper(this);
 	  this.add(this.helper);
 
@@ -217,6 +263,17 @@
 	  var room = new Room(roomWidth, roomHeight, roomDepth);
 	  scene.add(room);
 
+	  for (var i = 0; i < 30; i += 1) {
+	    var bug = new _Bug2.default();
+	    var x = -roomWidth / 2 + 1;
+	    var y = -20 + Math.random() * 40;
+	    var z = -20 + Math.random() * 40;
+	    bug.position.set(x, y, z);
+	    bug.rotation.y = Math.PI / 2;
+	    bugs.push(bug);
+	    scene.add(bug);
+	  }
+
 	  var light1 = new Light();
 	  var light1Pos = {
 	    x: 0,
@@ -252,6 +309,8 @@
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
 	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	  renderer.shadowMap.enabled = true;
+	  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 	  camera.position.set(75, 0, 150);
@@ -270,6 +329,9 @@
 	  lights.forEach(function (light) {
 	    return light.update();
 	  });
+	  bugs.forEach(function (bug) {
+	    return bug.update();
+	  });
 	  stats.update();
 	  orbitControls.update();
 	}
@@ -287,5 +349,53 @@
 	init();
 	tick();
 
+/***/ },
+
+/***/ 6:
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	function Bug() {
+	  THREE.Object3D.call(this);
+	  // const geometry = new THREE.SphereGeometry(1, 2, 2, 0, Math.PI);
+	  var geometry = new THREE.CircleBufferGeometry(0.5);
+	  var material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+	  this.sphere = new THREE.Mesh(geometry, material);
+	  this.sphere.castShadow = true;
+	  this.sphere.receiveShadow = false;
+	  this.add(this.sphere);
+	}
+
+	Bug.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
+	  constructor: Bug,
+	  update: function update() {
+	    if (this.moveSteps) {
+	      this.sphere.position.x += this.moveDelta.x;
+	      this.sphere.position.y += this.moveDelta.y;
+	      this.moveSteps -= 1;
+	      return;
+	    }
+	    var wantsToMove = Math.random() > 0.9999;
+	    if (wantsToMove) {
+	      this.moveTarget = {
+	        x: -20 + Math.random() * 40,
+	        y: -20 + Math.random() * 40
+	      };
+	      this.moveSteps = 60 * 3;
+	      this.moveDelta = {
+	        x: this.moveTarget.x / this.moveSteps,
+	        y: this.moveTarget.y / this.moveSteps
+	      };
+	    }
+	  }
+	});
+
+	exports.default = Bug;
+
 /***/ }
-/******/ ]);
+
+/******/ });
