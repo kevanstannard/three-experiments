@@ -2,7 +2,7 @@ export default {
   title: 'Ray Caster',
   description: 'Raycaster experiment using origin and direction',
   tags: 'Raycaster, Ray',
-  public: false,
+  public: true,
   scripts: [
     '../../libs/three/r83/three.js',
     '../../libs/three/r83/controls/OrbitControls.js',
