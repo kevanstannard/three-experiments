@@ -37,11 +37,10 @@ function build(experiments) {
 }
 
 function dev(experiments) {
-  const PORT = 8080;
+  const PORT = 8001;
   const HOST = 'localhost';
   return new Promise((resolve, reject) => {
     const config = webpackConfig(experiments, 'serve');
-    // console.log(config);
     const compiler = webpack(config);
     const devServerConfig = {
       stats: { colors: true },
