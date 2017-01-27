@@ -40,15 +40,16 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fonts = __webpack_require__(1);
+	var _fonts = __webpack_require__(2);
 
-	var _CircleLineGeometry = __webpack_require__(7);
+	var _CircleLineGeometry = __webpack_require__(8);
 
 	var _CircleLineGeometry2 = _interopRequireDefault(_CircleLineGeometry);
 
@@ -231,7 +232,8 @@
 	});
 
 /***/ },
-/* 1 */
+
+/***/ 2:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -273,12 +275,8 @@
 	}
 
 /***/ },
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */
+
+/***/ 8:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -310,4 +308,5 @@
 	};
 
 /***/ }
-/******/ ]);
+
+/******/ });

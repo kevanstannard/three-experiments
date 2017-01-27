@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _fonts = __webpack_require__(1);
+	var _fonts = __webpack_require__(2);
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -650,7 +650,8 @@
 	});
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';

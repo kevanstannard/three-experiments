@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _MinecraftHeadGeometry = __webpack_require__(2);
+	var _MinecraftHeadGeometry = __webpack_require__(3);
 
 	var _MinecraftHeadGeometry2 = _interopRequireDefault(_MinecraftHeadGeometry);
 
@@ -150,7 +150,8 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ function(module, exports) {
 
 	"use strict";
