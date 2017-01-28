@@ -56,14 +56,13 @@
 	var scene = void 0;
 	var camera = void 0;
 	var renderer = void 0;
-	var axisHelper = void 0;
+	// let axisHelper;
 	var gridHelper = void 0;
 	var orbitControls = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
-	var mesh = void 0;
-	var controls = void 0;
 	var stats = void 0;
+	var skeletonHelper = void 0;
+	var bones = void 0;
+	var clock = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
@@ -76,24 +75,13 @@
 	  document.getElementById('stats').appendChild(stats.domElement);
 	}
 
-	function initControls() {
-	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
-	  };
-	  var gui = new dat.GUI();
-	  gui.domElement.parentElement.style.zIndex = 2;
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-	}
-
 	function init() {
+	  clock = new THREE.Clock();
+
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
+	  camera.position.set(10, 10, 10);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -106,29 +94,92 @@
 	  document.body.appendChild(renderer.domElement);
 
 	  initStats();
-	  initControls();
 
-	  gridHelper = new THREE.GridHelper(100, 10);
+	  gridHelper = new THREE.GridHelper(10, 10);
 	  scene.add(gridHelper);
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+	  // axisHelper = new THREE.AxisHelper(100);
+	  // scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
+	  var lights = [];
+	  lights[0] = new THREE.PointLight(0xffffff, 1, 0);
+	  lights[1] = new THREE.PointLight(0xffffff, 1, 0);
+	  lights[2] = new THREE.PointLight(0xffffff, 1, 0);
+
+	  lights[0].position.set(0, 200, 0);
+	  lights[1].position.set(100, 200, 100);
+	  lights[2].position.set(-100, -200, -100);
+
+	  scene.add(lights[0]);
+	  scene.add(lights[1]);
+	  scene.add(lights[2]);
+
+	  // We have two bones, but this is visually
+	  // represented as a single line between them
+
+	  bones = [];
+	  var bone1 = new THREE.Bone();
+	  bone1.position.y = -2;
+	  bones.push(bone1);
+
+	  var bone2 = new THREE.Bone();
+	  bone2.position.y = 2;
+	  bone1.add(bone2);
+	  bones.push(bone2);
+
+	  var bone3 = new THREE.Bone();
+	  bone3.position.y = 2;
+	  bone2.add(bone3);
+	  bones.push(bone3);
+
+	  var skeleton = new THREE.Skeleton(bones);
+
+	  var height = 4;
+	  var halfHeight = height / 2;
+	  var heightSegments = 16;
+	  var segmentHeight = 4 / heightSegments;
+
+	  var geometry = new THREE.CylinderGeometry(2, // radiusTop
+	  2, // radiusBottom
+	  height, // height
+	  4, // radiusSegments
+	  heightSegments, // heightSegments
+	  true);
+
+	  // Describe how the geometry vertices are affected by the bones
+	  geometry.vertices.forEach(function (vertex) {
+	    var y = vertex.y + halfHeight;
+	    var skinIndex = Math.floor(y / segmentHeight);
+	    var skinWeight = y % segmentHeight / segmentHeight;
+	    geometry.skinIndices.push(new THREE.Vector4(skinIndex, 0, 0, 0));
+	    geometry.skinWeights.push(new THREE.Vector4(1 - skinWeight, 0, 0, 0));
+	  });
+
+	  var material = new THREE.MeshStandardMaterial({
+	    skinning: true,
+	    color: 0x156289,
+	    emissive: 0x072534,
+	    side: THREE.DoubleSide,
+	    shading: THREE.FlatShading
+	  });
+
+	  var mesh = new THREE.SkinnedMesh(geometry, material);
 	  scene.add(mesh);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-	  scene.add(ambientLight);
+	  mesh.add(bones[0]);
+	  mesh.bind(skeleton);
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
-	  scene.add(pointLight);
+	  skeletonHelper = new THREE.SkeletonHelper(mesh);
+	  scene.add(skeletonHelper);
 	}
 
 	function update() {
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
+	  var t = clock.getElapsedTime();
+	  var y = Math.sin(t);
+	  bones[2].rotation.z = Math.abs(y);
+	  bones[1].rotation.z = Math.abs(y);
+	  bones[0].rotation.z = Math.abs(y);
+	  skeletonHelper.update();
 	  stats.update();
 	  orbitControls.update();
 	}

@@ -8,16 +8,15 @@ const FAR = 10000;
 let scene;
 let camera;
 let renderer;
-let axisHelper;
-let gridHelper;
+// let axisHelper;
+// let gridHelper;
 let orbitControls;
-let pointLight;
-let ambientLight;
+// let pointLight;
+// let ambientLight;
 let mesh;
-let controls;
 let stats;
 
-const origin = new THREE.Vector3(0, 0, 0);
+// const origin = new THREE.Vector3(0, 0, 0);
 
 function initStats() {
   stats = new Stats();
@@ -28,25 +27,12 @@ function initStats() {
   document.getElementById('stats').appendChild(stats.domElement);
 }
 
-function initControls() {
-  controls = {
-    xRotation: 0,
-    yRotation: 0,
-    zRotation: 0,
-  };
-  const gui = new dat.GUI();
-  gui.domElement.parentElement.style.zIndex = 2;
-  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-}
-
 function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
+  camera.position.set(0, 0, -300);
+  // camera.lookAt(origin);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -58,33 +44,45 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   initStats();
-  initControls();
 
-  gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
+  // gridHelper = new THREE.GridHelper(100, 10);
+  // scene.add(gridHelper);
 
-  axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
+  // axisHelper = new THREE.AxisHelper(100);
+  // scene.add(axisHelper);
 
-  const geometry = new THREE.BoxGeometry(50, 50, 50);
-  const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  const geometry = new THREE.SphereBufferGeometry(
+    100,    // radius
+    32,     // width segments
+    32,     // height segments
+  );
+  const material = new THREE.MeshStandardMaterial({
+    roughness: 1,
+    metalness: 0,
+
+  });
   mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
   scene.add(ambientLight);
 
-  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(50, 200, -100);
-  scene.add(pointLight);
+  // const pointLight1 = new THREE.PointLight(0xffffff, 2, 500);
+  // pointLight1.position.set(200, 200, 200);
+  // scene.add(pointLight1);
+
+  // const pointLight2 = new THREE.PointLight(0xffffff, 1, 500);
+  // pointLight2.position.set(-200, -200, -200);
+  // scene.add(pointLight2);
+
+  const loader = new THREE.TextureLoader();
+  loader.load('../../assets/textures/sphere/earth.jpg', (texture) => {
+    material.map = texture;
+    material.needsUpdate = true;
+  });
 }
 
 function update() {
-  mesh.rotation.set(
-    mesh.rotation.x = controls.xRotation,
-    mesh.rotation.y = controls.yRotation,
-    mesh.rotation.z = controls.zRotation,
-  );
   stats.update();
   orbitControls.update();
 }
