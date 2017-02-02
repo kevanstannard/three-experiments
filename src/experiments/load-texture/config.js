@@ -1,7 +1,7 @@
 export default {
-  title: 'Load Texture',
-  description: 'Simple example to load a texture',
-  tags: 'ImageLoader, Image',
+  title: 'Load Texture on other domain',
+  description: 'Simple example to load a texture with CORS',
+  tags: 'ImageLoader, Image, CORS',
   public: true,
   scripts: [
     // '../../libs/three/r84/three.js',
