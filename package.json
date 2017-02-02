@@ -4,7 +4,8 @@
   "description": "Three.js Examples",
   "scripts": {
     "dev": "gulp dev",
-    "build": "gulp build"
+    "build": "gulp build",
+    "fetchthree": "gulp fetchthree"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,11 @@
     "lodash": "^4.17.2",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "mkdirp": "^0.5.1",
+    "request": "^2.79.0",
+    "require-dir": "^0.3.1"
   }
 }

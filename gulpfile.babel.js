@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import requireDir from 'require-dir';
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import clean from 'gulp-clean';
@@ -8,6 +9,8 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
 import webpackConfig from './webpack/config';
+
+requireDir('./tasks', { recurse: false });
 
 const EXPERIMENTS_DIR = path.join(__dirname, 'src/experiments');
 
