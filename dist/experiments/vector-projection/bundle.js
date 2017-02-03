@@ -108,7 +108,12 @@
 	var b = new THREE.Vector3(2, 0, 2);
 	var bHelper = new Vector3Helper(b, 0xffff00);
 
+	var a2 = a.clone();
+	var b2 = b.clone();
+
 	// Project a onto b
+
+	// METHOD 1
 
 	// First we need a normal of the vector
 	// we are projecting onto
@@ -116,12 +121,40 @@
 
 	// The dot product of the vector with the normal
 	// gives us the magnitude of the projection
-	var dotProduct = a.dot(bNormal);
+	var dotProduct = bNormal.dot(a);
 
 	// Then we can create the projection vector
 	var projection = bNormal.clone();
 	projection.multiplyScalar(dotProduct);
 	var projectionHelper = new Vector3Helper(projection, 0xffffff);
+
+	console.log('Method 1', projection);
+
+	// METHOD 2
+
+	a2.projectOnVector(b2);
+	console.log('Method 2', a2);
+
+	// RESULTS
+
+	// Method 1 = {x: 0.9999999999999998, y: 0, z: 0.9999999999999998}
+	// Method 2 = {x: 1, y: 0, z: 1}
+	//
+	// Method 2 is better here.
+	//
+	// Why? Not sure.
+	//
+	// Method 1 algorithm:
+	//
+	//  bNormal = b.normalize()
+	//  scalar = bNormal.dot(a)
+	//  projection = bNormal.multiplyScalar(scalar)
+	//
+	// Method 2 algorithm:
+	//
+	//  scalar = b.dot(a) / b.lengthSq()
+	//  projection = b.multiplyScalar(scalar)
+	//
 
 	function initStats() {
 	  stats = new Stats();

@@ -81,8 +81,6 @@
 	}
 
 	function createGeometry(sizing) {
-	  console.log(sizing);
-
 	  var geometry = new THREE.CylinderGeometry(5, // radiusTop
 	  5, // radiusBottom
 	  sizing.height, // height
@@ -129,7 +127,9 @@
 	    // y = 24, bone = 3
 	    // y = 32, bone = 4
 	    //
-	    // But we only have 4 bones (indice 0 to 3) ???
+	    // It's important to note that a bone is a POINT not a line.
+	    // Two Bone points are required to make a visual bone line.
+	    // In this example, there are 5 bones.
 	    //
 	    // The skinIndices' values correspond to the geometry's vertices.
 	    // Each vertex can have up to 4 bones associated with it.

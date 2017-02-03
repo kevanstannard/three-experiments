@@ -44,7 +44,10 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
+
+	// Minecraft Model Format
+	// http://minecraft.gamepedia.com/Tutorials/Changing_minecraft_entity_models#Minecraft_Model_Format
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -57,14 +60,26 @@
 	var camera = void 0;
 	var renderer = void 0;
 	var orbitControls = void 0;
+	var pointLight = void 0;
+	var ambientLight = void 0;
+	var stats = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
+
+	function initStats() {
+	  stats = new Stats();
+	  stats.domElement.style.position = 'absolute';
+	  stats.domElement.style.left = '0px';
+	  stats.domElement.style.top = '20px';
+	  stats.setMode(0); // 0: fps, 1: ms
+	  document.getElementById('stats').appendChild(stats.domElement);
+	}
 
 	function init() {
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(50, 50, 50);
+	  camera.position.set(200, 200, 200);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -76,21 +91,36 @@
 
 	  document.body.appendChild(renderer.domElement);
 
-	  var axisHelper = new THREE.AxisHelper(40);
-	  scene.add(axisHelper);
+	  initStats();
 
-	  var gridHelper = new THREE.GridHelper(10, 10);
-	  gridHelper.position.z = 20;
+	  var gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
 
-	  console.log(gridHelper);
+	  var axisHelper = new THREE.AxisHelper(100);
+	  scene.add(axisHelper);
 
-	  var gridHelper2 = gridHelper.clone();
-	  gridHelper2.position.x = 20;
-	  scene.add(gridHelper2);
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  scene.add(ambientLight);
+
+	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+	  pointLight.position.set(50, 200, -100);
+	  scene.add(pointLight);
+
+	  var loader = new THREE.JSONLoader();
+	  loader.load('./mobs.json', function () {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    console.log(args);
+	    // var material = new THREE.MultiMaterial( materials );
+	    // var object = new THREE.Mesh( geometry, material );
+	    // scene.add( object );
+	  });
 	}
 
 	function update() {
+	  stats.update();
 	  orbitControls.update();
 	}
 
