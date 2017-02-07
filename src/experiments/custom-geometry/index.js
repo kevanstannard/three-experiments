@@ -49,6 +49,7 @@ function init() {
   axisHelper = new THREE.AxisHelper(100);
   scene.add(axisHelper);
 
+  // Vertices of a 4 sided pyramid
   const vertices = [
     new THREE.Vector3(30, 0, 0),
     new THREE.Vector3(0, 0, 30),
