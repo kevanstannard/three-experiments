@@ -9,8 +9,8 @@ let scene;
 let camera;
 let renderer;
 let orbitControls;
-let mesh;
-let controls;
+let pointLight;
+let ambientLight;
 let stats;
 
 const origin = new THREE.Vector3(0, 0, 0);
@@ -24,24 +24,11 @@ function initStats() {
   document.getElementById('stats').appendChild(stats.domElement);
 }
 
-function initControls() {
-  controls = {
-    xRotation: 0,
-    yRotation: 0,
-    zRotation: 0,
-  };
-  const gui = new dat.GUI();
-  gui.domElement.parentElement.style.zIndex = 2;
-  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-}
-
 function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
+  camera.position.set(5, 5, 5);
   camera.lookAt(origin);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -54,7 +41,6 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   initStats();
-  initControls();
 
   const gridHelper = new THREE.GridHelper(100, 10);
   scene.add(gridHelper);
@@ -62,25 +48,53 @@ function init() {
   const axisHelper = new THREE.AxisHelper(100);
   scene.add(axisHelper);
 
-  const geometry = new THREE.BoxGeometry(50, 50, 50);
-  const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-  mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
-  const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
   pointLight.position.set(50, 200, -100);
   scene.add(pointLight);
+
+  // Creating a quaterion with
+  // a) the axis pointing along Y
+  // b) a rotation of Math.PI / 4
+  const quaternion = new THREE.Quaternion();
+  const axisNormalised = new THREE.Vector3(0, 1, 0).normalize();
+  const angle = Math.PI / 4;
+  quaternion.setFromAxisAngle(axisNormalised, angle);
+
+  const beforeVector = new THREE.Vector3(1, 0, 0);
+
+  const afterVector = beforeVector.clone();
+  afterVector.applyQuaternion(quaternion);
+
+  // console.log('beforeVector', beforeVector);
+  // console.log('afterVector', afterVector);
+
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.quaternion.copy(quaternion);
+  scene.add(mesh);
+
+  const beforeArrow = new THREE.ArrowHelper(
+    beforeVector.clone().normalize(),
+    origin,
+    beforeVector.length(),
+    0xffff00,
+  );
+  scene.add(beforeArrow);
+
+  const afterArrow = new THREE.ArrowHelper(
+    afterVector.clone().normalize(),
+    origin,
+    afterVector.length() * 2,
+    0xffffff,
+  );
+  scene.add(afterArrow);
 }
 
 function update() {
-  mesh.rotation.set(
-    mesh.rotation.x = controls.xRotation,
-    mesh.rotation.y = controls.yRotation,
-    mesh.rotation.z = controls.zRotation,
-  );
   stats.update();
   orbitControls.update();
 }

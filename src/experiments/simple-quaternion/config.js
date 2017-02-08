@@ -1,8 +1,8 @@
 export default {
-  title: 'Hello World',
-  description: 'Simple Hello World application with common elements for a scene',
-  tags: 'Cube',
-  public: false,
+  title: 'Simple Quaternion',
+  description: 'Simple experiment with quaternions',
+  tags: 'Quaternion',
+  public: true,
   scripts: [
     '../../libs/three/r84/three.min.js',
     // 'http://127.0.0.1:8080/build/three.js',
