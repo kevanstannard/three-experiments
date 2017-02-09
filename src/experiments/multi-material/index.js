@@ -26,6 +26,22 @@ function initStats() {
   document.getElementById('stats').appendChild(stats.domElement);
 }
 
+function loadTextures(urls, callback) {
+  const textures = [];
+  const onLoad = () => {
+    callback(null, textures);
+  };
+  const onProgress = () => {};
+  const onError = (url) => {
+    callback(new Error(`Cannot load${url}`));
+  };
+  const manager = new THREE.LoadingManager(onLoad, onProgress, onError);
+  const loader = new THREE.TextureLoader(manager);
+  for (let i = 0; i < urls.length; i += 1) {
+    textures.push(loader.load(urls[i]));
+  }
+}
+
 function init() {
   scene = new THREE.Scene();
 
@@ -57,38 +73,26 @@ function init() {
   pointLight.position.set(50, 200, -100);
   scene.add(pointLight);
 
-  const textureLoader = new THREE.TextureLoader();
-  textureLoader.load('../../assets/textures/misc/free.jpg', (t1) => {
-    textureLoader.load('../../assets/textures/misc/uv_grid_sm.jpg', (t2) => {
-      const geometry = new THREE.BoxGeometry(3, 3, 3);
+  const urls = [
+    '../../assets/textures/misc/free.jpg',
+    '../../assets/textures/misc/uv_grid_sm.jpg',
+  ];
 
-      // geometry.vertices.forEach((vertex) => {
-      //   vertex.normalize().multiplyScalar(1);
-      // });
-
-      geometry.faces.forEach((face) => {
-        face.materialIndex %= 2;
-      });
-
-      // Disable eslint so the collowing code can be used in
-      // a stack overflow answer
-      /* eslint-disable */
-      // for (var i = 0; i < geometry.faces.length; i += 1) {
-      //   var face = geometry.faces[i];
-      //   face.materialIndex = face.materialIndex % 2;
-      // }
-      /* eslint-enable */
-
-      const mat1 = new THREE.MeshLambertMaterial({ map: t1 });
-      const mat2 = new THREE.MeshLambertMaterial({ map: t2 });
-
-      const materials = [mat1, mat2];
-      const mats = new THREE.MultiMaterial(materials);
-
-      const cube = new THREE.Mesh(geometry, mats);
-
-      scene.add(cube);
+  loadTextures(urls, (error, textures) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    const geometry = new THREE.BoxGeometry(3, 3, 3);
+    geometry.faces.forEach((face) => {
+      face.materialIndex %= 2;
     });
+    const mat1 = new THREE.MeshLambertMaterial({ map: textures[0] });
+    const mat2 = new THREE.MeshLambertMaterial({ map: textures[1] });
+    const materials = [mat1, mat2];
+    const mats = new THREE.MultiMaterial(materials);
+    const cube = new THREE.Mesh(geometry, mats);
+    scene.add(cube);
   });
 }
 
