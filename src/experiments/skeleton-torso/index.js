@@ -92,7 +92,7 @@ function init() {
     height: 12,
     depth: 4,
     widthSegments: 1,
-    heightSegments: 2,
+    heightSegments: 1,
     depthSegments: 1,
   };
 
