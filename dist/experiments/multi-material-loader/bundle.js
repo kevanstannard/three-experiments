@@ -56,9 +56,11 @@
 	var scene = void 0;
 	var camera = void 0;
 	var renderer = void 0;
+	var axisHelper = void 0;
+	var gridHelper = void 0;
 	var orbitControls = void 0;
-	var mesh = void 0;
-	var controls = void 0;
+	var pointLight = void 0;
+	var ambientLight = void 0;
 	var stats = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
@@ -72,24 +74,27 @@
 	  document.getElementById('stats').appendChild(stats.domElement);
 	}
 
-	function initControls() {
-	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
+	function loadTextures(urls, callback) {
+	  var textures = [];
+	  var onLoad = function onLoad() {
+	    callback(null, textures);
 	  };
-	  var gui = new dat.GUI();
-	  gui.domElement.parentElement.style.zIndex = 2;
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
+	  var onProgress = function onProgress() {};
+	  var onError = function onError(url) {
+	    callback(new Error('Cannot load' + url));
+	  };
+	  var manager = new THREE.LoadingManager(onLoad, onProgress, onError);
+	  var loader = new THREE.TextureLoader(manager);
+	  for (var i = 0; i < urls.length; i += 1) {
+	    textures.push(loader.load(urls[i]));
+	  }
 	}
 
 	function init() {
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
+	  camera.position.set(5, 5, 5);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -102,29 +107,41 @@
 	  document.body.appendChild(renderer.domElement);
 
 	  initStats();
-	  initControls();
 
-	  var gridHelper = new THREE.GridHelper(100, 10);
+	  gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
 
-	  var axisHelper = new THREE.AxisHelper(100);
+	  axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
-
-	  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 	  scene.add(ambientLight);
 
-	  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
 	  pointLight.position.set(50, 200, -100);
 	  scene.add(pointLight);
+
+	  var urls = ['../../assets/textures/misc/free.jpg', '../../assets/textures/misc/uv_grid_sm.jpg'];
+
+	  loadTextures(urls, function (error, textures) {
+	    if (error) {
+	      console.log(error);
+	      return;
+	    }
+	    var geometry = new THREE.BoxGeometry(3, 3, 3);
+	    geometry.faces.forEach(function (face) {
+	      face.materialIndex %= 2;
+	    });
+	    var mat1 = new THREE.MeshLambertMaterial({ map: textures[0] });
+	    var mat2 = new THREE.MeshLambertMaterial({ map: textures[1] });
+	    var materials = [mat1, mat2];
+	    var mats = new THREE.MultiMaterial(materials);
+	    var cube = new THREE.Mesh(geometry, mats);
+	    scene.add(cube);
+	  });
 	}
 
 	function update() {
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
 	  stats.update();
 	  orbitControls.update();
 	}

@@ -57,9 +57,8 @@
 	var camera = void 0;
 	var renderer = void 0;
 	var orbitControls = void 0;
-	var mesh = void 0;
-	var controls = void 0;
 	var stats = void 0;
+	var labelEl = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
@@ -72,59 +71,74 @@
 	  document.getElementById('stats').appendChild(stats.domElement);
 	}
 
-	function initControls() {
-	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
-	  };
-	  var gui = new dat.GUI();
-	  gui.domElement.parentElement.style.zIndex = 2;
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-	}
-
 	function init() {
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
 	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+	  orbitControls.autoRotate = true;
+	  orbitControls.autoRotateSpeed = -2.0;
 
 	  THREEx.WindowResize(renderer, camera);
 
 	  document.body.appendChild(renderer.domElement);
 
 	  initStats();
-	  initControls();
 
 	  var gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
 
-	  var axisHelper = new THREE.AxisHelper(100);
+	  var axisHelper = new THREE.AxisHelper(50);
 	  scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
+	  camera.position.set(0, 50, 100);
+	  camera.lookAt(origin);
 
-	  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-	  scene.add(ambientLight);
+	  labelEl = document.createElement('div');
+	  labelEl.style.position = 'absolute';
+	  labelEl.style.width = '50px';
+	  labelEl.style.padding = '10px';
+	  labelEl.style.backgroundColor = '#333333';
+	  labelEl.style.color = 'white';
+	  labelEl.style.top = '120px';
+	  labelEl.style.left = '0px';
+	  labelEl.style.textAlign = 'center';
+	  document.body.appendChild(labelEl);
 
-	  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
-	  scene.add(pointLight);
+	  // Ref:
+	  // http://stackoverflow.com/questions/42089919/three-js-camera-rotation-y-to-360-degrees-conversion/42112495?noredirect=1#comment71441294_42112495
+	  //
+	  // If you set
+	  //
+	  // camera.rotation.order = "YXZ"
+	  //
+	  // ( the default is "XYZ" ) the Euler angles will make a lot more sense to you:
+	  //
+	  // rotation.y will be the camera heading in radians
+	  //
+	  // rotation.x will be the camera pitch in radians
+	  //
+	  // rotation.z will be the camera roll in radians
+	  //
+	  // The rotations will be applied in that order.
+	  //
+	  // For more information, see this stackoverflow answer.
+	  //
+	  // http://stackoverflow.com/questions/17517937/three-js-camera-tilt-up-or-down-and-keep-horizon-level/17518092#17518092
+
+	  camera.rotation.order = 'YXZ';
 	}
 
 	function update() {
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
+	  var heading = camera.rotation.y;
+	  var radians = heading > 0 ? heading : 2 * Math.PI + heading;
+	  var degrees = THREE.Math.radToDeg(radians);
+	  labelEl.innerHTML = Math.floor(degrees);
+
 	  stats.update();
 	  orbitControls.update();
 	}

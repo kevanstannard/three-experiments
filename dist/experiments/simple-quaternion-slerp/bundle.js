@@ -57,9 +57,12 @@
 	var camera = void 0;
 	var renderer = void 0;
 	var orbitControls = void 0;
-	var mesh = void 0;
-	var controls = void 0;
+	var pointLight = void 0;
+	var ambientLight = void 0;
 	var stats = void 0;
+	var object = void 0;
+	var fromRotation = void 0;
+	var toRotation = void 0;
 
 	var origin = new THREE.Vector3(0, 0, 0);
 
@@ -72,24 +75,11 @@
 	  document.getElementById('stats').appendChild(stats.domElement);
 	}
 
-	function initControls() {
-	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
-	  };
-	  var gui = new dat.GUI();
-	  gui.domElement.parentElement.style.zIndex = 2;
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-	}
-
 	function init() {
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
+	  camera.position.set(3, 5, 6);
 	  camera.lookAt(origin);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -102,7 +92,6 @@
 	  document.body.appendChild(renderer.domElement);
 
 	  initStats();
-	  initControls();
 
 	  var gridHelper = new THREE.GridHelper(100, 10);
 	  scene.add(gridHelper);
@@ -110,21 +99,48 @@
 	  var axisHelper = new THREE.AxisHelper(100);
 	  scene.add(axisHelper);
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
-
-	  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 	  scene.add(ambientLight);
 
-	  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
 	  pointLight.position.set(50, 200, -100);
 	  scene.add(pointLight);
+
+	  object = new THREE.Object3D();
+
+	  var geometry = new THREE.BoxGeometry(1, 1, 1);
+	  var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+	  var mesh = new THREE.Mesh(geometry, material);
+	  object.add(mesh);
+
+	  var vector = new THREE.Vector3(0, 0, 1);
+
+	  var arrow = new THREE.ArrowHelper(vector.clone().normalize(), mesh.position, vector.length(), 0xffffff);
+
+	  object.add(arrow);
+
+	  scene.add(object);
+
+	  fromRotation = new THREE.Quaternion();
+	  fromRotation.copy(object.quaternion);
+
+	  toRotation = new THREE.Quaternion();
+	  var axisNormalised = new THREE.Vector3(1, 1, 1).normalize();
+	  var angle = Math.PI;
+	  toRotation.setFromAxisAngle(axisNormalised, angle);
+
+	  var axisArrow = new THREE.ArrowHelper(axisNormalised.clone(), mesh.position, axisNormalised.length() * 2, 0xffff00);
+	  scene.add(axisArrow);
 	}
 
+	var angle = 0;
+
 	function update() {
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
+	  var percent = Math.abs(Math.sin(angle));
+	  angle += 0.01;
+
+	  THREE.Quaternion.slerp(fromRotation, toRotation, object.quaternion, percent);
+
 	  stats.update();
 	  orbitControls.update();
 	}

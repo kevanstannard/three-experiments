@@ -58,6 +58,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/camera-rotation-angle/index.html">Camera Rotation Angle</a>
+      
+        
+        
+          <span class="tag">Camera</span>
+        
+          <span class="tag"> Euler</span>
+        
+      
+      
+        - Camera rotation experiment with Euler angles
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/circle-outline/index.html">Circle Outline</a>
       
         
@@ -136,6 +152,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/euler-rotation/index.html">Camera Rotation Angle</a>
+      
+        
+        
+          <span class="tag">Camera</span>
+        
+          <span class="tag"> Euler</span>
+        
+      
+      
+        - Camera rotation experiment with Euler angles
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/fractal-tree/index.html">Fractal Tree</a>
       
       
@@ -172,20 +204,6 @@
       
       
         - Example of manipulating Geometry vertices
-      
-    </li>
-  
-    
-    <li class="public">
-      <a href="dist/experiments/hello-world/index.html">Hello World</a>
-      
-        
-        
-          <span class="tag">Cube</span>
-        
-      
-      
-        - Simple Hello World application with common elements for a scene
       
     </li>
   
@@ -297,6 +315,24 @@
   
     
     <li class="public">
+      <a href="dist/experiments/multi-material-loader/index.html">Multi Material Loader</a>
+      
+        
+        
+          <span class="tag">Material</span>
+        
+          <span class="tag"> MultiMaterial</span>
+        
+          <span class="tag"> Loader</span>
+        
+      
+      
+        - Loading multiple materials
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/multiple-cameras/index.html">Multiple Cameras</a>
       
         
@@ -376,6 +412,15 @@
       
       
         - Simple orthographic camera example
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/planet-ring-orbit/index.html">Planet Ring Orbit</a>
+      
+      
+        - Experiment with a planet in orbit in a rotated plane
       
     </li>
   
@@ -537,10 +582,56 @@
   
     
     <li class="public">
+      <a href="dist/experiments/simple-quaternion/index.html">Simple Quaternion</a>
+      
+        
+        
+          <span class="tag">Quaternion</span>
+        
+      
+      
+        - Simple experiment with quaternions
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/simple-quaternion-slerp/index.html">Simple Quaternion Slerp</a>
+      
+        
+        
+          <span class="tag">Quaternion</span>
+        
+      
+      
+        - Simple experiment with quaternions
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/simple-shadows/index.html">Simple Shadows</a>
       
       
         - Simple shadow example
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/skeleton-body/index.html">Skeleton Body</a>
+      
+        
+        
+          <span class="tag">Skeleton</span>
+        
+          <span class="tag"> Bone</span>
+        
+          <span class="tag"> Mesh</span>
+        
+      
+      
+        - Simple Skeleton body with multiple parts experiment
       
     </li>
   
@@ -559,6 +650,42 @@
       
       
         - Experimenting with Bones, a Skeleton and a Mesh
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/skeleton-helper/index.html">Skeleton Helper</a>
+      
+        
+        
+          <span class="tag">SkeletonHelper</span>
+        
+          <span class="tag"> Skeleton</span>
+        
+          <span class="tag"> Bone</span>
+        
+      
+      
+        - Simple Helper experiment
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/skeleton-torso/index.html">Skeleton Torso</a>
+      
+        
+        
+          <span class="tag">Skeleton</span>
+        
+          <span class="tag"> Bone</span>
+        
+          <span class="tag"> Mesh</span>
+        
+      
+      
+        - Experiment with a skeleton, bones, and a twisting torso
       
     </li>
   
@@ -713,6 +840,23 @@ window.experiments = [
     "id": "box-wireframe"
   },
   {
+    "title": "Camera Rotation Angle",
+    "description": "Camera rotation experiment with Euler angles",
+    "tags": "Camera, Euler",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "camera-rotation-angle"
+  },
+  {
     "title": "Circle Outline",
     "description": "Simple example of an outlined circle (not filled in)",
     "tags": "Circle, Geometry",
@@ -790,6 +934,23 @@ window.experiments = [
     "id": "custom-geometry"
   },
   {
+    "title": "Camera Rotation Angle",
+    "description": "Camera rotation experiment with Euler angles",
+    "tags": "Camera, Euler",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "euler-rotation"
+  },
+  {
     "title": "Fractal Tree",
     "description": "Fractal experiment with a tree shape",
     "public": true,
@@ -841,23 +1002,6 @@ window.experiments = [
     ],
     "styles": [],
     "id": "geometry-vertices"
-  },
-  {
-    "title": "Hello World",
-    "description": "Simple Hello World application with common elements for a scene",
-    "tags": "Cube",
-    "public": true,
-    "scripts": [
-      "../../libs/three/r83/three.min.js",
-      "../../libs/three/r83/controls/OrbitControls.js",
-      "../../libs/stats/r17/stats.min.js",
-      "../../libs/threex/THREEx.WindowResize.js",
-      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
-    ],
-    "styles": [
-      "../../libs/dat.gui/0.6.2/dat.gui.css"
-    ],
-    "id": "hello-world"
   },
   {
     "title": "Helpers",
@@ -974,6 +1118,23 @@ window.experiments = [
     "id": "moving-relative-objects"
   },
   {
+    "title": "Multi Material Loader",
+    "description": "Loading multiple materials",
+    "tags": "Material, MultiMaterial, Loader",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "multi-material-loader"
+  },
+  {
     "title": "Multiple Cameras",
     "description": "Experiment with multiple cameras",
     "tags": "Camera, CameraHelper",
@@ -1078,6 +1239,23 @@ window.experiments = [
     ],
     "styles": [],
     "id": "orthographic-camera"
+  },
+  {
+    "title": "Planet Ring Orbit",
+    "description": "Experiment with a planet in orbit in a rotated plane",
+    "tags": "",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "planet-ring-orbit"
   },
   {
     "title": "Point Light Inside Box",
@@ -1253,6 +1431,40 @@ window.experiments = [
     "id": "simple-font"
   },
   {
+    "title": "Simple Quaternion",
+    "description": "Simple experiment with quaternions",
+    "tags": "Quaternion",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "simple-quaternion"
+  },
+  {
+    "title": "Simple Quaternion Slerp",
+    "description": "Simple experiment with quaternions",
+    "tags": "Quaternion",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "simple-quaternion-slerp"
+  },
+  {
     "title": "Simple Shadows",
     "description": "Simple shadow example",
     "public": true,
@@ -1263,6 +1475,23 @@ window.experiments = [
     ],
     "styles": [],
     "id": "simple-shadows"
+  },
+  {
+    "title": "Skeleton Body",
+    "description": "Simple Skeleton body with multiple parts experiment",
+    "tags": "Skeleton, Bone, Mesh",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "skeleton-body"
   },
   {
     "title": "Skeleton Bone Mesh",
@@ -1280,6 +1509,40 @@ window.experiments = [
       "../../libs/dat.gui/0.6.2/dat.gui.css"
     ],
     "id": "skeleton-bone-mesh"
+  },
+  {
+    "title": "Skeleton Helper",
+    "description": "Simple Helper experiment",
+    "tags": "SkeletonHelper, Skeleton, Bone",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "skeleton-helper"
+  },
+  {
+    "title": "Skeleton Torso",
+    "description": "Experiment with a skeleton, bones, and a twisting torso",
+    "tags": "Skeleton, Bone, Mesh",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "skeleton-torso"
   },
   {
     "title": "Sphere Points",

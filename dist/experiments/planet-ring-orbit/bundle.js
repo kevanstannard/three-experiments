@@ -46,9 +46,6 @@
 
 	'use strict';
 
-	// Minecraft Model Format
-	// http://minecraft.gamepedia.com/Tutorials/Changing_minecraft_entity_models#Minecraft_Model_Format
-
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45;
@@ -64,8 +61,6 @@
 	var ambientLight = void 0;
 	var stats = void 0;
 
-	var origin = new THREE.Vector3(0, 0, 0);
-
 	function initStats() {
 	  stats = new Stats();
 	  stats.domElement.style.position = 'absolute';
@@ -79,8 +74,7 @@
 	  scene = new THREE.Scene();
 
 	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
+	  camera.position.set(100, 100, 100);
 
 	  renderer = new THREE.WebGLRenderer({ antialias: true });
 	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -106,17 +100,26 @@
 	  pointLight.position.set(50, 200, -100);
 	  scene.add(pointLight);
 
-	  var loader = new THREE.JSONLoader();
-	  loader.load('./mobs.json', function () {
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	  var starGeometry = new THREE.SphereGeometry(10, 32, 32);
+	  var starMaterial = new THREE.MeshBasicMaterial({ color: 0xCDF409 });
+	  var starMesh = new THREE.Mesh(starGeometry, starMaterial);
+	  scene.add(starMesh);
 
-	    console.log(args);
-	    // var material = new THREE.MultiMaterial( materials );
-	    // var object = new THREE.Mesh( geometry, material );
-	    // scene.add( object );
-	  });
+	  var planetGeometry = new THREE.SphereGeometry(5, 32, 32);
+	  var planetMaterial = new THREE.MeshBasicMaterial({ color: 0x09F425 });
+	  var planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
+	  planetMesh.position.set(20, 30, -40);
+	  scene.add(planetMesh);
+
+	  var radius = starMesh.position.distanceTo(planetMesh.position);
+	  var ringGeometry = new THREE.CircleGeometry(radius, 32);
+	  ringGeometry.rotateX(-Math.PI / 2);
+	  ringGeometry.vertices.shift(); // Remove the line that goes from the center to the ring
+	  var ringMaterial = new THREE.LineBasicMaterial({ color: 0xCC0000 });
+	  var ringMesh = new THREE.Line(ringGeometry, ringMaterial);
+	  scene.add(ringMesh);
+
+	  ringMesh.lookAt(planetMesh.position);
 	}
 
 	function update() {
