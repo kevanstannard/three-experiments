@@ -2,7 +2,7 @@ export default {
   title: 'Skeleton Disconnected Bones',
   description: 'Skeleton with bones that are not connected',
   tags: 'Skeleton, Bone, Mesh',
-  public: false,
+  public: true,
   scripts: [
     '../../libs/three/r84/three.min.js',
     '../../libs/three/r84/controls/OrbitControls.js',
