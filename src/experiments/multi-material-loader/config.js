@@ -1,7 +1,7 @@
 export default {
-  title: 'Planet Ring Orbit',
-  description: 'Experiment with a planet in orbit in a rotated plane',
-  tags: '',
+  title: 'Multi Material Loader',
+  description: 'Loading multiple materials',
+  tags: 'Material, MultiMaterial, Loader',
   public: true,
   scripts: [
     '../../libs/three/r84/three.min.js',
