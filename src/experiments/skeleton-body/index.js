@@ -139,7 +139,6 @@ function init() {
 
   helper = new THREE.SkeletonHelper(mesh);
   helper.material.linewidth = 4; // Not working ?
-  helper.material.needsUpdate = true;
   scene.add(helper);
 }
 
