@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _Pulses = __webpack_require__(7);
+	var _Pulses = __webpack_require__(5);
 
 	var _Pulses2 = _interopRequireDefault(_Pulses);
 
@@ -148,9 +148,7 @@
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -160,7 +158,7 @@
 	});
 	exports.default = Pulses;
 
-	var _Pulse = __webpack_require__(8);
+	var _Pulse = __webpack_require__(6);
 
 	var _Pulse2 = _interopRequireDefault(_Pulse);
 
@@ -197,7 +195,7 @@
 	});
 
 /***/ },
-/* 8 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -207,7 +205,7 @@
 	});
 	exports.default = Pulse;
 
-	var _CircleLineGeometry = __webpack_require__(9);
+	var _CircleLineGeometry = __webpack_require__(7);
 
 	var _CircleLineGeometry2 = _interopRequireDefault(_CircleLineGeometry);
 
@@ -295,7 +293,7 @@
 	});
 
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";

@@ -47,7 +47,7 @@
 
 	'use strict';
 
-	var _Bug = __webpack_require__(10);
+	var _Bug = __webpack_require__(8);
 
 	var _Bug2 = _interopRequireDefault(_Bug);
 
@@ -351,7 +351,7 @@
 
 /***/ },
 
-/***/ 10:
+/***/ 8:
 /***/ function(module, exports) {
 
 	"use strict";
