@@ -1,3 +1,5 @@
+import { merge } from 'lodash';
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -15,7 +17,7 @@ let helper;
 
 // const origin = new THREE.Vector3(0, 0, 0);
 
-const quadraped = {
+const quadruped = {
   bones: [
     {
       name: 'body',
@@ -86,6 +88,85 @@ const quadraped = {
   ],
 };
 
+const cow = {
+  texturewidth: 64,
+  textureheight: 32,
+  bones: [
+    {
+      name: 'body',
+      reset: true,
+      pivot: [0.0, 19.0, 2.0],
+      cubes: [
+        {
+          origin: [-6.0, 11.0, -5.0],
+          size: [12, 18, 10],
+          uv: [18, 4],
+        },
+        {
+          origin: [-2.0, 11.0, -6.0],
+          size: [4, 6, 1],
+          uv: [52, 0],
+        },
+      ],
+    },
+    {
+      name: 'head',
+      reset: true,
+      pivot: [0.0, 20.0, -8.0],
+      cubes: [
+        {
+          origin: [-4.0, 16.0, -14.0],
+          size: [8, 8, 6],
+          uv: [0, 0],
+        },
+        {
+          origin: [-5.0, 22.0, -12.0],
+          size: [1, 3, 1],
+          uv: [22, 0],
+        },
+        {
+          origin: [4.0, 22.0, -12.0],
+          size: [1, 3, 1],
+          uv: [22, 0],
+        },
+      ],
+    },
+    {
+      name: 'leg0',
+      pivot: [-4.0, 12.0, 7.0],
+    },
+    {
+      name: 'leg1',
+      pivot: [4.0, 12.0, 7.0],
+    },
+    {
+      name: 'leg2',
+      pivot: [-4.0, 12.0, -6.0],
+    },
+    {
+      name: 'leg3',
+      pivot: [4.0, 12.0, -6.0],
+    },
+  ],
+};
+
+// const cowMerged = merge({}, quadruped, cow);
+const cowMerged = {};
+
+// Replace bones when reset === true
+// This only works when the parent and child have the same number of bones
+const cowMergedBones = [];
+for (let i = 0; i < cow.bones.length; i += 1) {
+  const quadBone = quadruped.bones[i];
+  const cowBone = cow.bones[i];
+  if (cowBone.reset) {
+    cowMergedBones.push(cowBone);
+  } else {
+    cowMergedBones.push(merge({}, quadBone, cowBone));
+  }
+}
+cowMerged.bones = cowMergedBones;
+
 function initStats() {
   stats = new Stats();
   stats.domElement.style.position = 'absolute';
@@ -117,6 +198,8 @@ function init() {
   // scene.add(gridHelper);
 
   const axisHelper = new THREE.AxisHelper(20);
+  axisHelper.material.transparent = true;
+  axisHelper.material.opacity = 0.5;
   scene.add(axisHelper);
 
   // const geometry = new THREE.BoxGeometry(50, 50, 50);
@@ -133,7 +216,7 @@ function init() {
 
   const bones = [];
   const geometry = new THREE.Geometry();
-  quadraped.bones.forEach((geometryBone, boneIndex) => {
+  cowMerged.bones.forEach((geometryBone, boneIndex) => {
     const pivot = geometryBone.pivot;
     // console.log(pivot);
     const cubes = geometryBone.cubes;
@@ -152,6 +235,10 @@ function init() {
       const y = origin[1] + yoff;
       const z = origin[2] + zoff;
       const boxGeometry = new THREE.BoxGeometry(size[0], size[1], size[2]);
+      // console.log(boxGeometry.vertices);
+      boxGeometry.vertices.forEach((vertex) => {
+        vertex.hello = 'world';
+      });
       boxGeometry.translate(x, y, z);
       geometry.merge(boxGeometry);
       for (let i = 0; i < boxGeometry.vertices.length; i += 1) {
@@ -166,7 +253,7 @@ function init() {
 
   const material = new THREE.MeshStandardMaterial({
     skinning: true,
-    wireframe: true,
+    // wireframe: true,
     // metalness: 0,
     // side: THREE.DoubleSide,
     // roughness: 1,
@@ -182,6 +269,7 @@ function init() {
 
   mesh.bind(skeleton);
 
+  // ???????????????????????????????????????????
   // For some reason the data has the body at an
   // odd orentation. Fixing that here.
   bones[0].rotation.x = -Math.PI / 2;
@@ -208,6 +296,12 @@ function init() {
   });
 
   mesh.add(pivots);
+
+  // const loader = new THREE.TextureLoader();
+  // loader.load('cow.png', (texture) => {
+  //   console.log(texture);
+  //   console.log(mesh.geometry);
+  // });
 }
 
 function update() {
