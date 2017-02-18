@@ -150,7 +150,6 @@ const cow = {
   ],
 };
 
-// const cowMerged = merge({}, quadruped, cow);
 const cowMerged = {};
 
 // Replace bones when reset === true
@@ -253,12 +252,12 @@ function init() {
 
   const material = new THREE.MeshStandardMaterial({
     skinning: true,
-    // wireframe: true,
+    wireframe: true,
     // metalness: 0,
     // side: THREE.DoubleSide,
     // roughness: 1,
     // transparent: true,
-    // opacity: 0.5,
+    // opacity: 0.25,
   });
 
   mesh = new THREE.SkinnedMesh(geometry, material);
