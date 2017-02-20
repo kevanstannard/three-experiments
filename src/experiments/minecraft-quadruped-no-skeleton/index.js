@@ -1,3 +1,5 @@
+import Pivot from './Pivot';
+import MinecraftBoxGeometry from './MinecraftBoxGeometry';
 import data from './cow';
 
 const SCREEN_WIDTH = window.innerWidth;
@@ -13,28 +15,6 @@ let renderer;
 let orbitControls;
 let stats;
 let parts;
-
-// class Pivot extends THREE.SphereGeometry {
-//   constructor() {
-//     const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-//     const geometry = new THREE.SphereGeometry(0.5, 8, 8);
-//     super(geometry, material);
-//     return this;
-//   }
-// }
-
-function Pivot() {
-  const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-  const geometry = new THREE.SphereGeometry(0.5, 8, 8);
-  THREE.Mesh.call(this, geometry, material);
-}
-
-Pivot.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-  constructor: Pivot,
-});
-
-// const p = new Pivot();
-// console.log(p);
 
 function initStats() {
   stats = new Stats();
@@ -55,7 +35,7 @@ function init() {
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
   orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  orbitControls.target = new THREE.Vector3(0, 15, 0);
+  orbitControls.target = new THREE.Vector3(0, 12, 0);
 
   THREEx.WindowResize(renderer, camera);
 
@@ -63,8 +43,8 @@ function init() {
 
   initStats();
 
-  const axisHelper = new THREE.AxisHelper(10);
-  scene.add(axisHelper);
+  // const axisHelper = new THREE.AxisHelper(10);
+  // scene.add(axisHelper);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
@@ -73,9 +53,14 @@ function init() {
   pointLight.position.set(50, 200, -100);
   scene.add(pointLight);
 
+  const textureLoader = new THREE.TextureLoader();
+
+  const texture = textureLoader.load('cow.png');
+  texture.magFilter = THREE.NearestFilter;
+  texture.minFilter = THREE.LinearMipMapLinearFilter;
+
   const material = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    wireframe: true,
+    map: texture,
   });
 
   const model = new THREE.Object3D();
@@ -89,20 +74,19 @@ function init() {
     part.position.set(pivot[0], pivot[1], pivot[2]);
     part.add(new Pivot());
     parts.push(part);
-    bone.cubes.forEach((dataCube) => {
-      const size = dataCube.size;
-      const origin = dataCube.origin;
-      const width = size[0];
-      const height = size[1];
-      const depth = size[2];
+    bone.cubes.forEach((cube, cudeIndex) => {
+      const origin = cube.origin;
+      const [width, height, depth] = cube.size;
+      const [u, v] = cube.uv;
       const xoff = width / 2;
       const yoff = height / 2;
       const zoff = depth / 2;
       const x = (origin[0] + xoff) - pivot[0];
       const y = (origin[1] + yoff) - pivot[1];
       const z = (origin[2] + zoff) - pivot[2];
-      const geometry = new THREE.BoxGeometry(width, height, depth);
+      const geometry = new MinecraftBoxGeometry(u, v, width, height, depth);
       const box = new THREE.Mesh(geometry, material);
+      box.name = `${bone.name}:box${cudeIndex}`;
       box.position.set(x, y, z);
       part.add(box);
     });
