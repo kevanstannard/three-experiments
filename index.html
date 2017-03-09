@@ -245,6 +245,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/line-vs-mesh/index.html">Line vs Mesh</a>
+      
+        
+        
+          <span class="tag">Line</span>
+        
+          <span class="tag"> Mesh</span>
+        
+      
+      
+        - Explore difference between a Line and a Mesh
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/load-obj/index.html">Load OBJ</a>
       
         
@@ -306,13 +322,27 @@
   
     
     <li class="public">
-      <a href="dist/experiments/minecraft-quadraped/index.html">Minecraft Quadruped</a>
+      <a href="dist/experiments/minecraft-quadruped/index.html">Minecraft Quadruped</a>
       
         
         
           <span class="tag">Minecraft</span>
         
           <span class="tag"> Skeleton</span>
+        
+      
+      
+        - Experiment with a Minecraft Vanilla Resource Mob model
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/minecraft-quadruped-no-skeleton/index.html">Minecraft Quadruped without Skeleton</a>
+      
+        
+        
+          <span class="tag">Minecraft</span>
         
       
       
@@ -1080,6 +1110,23 @@ window.experiments = [
     "id": "keyboard-move"
   },
   {
+    "title": "Line vs Mesh",
+    "description": "Explore difference between a Line and a Mesh",
+    "tags": "Line, Mesh",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "line-vs-mesh"
+  },
+  {
     "title": "Load OBJ",
     "description": "Loads and displays a simple OBJ object",
     "tags": "OBJ, Loader",
@@ -1154,7 +1201,24 @@ window.experiments = [
     "styles": [
       "../../libs/dat.gui/0.6.2/dat.gui.css"
     ],
-    "id": "minecraft-quadraped"
+    "id": "minecraft-quadruped"
+  },
+  {
+    "title": "Minecraft Quadruped without Skeleton",
+    "description": "Experiment with a Minecraft Vanilla Resource Mob model",
+    "tags": "Minecraft",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r84/three.min.js",
+      "../../libs/three/r84/controls/OrbitControls.js",
+      "../../libs/stats/r17/stats.min.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "minecraft-quadruped-no-skeleton"
   },
   {
     "title": "Moving Relative Objects",

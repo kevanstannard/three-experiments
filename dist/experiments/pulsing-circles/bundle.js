@@ -40,13 +40,14 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _Pulses = __webpack_require__(5);
+	var _Pulses = __webpack_require__(14);
 
 	var _Pulses2 = _interopRequireDefault(_Pulses);
 
@@ -144,11 +145,8 @@
 	animate();
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
+
+/***/ 14:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -158,7 +156,7 @@
 	});
 	exports.default = Pulses;
 
-	var _Pulse = __webpack_require__(6);
+	var _Pulse = __webpack_require__(15);
 
 	var _Pulse2 = _interopRequireDefault(_Pulse);
 
@@ -195,7 +193,8 @@
 	});
 
 /***/ },
-/* 6 */
+
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -205,7 +204,7 @@
 	});
 	exports.default = Pulse;
 
-	var _CircleLineGeometry = __webpack_require__(7);
+	var _CircleLineGeometry = __webpack_require__(16);
 
 	var _CircleLineGeometry2 = _interopRequireDefault(_CircleLineGeometry);
 
@@ -293,7 +292,8 @@
 	});
 
 /***/ },
-/* 7 */
+
+/***/ 16:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -321,4 +321,5 @@
 	}
 
 /***/ }
-/******/ ]);
+
+/******/ });

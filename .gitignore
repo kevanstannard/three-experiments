@@ -1,3 +1,7 @@
 node_modules
 npm-debug.log
 .DS_Store
+
+# Temporary
+dist/experiments/minecraft-loader/
+src/experiments/minecraft-loader/
