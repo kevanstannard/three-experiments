@@ -38,6 +38,48 @@
 //   Bottom Right: (0.5, 0.5)
 //   Top Right:    (0.5, 0)
 //
+// Minecraft mobs boxes have a standard texture layout:
+//
+//   +-----+-----+-----+-----+
+//   |     |     |     |     |
+//   |     | TOP | BTM |     |
+//   |     |     |     |     |
+//   +-----+-----+-----+-----+
+//   |     |     |     |     |
+//   |     |     |     |     |
+//   | RGT | FRT | LFT | BCK |
+//   |     |     |     |     |
+//   |     |     |     |     |
+//   +-----+-----+-----+-----+
+//
+// Image this shape has dimensions w(idth), h(eight) and d(epth)
+//
+// Then we can work out the positions and sizes of each face
+//
+//   +--w--+--w--+--w--+--w--+
+//   |     |     |     |     |
+//   d     d TOP d BTM d     d
+//   |     |     |     |     |
+//   +--w--+--w--+--w--+--w--+
+//   |     |     |     |     |
+//   |     |     |     |     |
+//   h RGT h FRT h LFT h BCK h
+//   |     |     |     |     |
+//   |     |     |     |     |
+//   +--w--+--w--+--w--+--w--+
+//
+// The FRT face is:
+//     position: (w, d)
+//     size: (w, h)
+//
+// The BTM face is:
+//     position: (w + w, 0)
+//     size: (w, d)
+//
+// The BCK face is:
+//     position: (w + w + w, d)
+//     size: (w, h)
+//
 
 // Default width and height of a Minecraft skin
 const SKIN_WIDTH = 64;
@@ -89,23 +131,14 @@ export default function MinecraftHeadGeometry(u, v, width, height, depth) {
 
   const geometry = new THREE.BoxGeometry(width, height, depth);
 
-  // console.log(width, height, depth, '*', u + depth, v + depth, width, height, box.front);
-
-  const isHead = width === 8 && height === 8 && depth === 6;
-
-  if (isHead) {
-    console.log(geometry);
-    console.log(box);
-  }
-
   // Clear out any UV mapping that may have already existed on the cube
   geometry.faceVertexUvs[0] = [];
 
-  // Left
+  // Right
   geometry.faceVertexUvs[0][0] = [box.right[0], box.right[1], box.right[3]];
   geometry.faceVertexUvs[0][1] = [box.right[1], box.right[2], box.right[3]];
 
-  // Right
+  // Left
   geometry.faceVertexUvs[0][2] = [box.left[0], box.left[1], box.left[3]];
   geometry.faceVertexUvs[0][3] = [box.left[1], box.left[2], box.left[3]];
 

@@ -1,6 +1,6 @@
 import Pivot from './Pivot';
 import MinecraftBoxGeometry from './MinecraftBoxGeometry';
-import data from './cow';
+import data from './mobs/pig';
 
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
@@ -31,7 +31,7 @@ function init() {
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
   camera.position.set(30, 30, -30);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer();
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
   orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -55,12 +55,13 @@ function init() {
 
   const textureLoader = new THREE.TextureLoader();
 
-  const texture = textureLoader.load('cow.png');
+  const texture = textureLoader.load('mobs/pig.png');
   texture.magFilter = THREE.NearestFilter;
-  texture.minFilter = THREE.LinearMipMapLinearFilter;
+  // texture.minFilter = THREE.LinearMipMapLinearFilter;
 
-  const material = new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshLambertMaterial({
     map: texture,
+    side: THREE.DoubleSide,
   });
 
   const model = new THREE.Object3D();
