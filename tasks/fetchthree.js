@@ -27,6 +27,10 @@ const files = [
     url: 'https://github.com/mrdoob/three.js/raw/r84/examples/js/controls/OrbitControls.js',
     filePath: `${versionRoot}/controls/OrbitControls.js`,
   },
+  {
+    url: 'https://github.com/mrdoob/three.js/raw/r84/examples/js/controls/TrackballControls.js',
+    filePath: `${versionRoot}/controls/TrackballControls.js`,
+  },
 ];
 
 function createRequest(aFile) {
