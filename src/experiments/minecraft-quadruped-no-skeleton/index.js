@@ -55,7 +55,7 @@ function init() {
 
   const textureLoader = new THREE.TextureLoader();
 
-  const texture = textureLoader.load('mobs/pig.png');
+  const texture = textureLoader.load('../../assets/textures/minecraft/entities/pig.png');
   texture.magFilter = THREE.NearestFilter;
   // texture.minFilter = THREE.LinearMipMapLinearFilter;
 
