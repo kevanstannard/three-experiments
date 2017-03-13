@@ -47,7 +47,7 @@
 
 	'use strict';
 
-	var _lodash = __webpack_require__(8);
+	var _lodash = __webpack_require__(13);
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -345,7 +345,7 @@
 
 /***/ },
 
-/***/ 8:
+/***/ 13:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -17414,11 +17414,11 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(9)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)(module)))
 
 /***/ },
 
-/***/ 9:
+/***/ 14:
 /***/ function(module, exports) {
 
 	module.exports = function(module) {

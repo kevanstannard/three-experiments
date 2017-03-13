@@ -40,13 +40,14 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fonts = __webpack_require__(2);
+	var _fonts = __webpack_require__(7);
 
 	var SCREEN_WIDTH = window.innerWidth; // References
 	// https://github.com/mrdoob/three.js/tree/master/examples/fonts
@@ -69,6 +70,32 @@
 	var origin = new THREE.Vector3(0, 0, 0);
 
 	var FONT_SIZE = 36;
+
+	// ES5 alternative to load the fonts
+	// https://github.com/kevanstannard/three/issues/1
+
+	// var fontLoader = new THREE.FontLoader();
+	//
+	// var fonts = {};
+	//
+	// function loadFont(name) {
+	//   var url = '../../modules/fonts/fonts/' + name + '.typeface.json';
+	//   return new Promise(function(resolve) {
+	//     fontLoader.load(url, function(font) {
+	//       fonts[name] = font;
+	//       resolve();
+	//     });
+	//   });
+	// }
+	//
+	// function loadFonts() {
+	//   var promises = [
+	//     loadFont('gentilis_regular'),
+	//     loadFont('helvetiker_regular'),
+	//     loadFont('optimer_regular'),
+	//   ];
+	//   return Promise.all(promises);
+	// }
 
 	function createText(text, fontId) {
 	  var params = {
@@ -140,8 +167,8 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */
+
+/***/ 7:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -183,4 +210,5 @@
 	}
 
 /***/ }
-/******/ ]);
+
+/******/ });

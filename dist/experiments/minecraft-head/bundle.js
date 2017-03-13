@@ -40,13 +40,14 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _MinecraftHeadGeometry = __webpack_require__(3);
+	var _MinecraftHeadGeometry = __webpack_require__(8);
 
 	var _MinecraftHeadGeometry2 = _interopRequireDefault(_MinecraftHeadGeometry);
 
@@ -149,9 +150,8 @@
 	animate();
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 8:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -270,4 +270,5 @@
 	}
 
 /***/ }
-/******/ ]);
+
+/******/ });

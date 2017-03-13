@@ -23,6 +23,32 @@ const origin = new THREE.Vector3(0, 0, 0);
 
 const FONT_SIZE = 36;
 
+// ES5 alternative to load the fonts
+// https://github.com/kevanstannard/three/issues/1
+
+// var fontLoader = new THREE.FontLoader();
+//
+// var fonts = {};
+//
+// function loadFont(name) {
+//   var url = '../../modules/fonts/fonts/' + name + '.typeface.json';
+//   return new Promise(function(resolve) {
+//     fontLoader.load(url, function(font) {
+//       fonts[name] = font;
+//       resolve();
+//     });
+//   });
+// }
+//
+// function loadFonts() {
+//   var promises = [
+//     loadFont('gentilis_regular'),
+//     loadFont('helvetiker_regular'),
+//     loadFont('optimer_regular'),
+//   ];
+//   return Promise.all(promises);
+// }
+
 function createText(text, fontId) {
   const params = {
     font: fonts[fontId],

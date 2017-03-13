@@ -48,15 +48,15 @@
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	var _Pivot = __webpack_require__(10);
+	var _Pivot = __webpack_require__(15);
 
 	var _Pivot2 = _interopRequireDefault(_Pivot);
 
-	var _MinecraftBoxGeometry = __webpack_require__(11);
+	var _MinecraftBoxGeometry = __webpack_require__(16);
 
 	var _MinecraftBoxGeometry2 = _interopRequireDefault(_MinecraftBoxGeometry);
 
-	var _pig = __webpack_require__(12);
+	var _pig = __webpack_require__(17);
 
 	var _pig2 = _interopRequireDefault(_pig);
 
@@ -203,7 +203,12 @@
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -17272,10 +17277,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(9)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(14)(module)))
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -17291,7 +17296,7 @@
 
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -17312,7 +17317,7 @@
 	exports.default = Pivot;
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -17499,7 +17504,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17508,9 +17513,9 @@
 	  value: true
 	});
 
-	var _lodash = __webpack_require__(8);
+	var _lodash = __webpack_require__(13);
 
-	var _quadruped = __webpack_require__(13);
+	var _quadruped = __webpack_require__(18);
 
 	var _quadruped2 = _interopRequireDefault(_quadruped);
 
@@ -17600,7 +17605,7 @@
 	exports.default = merged;
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';

@@ -40,13 +40,14 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fonts = __webpack_require__(2);
+	var _fonts = __webpack_require__(7);
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
@@ -650,8 +651,8 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */
+
+/***/ 7:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -693,4 +694,5 @@
 	}
 
 /***/ }
-/******/ ]);
+
+/******/ });
