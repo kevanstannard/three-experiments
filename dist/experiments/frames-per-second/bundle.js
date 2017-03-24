@@ -40,14 +40,13 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _FPS = __webpack_require__(6);
+	var _FPS = __webpack_require__(1);
 
 	var _FPS2 = _interopRequireDefault(_FPS);
 
@@ -165,8 +164,7 @@
 	tick();
 
 /***/ },
-
-/***/ 6:
+/* 1 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -214,5 +212,4 @@
 	exports.default = FPS;
 
 /***/ }
-
-/******/ });
+/******/ ]);

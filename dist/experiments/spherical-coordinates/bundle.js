@@ -47,9 +47,9 @@
 
 	'use strict';
 
-	var _fonts = __webpack_require__(7);
+	var _fonts = __webpack_require__(2);
 
-	var _CircleLineGeometry = __webpack_require__(23);
+	var _CircleLineGeometry = __webpack_require__(18);
 
 	var _CircleLineGeometry2 = _interopRequireDefault(_CircleLineGeometry);
 
@@ -233,7 +233,7 @@
 
 /***/ },
 
-/***/ 7:
+/***/ 2:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -276,7 +276,7 @@
 
 /***/ },
 
-/***/ 23:
+/***/ 18:
 /***/ function(module, exports) {
 
 	"use strict";
