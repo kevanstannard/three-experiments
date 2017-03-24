@@ -2,7 +2,7 @@ export default {
   title: 'Trackball Controls',
   description: 'Experiment with TrackballControls',
   tags: 'TrackballControls',
-  public: false,
+  public: true,
   scripts: [
     '../../libs/three/r84/three.min.js',
     '../../libs/three/r84/controls/TrackballControls.js',
