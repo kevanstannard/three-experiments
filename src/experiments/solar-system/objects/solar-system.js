@@ -10,9 +10,9 @@ export default class SolarSystem extends THREE.Object3D {
     this.add(body);
   }
 
-  update() {
+  update(delta) {
     this.bodies.forEach((body) => {
-      body.update();
+      body.update(delta);
     });
   }
 

@@ -2,7 +2,7 @@ export default class Planet extends THREE.Object3D {
 
   constructor(props) {
     super();
-    const { radius, color, orbitRadius } = props;
+    const { radius, color, orbitRadius, orbitPeriod } = props;
 
     const geometry = new THREE.SphereBufferGeometry(radius, 32, 32);
     const material = new THREE.MeshBasicMaterial({ color });
@@ -10,6 +10,7 @@ export default class Planet extends THREE.Object3D {
     this.add(mesh);
 
     this.orbitRadius = orbitRadius;
+    this.orbitPeriod = orbitPeriod;
   }
 
 }

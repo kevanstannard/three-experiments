@@ -12,6 +12,7 @@ const NEAR = 1;
 const FAR = 5000000;
 const SCALE = 0.005;
 
+let prevTime = Date.now();
 let scene;
 let camera;
 let renderer;
@@ -76,7 +77,10 @@ function init() {
 }
 
 function update() {
-  solarSystem.update();
+  const time = Date.now();
+  const delta = time - prevTime;
+  prevTime = time;
+  solarSystem.update(delta);
   stats.update();
   orbitControls.update();
 }

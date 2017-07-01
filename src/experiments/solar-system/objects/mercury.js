@@ -1,10 +1,11 @@
 import Planet from './planet';
 
 const props = {
-  radius: 2440,
   // color: 0x888888,
   color: 0xffffff,
-  orbitRadius: 58000000,
+  radius: 2440, // kms
+  orbitRadius: 58000000, // kms
+  orbitPeriod: 88, // days
 };
 
 export default class Mercury extends Planet {
