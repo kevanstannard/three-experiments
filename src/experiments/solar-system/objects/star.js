@@ -1,3 +1,4 @@
+import Orbit from './orbit';
 import orbitRadiusScale from '../lib/orbit-radius-scale';
 import orbitPeriodScale from '../lib/orbit-period-scale';
 
@@ -28,16 +29,16 @@ export default class Star extends THREE.Object3D {
     };
     this.satellites.push(satellite);
     this.add(planet);
+    const orbit = new Orbit(orbitRadiusScale(planet.orbitRadius));
+    this.add(orbit);
   }
 
   update(delta) {
-    // console.log(delta);
     this.satellites.forEach((satellite) => {
       const orbitPeriod = orbitPeriodScale(satellite.planet.orbitPeriod);
       const orbitAnglePerSecond = (2 * Math.PI) / daysToSeconds(orbitPeriod);
       const deltaSeconds = delta / 1000;
       const angleDelta = orbitAnglePerSecond * deltaSeconds;
-      // console.log(satellite.planet.orbitPeriod);
       satellite.angle += angleDelta;
       satellite.x = orbitRadiusScale(satellite.planet.orbitRadius) * Math.cos(satellite.angle);
       satellite.y = orbitRadiusScale(satellite.planet.orbitRadius) * Math.sin(satellite.angle);
