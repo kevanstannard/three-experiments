@@ -1,3 +1,4 @@
+import Moon from './objects/moon';
 import Mercury from './objects/mercury';
 import Venus from './objects/venus';
 import Earth from './objects/earth';
@@ -34,27 +35,20 @@ function initStats() {
 function init() {
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(0, -20000, 10000);
-  camera.lookAt(origin);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-
-  initStats();
-
   const axisHelper = new THREE.AxisHelper(1000);
   scene.add(axisHelper);
 
   const mercury = new Mercury();
   const venus = new Venus();
+
+  const moon = new Moon({
+    color: 0xffffff,
+    radius: 1737,
+    orbitRadius: 384000 * 10, // TODO: Fix this
+    orbitPeriod: 27,
+  });
   const earth = new Earth();
+  earth.addMoon(moon);
 
   const sol = new Sol();
   sol.addPlanet(mercury);
@@ -74,6 +68,21 @@ function init() {
   const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
   pointLight.position.set(50, 200, -100);
   scene.add(pointLight);
+
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(0, -20000, 10000);
+  camera.lookAt(origin);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  THREEx.WindowResize(renderer, camera);
+
+  document.body.appendChild(renderer.domElement);
+
+  initStats();
 }
 
 function update() {

@@ -43,6 +43,7 @@ export default class Star extends THREE.Object3D {
       satellite.x = orbitRadiusScale(satellite.planet.orbitRadius) * Math.cos(satellite.angle);
       satellite.y = orbitRadiusScale(satellite.planet.orbitRadius) * Math.sin(satellite.angle);
       satellite.planet.position.set(satellite.x, satellite.y, satellite.z);
+      satellite.planet.update(delta);
     });
   }
 
