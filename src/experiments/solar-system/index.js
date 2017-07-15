@@ -20,6 +20,7 @@ let renderer;
 let orbitControls;
 let stats;
 let solarSystem;
+let followObject;
 
 const origin = new THREE.Vector3(0, 0, 0);
 
@@ -62,6 +63,8 @@ function init() {
 
   scene.add(solarSystem);
 
+  // followObject = mercury;
+
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
@@ -70,13 +73,15 @@ function init() {
   scene.add(pointLight);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(0, -20000, 10000);
+  camera.position.set(0, -40000, 20000);
   camera.lookAt(origin);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  if (!followObject) {
+    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  }
 
   THREEx.WindowResize(renderer, camera);
 
@@ -91,7 +96,11 @@ function update() {
   prevTime = time;
   solarSystem.update(delta);
   stats.update();
-  orbitControls.update();
+  if (!followObject) {
+    orbitControls.update();
+  } else {
+    camera.position.set(followObject.position.x * SCALE, followObject.position.y * SCALE, 2000);
+  }
 }
 
 function render() {
