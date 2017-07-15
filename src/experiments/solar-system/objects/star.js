@@ -17,6 +17,7 @@ export default class Star extends THREE.Object3D {
     this.add(mesh);
     this.satellites = [];
     this.prevTime = 0;
+    this.radius = radius;
   }
 
   addPlanet(planet) {
@@ -26,10 +27,11 @@ export default class Star extends THREE.Object3D {
       y: 0,
       z: 0,
       angle: 0,
+      orbitRadius: this.radius + planet.orbitRadius + planet.radius,
     };
     this.satellites.push(satellite);
     this.add(planet);
-    const orbit = new Orbit(orbitRadiusScale(planet.orbitRadius));
+    const orbit = new Orbit(orbitRadiusScale(satellite.orbitRadius));
     this.add(orbit);
   }
 
@@ -40,8 +42,8 @@ export default class Star extends THREE.Object3D {
       const deltaSeconds = delta / 1000;
       const angleDelta = orbitAnglePerSecond * deltaSeconds;
       satellite.angle += angleDelta;
-      satellite.x = orbitRadiusScale(satellite.planet.orbitRadius) * Math.cos(satellite.angle);
-      satellite.y = orbitRadiusScale(satellite.planet.orbitRadius) * Math.sin(satellite.angle);
+      satellite.x = orbitRadiusScale(satellite.orbitRadius) * Math.cos(satellite.angle);
+      satellite.y = orbitRadiusScale(satellite.orbitRadius) * Math.sin(satellite.angle);
       satellite.planet.position.set(satellite.x, satellite.y, satellite.z);
       satellite.planet.update(delta);
     });

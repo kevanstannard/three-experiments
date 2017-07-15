@@ -44,7 +44,7 @@ function init() {
   const moon = new Moon({
     color: 0xffffff,
     radius: 1737,
-    orbitRadius: 384000 * 10, // TODO: Fix this
+    orbitRadius: 384000,
     orbitPeriod: 27,
   });
   const earth = new Earth();

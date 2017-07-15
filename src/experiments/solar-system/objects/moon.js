@@ -9,6 +9,7 @@ export default class Moon extends THREE.Object3D {
     const mesh = new THREE.Mesh(geometry, material);
     this.add(mesh);
 
+    this.radius = radius;
     this.orbitRadius = orbitRadius;
     this.orbitPeriod = orbitPeriod;
   }
