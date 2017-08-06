@@ -1,7 +1,6 @@
 import Planet from './planet';
 
 const props = {
-  // color: 0x888888,
   color: 0xffffff,
   radius: 2440, // kms
   orbitRadius: 58000000, // kms

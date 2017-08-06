@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp';
 
 const THREE_DIR = path.resolve(__dirname, '../src/libs/three');
 
-const version = 'r84';
+const version = 'r86';
 const versionRoot = `${THREE_DIR}/${version}`;
 
 const threeBuildUrl = `https://github.com/mrdoob/three.js/raw/${version}/build`;
@@ -24,11 +24,11 @@ const files = [
     filePath: `${versionRoot}/three.min.js`,
   },
   {
-    url: 'https://github.com/mrdoob/three.js/raw/r84/examples/js/controls/OrbitControls.js',
+    url: 'https://github.com/mrdoob/three.js/raw/r86/examples/js/controls/OrbitControls.js',
     filePath: `${versionRoot}/controls/OrbitControls.js`,
   },
   {
-    url: 'https://github.com/mrdoob/three.js/raw/r84/examples/js/controls/TrackballControls.js',
+    url: 'https://github.com/mrdoob/three.js/raw/r86/examples/js/controls/TrackballControls.js',
     filePath: `${versionRoot}/controls/TrackballControls.js`,
   },
 ];
