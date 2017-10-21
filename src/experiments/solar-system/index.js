@@ -53,7 +53,7 @@ function init() {
   scene.add(pointLight);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(100000, 100000, 100000);
+  camera.position.set(0, -100000, 100000);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
