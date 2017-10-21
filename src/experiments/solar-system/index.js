@@ -1,15 +1,5 @@
-import { ONE_MILLION } from './lib/constants';
-
-import Moon from './objects/moon';
-import Mercury from './objects/mercury';
-import Venus from './objects/venus';
-import Earth from './objects/earth';
-import Mars from './objects/mars';
-import Jupiter from './objects/jupiter';
-import Saturn from './objects/saturn';
-import Uranus from './objects/uranus';
-import Neptune from './objects/neptune';
-import Sol from './objects/sol';
+import model from './model/scaled';
+import createStar from './lib/factory';
 import SolarSystem from './objects/solar-system';
 
 const SCREEN_WIDTH = window.innerWidth;
@@ -17,7 +7,7 @@ const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
 const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
 const NEAR = 1;
-const FAR = 50000000;
+const FAR = 5000000;
 
 let prevTime = Date.now();
 let scene;
@@ -29,8 +19,6 @@ let solarSystem;
 
 let followObject;
 const followObjectWorldPosition = new THREE.Vector3();
-
-const bodies = {};
 
 function initStats() {
   stats = new Stats();
@@ -47,66 +35,15 @@ function init() {
   const axisHelper = new THREE.AxisHelper(1000);
   scene.add(axisHelper);
 
-  bodies.mercury = new Mercury();
-  bodies.venus = new Venus();
-
-  bodies.earth = new Earth();
-  bodies.moon = new Moon({
-    color: 0xffffff,
-    radius: 1737,
-    orbitRadius: 384000,
-    orbitPeriod: 27,
-  });
-  bodies.earth.addMoon(bodies.moon);
-
-  bodies.mars = new Mars();
-
-  bodies.jupiter = new Jupiter();
-  bodies.ganymede = new Moon({
-    color: 0xffffff,
-    radius: 5262 / 2,
-    orbitRadius: 1.070 * ONE_MILLION,
-    orbitPeriod: 7,
-  });
-  bodies.jupiter.addMoon(bodies.ganymede);
-  bodies.callisto = new Moon({
-    color: 0xffffff,
-    radius: 4821 / 2,
-    orbitRadius: 1.8827 * ONE_MILLION,
-    orbitPeriod: 17,
-  });
-  bodies.jupiter.addMoon(bodies.callisto);
-  bodies.io = new Moon({
-    color: 0xffffff,
-    radius: 3660 / 2,
-    orbitRadius: 0.422 * ONE_MILLION,
-    orbitPeriod: 1.7691,
-  });
-  bodies.jupiter.addMoon(bodies.io);
-
-  bodies.saturn = new Saturn();
-
-  bodies.uranus = new Uranus();
-
-  bodies.neptune = new Neptune();
-
-  bodies.sol = new Sol();
-  bodies.sol.addPlanet(bodies.mercury);
-  bodies.sol.addPlanet(bodies.venus);
-  bodies.sol.addPlanet(bodies.earth);
-  bodies.sol.addPlanet(bodies.mars);
-  bodies.sol.addPlanet(bodies.jupiter);
-  bodies.sol.addPlanet(bodies.saturn);
-  bodies.sol.addPlanet(bodies.uranus);
-  bodies.sol.addPlanet(bodies.neptune);
-
   solarSystem = new SolarSystem();
 
-  solarSystem.addBody(bodies.sol);
+  const sol = createStar(model);
+  solarSystem.addBody(sol);
 
   scene.add(solarSystem);
 
-  followObject = bodies.moon;
+  // console.log(sol.children);
+  // followObject = sol.children[9];
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
@@ -116,6 +53,7 @@ function init() {
   scene.add(pointLight);
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(100000, 100000, 100000);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -141,11 +79,7 @@ function update() {
     orbitControls.update();
   } else {
     followObject.getWorldPosition(followObjectWorldPosition);
-    camera.position.set(
-      followObjectWorldPosition.x,
-      followObjectWorldPosition.y,
-      2000000,
-    );
+    camera.position.set(followObjectWorldPosition.x, followObjectWorldPosition.y, 5000);
     camera.lookAt(followObjectWorldPosition);
   }
 }
