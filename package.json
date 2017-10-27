@@ -1,7 +1,7 @@
 {
-  "name": "three",
+  "name": "three-experiments",
   "version": "1.0.0",
-  "description": "Three.js Expreiments",
+  "description": "Three.js Experiments",
   "scripts": {
     "start": "gulp dev",
     "build": "gulp build",
