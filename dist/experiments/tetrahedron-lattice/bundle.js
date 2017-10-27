@@ -47,7 +47,7 @@
 
 	'use strict';
 
-	var _TetrahedronLattice = __webpack_require__(19);
+	var _TetrahedronLattice = __webpack_require__(29);
 
 	var _TetrahedronLattice2 = _interopRequireDefault(_TetrahedronLattice);
 
@@ -168,7 +168,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 29:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -181,7 +181,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Array3d = __webpack_require__(20);
+	var _Array3d = __webpack_require__(30);
 
 	var _Array3d2 = _interopRequireDefault(_Array3d);
 
@@ -274,7 +274,7 @@
 
 /***/ },
 
-/***/ 20:
+/***/ 30:
 /***/ function(module, exports) {
 
 	"use strict";
