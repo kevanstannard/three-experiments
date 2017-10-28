@@ -5,7 +5,7 @@ const path = require('path');
 const request = require('request');
 const mkdirp = require('mkdirp');
 
-const githubThree = require('./lib/github-three');
+const github = require('./lib/github');
 
 const THREE_DIR = path.resolve(__dirname, '../src/libs/three');
 
@@ -57,7 +57,7 @@ const downloadVersion = (version) => {
 };
 
 console.log('Getting latest version');
-githubThree
-  .getLatestVersion()
+github
+  .getLatestVersion('mrdoob', 'three.js')
   .then(downloadVersion)
   .catch(console.error);
