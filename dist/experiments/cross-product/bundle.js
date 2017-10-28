@@ -1,183 +1,209 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	'use strict';
+/***/ 12:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+"use strict";
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var orbitControls = void 0;
-	var stats = void 0;
-	var clock = void 0;
 
-	var origin = void 0;
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	var direction1 = void 0;
-	var direction1Arrow = void 0;
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var orbitControls = void 0;
+var stats = void 0;
+var clock = void 0;
 
-	var direction2 = void 0;
-	var direction2Arrow = void 0;
+var origin = void 0;
 
-	var direction3 = void 0;
-	var direction3Arrow = void 0;
+var direction1 = void 0;
+var direction1Arrow = void 0;
 
-	var line = void 0;
+var direction2 = void 0;
+var direction2Arrow = void 0;
 
-	function Line() {
-	  this.start = new THREE.Vector3();
-	  this.end = new THREE.Vector3();
-	  var material = new THREE.LineBasicMaterial({
-	    color: 0xffffff
-	  });
-	  var geometry = new THREE.Geometry();
-	  geometry.vertices.push(this.start, this.end);
-	  THREE.Line.call(this, geometry, material);
-	}
+var direction3 = void 0;
+var direction3Arrow = void 0;
 
-	Line.prototype = Object.assign(Object.create(THREE.Line.prototype), {
+var line = void 0;
 
-	  constructor: Line,
+function Line() {
+  this.start = new THREE.Vector3();
+  this.end = new THREE.Vector3();
+  var material = new THREE.LineBasicMaterial({
+    color: 0xffffff
+  });
+  var geometry = new THREE.Geometry();
+  geometry.vertices.push(this.start, this.end);
+  THREE.Line.call(this, geometry, material);
+}
 
-	  set: function set(start, end) {
-	    this.start.copy(start);
-	    this.end.copy(end);
-	  }
-	});
+Line.prototype = Object.assign(Object.create(THREE.Line.prototype), {
 
-	function initStats() {
-	  stats = new Stats();
-	  stats.domElement.style.position = 'absolute';
-	  stats.domElement.style.left = '0px';
-	  stats.domElement.style.top = '20px';
-	  stats.setMode(0); // 0: fps, 1: ms
-	  document.getElementById('stats').appendChild(stats.domElement);
-	}
+  constructor: Line,
 
-	function init() {
-	  clock = new THREE.Clock();
+  set: function set(start, end) {
+    this.start.copy(start);
+    this.end.copy(end);
+  }
+});
 
-	  scene = new THREE.Scene();
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
 
-	  gridHelper = new THREE.GridHelper(2, 4);
-	  scene.add(gridHelper);
+function init() {
+  clock = new THREE.Clock();
 
-	  axisHelper = new THREE.AxisHelper(2);
-	  scene.add(axisHelper);
+  scene = new THREE.Scene();
 
-	  origin = new THREE.Vector3(0, 0, 0);
+  gridHelper = new THREE.GridHelper(2, 4);
+  scene.add(gridHelper);
 
-	  direction1 = new THREE.Vector3();
-	  direction1Arrow = new THREE.ArrowHelper(direction1, origin, 1, 0xff0000);
-	  scene.add(direction1Arrow);
+  axisHelper = new THREE.AxisHelper(2);
+  scene.add(axisHelper);
 
-	  direction2 = new THREE.Vector3();
-	  direction2Arrow = new THREE.ArrowHelper(direction2, origin, 1, 0x00ff00);
-	  scene.add(direction2Arrow);
+  origin = new THREE.Vector3(0, 0, 0);
 
-	  direction3 = new THREE.Vector3();
-	  direction3Arrow = new THREE.ArrowHelper(direction3, origin, 1, 0x0000ff);
-	  scene.add(direction3Arrow);
+  direction1 = new THREE.Vector3();
+  direction1Arrow = new THREE.ArrowHelper(direction1, origin, 1, 0xff0000);
+  scene.add(direction1Arrow);
 
-	  line = new Line();
-	  scene.add(line);
+  direction2 = new THREE.Vector3();
+  direction2Arrow = new THREE.ArrowHelper(direction2, origin, 1, 0x00ff00);
+  scene.add(direction2Arrow);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(3, 3, 3);
-	  camera.lookAt(origin);
+  direction3 = new THREE.Vector3();
+  direction3Arrow = new THREE.ArrowHelper(direction3, origin, 1, 0x0000ff);
+  scene.add(direction3Arrow);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+  line = new Line();
+  scene.add(line);
 
-	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(3, 3, 3);
+  camera.lookAt(origin);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	  document.body.appendChild(renderer.domElement);
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	  initStats();
-	}
+  THREEx.WindowResize(renderer, camera);
 
-	function update() {
-	  var t = clock.getElapsedTime();
-	  var a = Math.sin(t / 10);
-	  var b = Math.cos(t / 10);
+  document.body.appendChild(renderer.domElement);
 
-	  direction1.set(a, 0, b).normalize();
-	  direction2.set(a, b, 0).normalize();
-	  direction3.crossVectors(direction1, direction2).normalize();
+  initStats();
+}
 
-	  direction1Arrow.setDirection(direction1);
-	  direction2Arrow.setDirection(direction2);
-	  direction3Arrow.setDirection(direction3);
+function update() {
+  var t = clock.getElapsedTime();
+  var a = Math.sin(t / 10);
+  var b = Math.cos(t / 10);
 
-	  stats.update();
-	  orbitControls.update();
-	}
+  direction1.set(a, 0, b).normalize();
+  direction2.set(a, b, 0).normalize();
+  direction3.crossVectors(direction1, direction2).normalize();
 
-	function render() {
-	  renderer.render(scene, camera);
-	}
+  direction1Arrow.setDirection(direction1);
+  direction2Arrow.setDirection(direction2);
+  direction3Arrow.setDirection(direction3);
 
-	function tick() {
-	  update();
-	  render();
-	  requestAnimationFrame(tick);
-	}
+  stats.update();
+  orbitControls.update();
+}
 
-	init();
-	tick();
+function render() {
+  renderer.render(scene, camera);
+}
 
-/***/ }
-/******/ ]);
+function tick() {
+  update();
+  render();
+  requestAnimationFrame(tick);
+}
+
+init();
+tick();
+
+/***/ })
+
+/******/ });

@@ -1,212 +1,240 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 46);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
 
-	'use strict';
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var _fonts = __webpack_require__(2);
+"use strict";
 
-	var SCREEN_WIDTH = window.innerWidth; // References
-	// https://github.com/mrdoob/three.js/tree/master/examples/fonts
 
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var controls = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
-	var fonts = void 0;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var origin = new THREE.Vector3(0, 0, 0);
+exports.loadFont = loadFont;
+exports.loadFonts = loadFonts;
 
-	var FONT_SIZE = 36;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	// ES5 alternative to load the fonts
-	// https://github.com/kevanstannard/three/issues/1
+var fontLoader = new THREE.FontLoader();
 
-	// var fontLoader = new THREE.FontLoader();
-	//
-	// var fonts = {};
-	//
-	// function loadFont(name) {
-	//   var url = '../../modules/fonts/fonts/' + name + '.typeface.json';
-	//   return new Promise(function(resolve) {
-	//     fontLoader.load(url, function(font) {
-	//       fonts[name] = font;
-	//       resolve();
-	//     });
-	//   });
-	// }
-	//
-	// function loadFonts() {
-	//   var promises = [
-	//     loadFont('gentilis_regular'),
-	//     loadFont('helvetiker_regular'),
-	//     loadFont('optimer_regular'),
-	//   ];
-	//   return Promise.all(promises);
-	// }
+var fonts = ['gentilis_bold', 'gentilis_regular', 'helvetiker_bold', 'helvetiker_regular', 'optimer_bold', 'optimer_regular'];
 
-	function createText(text, fontId) {
-	  var params = {
-	    font: fonts[fontId],
-	    size: FONT_SIZE,
-	    height: 1 };
-	  var geometry = new THREE.TextGeometry(text, params);
-	  var material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-	  var mesh = new THREE.Mesh(geometry, material);
-	  return mesh;
-	}
+function loadFont(url) {
+  return new Promise(function (resolve) {
+    fontLoader.load(url, resolve);
+  });
+}
 
-	function load() {
-	  return (0, _fonts.loadFonts)().then(function (theFonts) {
-	    fonts = theFonts;
-	  });
-	}
+function loadFonts() {
+  var promises = fonts.map(function (id) {
+    var url = '../../modules/fonts/fonts/' + id + '.typeface.json';
+    return loadFont(url).then(function (font) {
+      return { id: id, font: font };
+    });
+  });
+  return Promise.all(promises).then(function (results) {
+    var map = results.reduce(function (acc, result) {
+      return _extends({}, acc, _defineProperty({}, result.id, result.font));
+    }, {});
+    return map;
+  });
+}
 
-	function init() {
-	  scene = new THREE.Scene();
+/***/ }),
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+/***/ 46:
+/***/ (function(module, exports, __webpack_require__) {
 
-	  var lineHeight = FONT_SIZE;
+"use strict";
 
-	  var one = createText('one', 'gentilis_regular', 0xff0000);
-	  one.position.y = lineHeight * 2;
-	  scene.add(one);
 
-	  var two = createText('two', 'helvetiker_regular', 0x00ff00);
-	  two.position.y = lineHeight * 1;
-	  scene.add(two);
+var _fonts = __webpack_require__(0);
 
-	  var three = createText('three', 'optimer_regular', 0x0000ff);
-	  three.position.y = lineHeight * 0;
-	  scene.add(three);
+var SCREEN_WIDTH = window.innerWidth; // References
+// https://github.com/mrdoob/three.js/tree/master/examples/fonts
 
-	  ambientLight = new THREE.AmbientLight(0x888888);
-	  scene.add(ambientLight);
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	  pointLight = new THREE.PointLight(0xffffff, 2, 1000);
-	  pointLight.position.set(100, 100, 100);
-	  scene.add(pointLight);
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var controls = void 0;
+var pointLight = void 0;
+var ambientLight = void 0;
+var fonts = void 0;
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
+var origin = new THREE.Vector3(0, 0, 0);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(window.innerWidth, window.innerHeight);
+var FONT_SIZE = 36;
 
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
+// ES5 alternative to load the fonts
+// https://github.com/kevanstannard/three/issues/1
 
-	  THREEx.WindowResize(renderer, camera);
+// var fontLoader = new THREE.FontLoader();
+//
+// var fonts = {};
+//
+// function loadFont(name) {
+//   var url = '../../modules/fonts/fonts/' + name + '.typeface.json';
+//   return new Promise(function(resolve) {
+//     fontLoader.load(url, function(font) {
+//       fonts[name] = font;
+//       resolve();
+//     });
+//   });
+// }
+//
+// function loadFonts() {
+//   var promises = [
+//     loadFont('gentilis_regular'),
+//     loadFont('helvetiker_regular'),
+//     loadFont('optimer_regular'),
+//   ];
+//   return Promise.all(promises);
+// }
 
-	  document.body.appendChild(renderer.domElement);
-	}
+function createText(text, fontId) {
+  var params = {
+    font: fonts[fontId],
+    size: FONT_SIZE,
+    height: 1 // Thickness
+  };
+  var geometry = new THREE.TextGeometry(text, params);
+  var material = new THREE.MeshLambertMaterial({ color: 0x888888 });
+  var mesh = new THREE.Mesh(geometry, material);
+  return mesh;
+}
 
-	function animate() {
-	  requestAnimationFrame(animate);
-	  controls.update();
-	  renderer.render(scene, camera);
-	}
+function load() {
+  return (0, _fonts.loadFonts)().then(function (theFonts) {
+    fonts = theFonts;
+  });
+}
 
-	load().then(function () {
-	  init();
-	  animate();
-	});
+function init() {
+  scene = new THREE.Scene();
 
-/***/ },
-/* 1 */,
-/* 2 */
-/***/ function(module, exports) {
+  axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
 
-	'use strict';
+  var lineHeight = FONT_SIZE;
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+  var one = createText('one', 'gentilis_regular', 0xff0000);
+  one.position.y = lineHeight * 2;
+  scene.add(one);
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+  var two = createText('two', 'helvetiker_regular', 0x00ff00);
+  two.position.y = lineHeight * 1;
+  scene.add(two);
 
-	exports.loadFont = loadFont;
-	exports.loadFonts = loadFonts;
+  var three = createText('three', 'optimer_regular', 0x0000ff);
+  three.position.y = lineHeight * 0;
+  scene.add(three);
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+  ambientLight = new THREE.AmbientLight(0x888888);
+  scene.add(ambientLight);
 
-	var fontLoader = new THREE.FontLoader();
+  pointLight = new THREE.PointLight(0xffffff, 2, 1000);
+  pointLight.position.set(100, 100, 100);
+  scene.add(pointLight);
 
-	var fonts = ['gentilis_bold', 'gentilis_regular', 'helvetiker_bold', 'helvetiker_regular', 'optimer_bold', 'optimer_regular'];
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(origin);
 
-	function loadFont(url) {
-	  return new Promise(function (resolve) {
-	    fontLoader.load(url, resolve);
-	  });
-	}
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	function loadFonts() {
-	  var promises = fonts.map(function (id) {
-	    var url = '../../modules/fonts/fonts/' + id + '.typeface.json';
-	    return loadFont(url).then(function (font) {
-	      return { id: id, font: font };
-	    });
-	  });
-	  return Promise.all(promises).then(function (results) {
-	    var map = results.reduce(function (acc, result) {
-	      return _extends({}, acc, _defineProperty({}, result.id, result.font));
-	    }, {});
-	    return map;
-	  });
-	}
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-/***/ }
-/******/ ]);
+  THREEx.WindowResize(renderer, camera);
+
+  document.body.appendChild(renderer.domElement);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+load().then(function () {
+  init();
+  animate();
+});
+
+/***/ })
+
+/******/ });

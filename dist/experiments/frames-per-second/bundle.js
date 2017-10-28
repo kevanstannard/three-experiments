@@ -1,215 +1,243 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
 
-	'use strict';
+/***/ 17:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var _FPS = __webpack_require__(1);
+"use strict";
 
-	var _FPS2 = _interopRequireDefault(_FPS);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _FPS = __webpack_require__(18);
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+var _FPS2 = _interopRequireDefault(_FPS);
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var orbitControls = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
-	var stats = void 0;
-	var fps = void 0;
-	var fpsEl = void 0;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var origin = new THREE.Vector3(0, 0, 0);
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	function initStats() {
-	  stats = new Stats();
-	  stats.domElement.style.position = 'absolute';
-	  stats.domElement.style.left = '0px';
-	  stats.domElement.style.top = '20px';
-	  stats.setMode(0); // 0: fps, 1: ms
-	  document.getElementById('stats').appendChild(stats.domElement);
-	}
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var orbitControls = void 0;
+var pointLight = void 0;
+var ambientLight = void 0;
+var stats = void 0;
+var fps = void 0;
+var fpsEl = void 0;
 
-	function init() {
-	  fps = new _FPS2.default();
+var origin = new THREE.Vector3(0, 0, 0);
 
-	  scene = new THREE.Scene();
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+function init() {
+  fps = new _FPS2.default();
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+  scene = new THREE.Scene();
 
-	  var count = 3000;
-	  for (var i = 0; i < count; i += 1) {
-	    var geometry = new THREE.BoxGeometry(5, 5, 5);
-	    var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-	    var box = new THREE.Mesh(geometry, material);
-	    box.position.x = Math.random() * 200 - 100;
-	    box.position.y = Math.random() * 200 - 100;
-	    box.position.z = Math.random() * 200 - 100;
-	    scene.add(box);
-	  }
+  gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-	  scene.add(ambientLight);
+  axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
-	  scene.add(pointLight);
+  var count = 3000;
+  for (var i = 0; i < count; i += 1) {
+    var geometry = new THREE.BoxGeometry(5, 5, 5);
+    var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+    var box = new THREE.Mesh(geometry, material);
+    box.position.x = Math.random() * 200 - 100;
+    box.position.y = Math.random() * 200 - 100;
+    box.position.z = Math.random() * 200 - 100;
+    scene.add(box);
+  }
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+  pointLight.position.set(50, 200, -100);
+  scene.add(pointLight);
 
-	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(origin);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	  document.body.appendChild(renderer.domElement);
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	  initStats();
+  THREEx.WindowResize(renderer, camera);
 
-	  fpsEl = document.createElement('div');
-	  fpsEl.style.color = 'white';
-	  fpsEl.style.position = 'absolute';
-	  fpsEl.style.top = '150px';
-	  fpsEl.style.left = '0px';
-	  document.body.appendChild(fpsEl);
-	}
+  document.body.appendChild(renderer.domElement);
 
-	var prevTime = void 0;
-	var currTime = void 0;
+  initStats();
 
-	function update() {
-	  fps.update();
+  fpsEl = document.createElement('div');
+  fpsEl.style.color = 'white';
+  fpsEl.style.position = 'absolute';
+  fpsEl.style.top = '150px';
+  fpsEl.style.left = '0px';
+  document.body.appendChild(fpsEl);
+}
 
-	  currTime = Math.floor(fps.elapsed);
-	  if (currTime !== prevTime) {
-	    fpsEl.innerHTML = 'fps: ' + Math.round(fps.fps) + '<br />avg: ' + Math.round(fps.fpsAverage);
-	    prevTime = currTime;
-	  }
+var prevTime = void 0;
+var currTime = void 0;
 
-	  stats.update();
-	  orbitControls.update();
-	}
+function update() {
+  fps.update();
 
-	function render() {
-	  renderer.render(scene, camera);
-	}
+  currTime = Math.floor(fps.elapsed);
+  if (currTime !== prevTime) {
+    fpsEl.innerHTML = 'fps: ' + Math.round(fps.fps) + '<br />avg: ' + Math.round(fps.fpsAverage);
+    prevTime = currTime;
+  }
 
-	function tick() {
-	  update();
-	  render();
-	  requestAnimationFrame(tick);
-	}
+  stats.update();
+  orbitControls.update();
+}
 
-	init();
-	tick();
+function render() {
+  renderer.render(scene, camera);
+}
 
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
+function tick() {
+  update();
+  render();
+  requestAnimationFrame(tick);
+}
 
-	"use strict";
+init();
+tick();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+/***/ }),
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/***/ 18:
+/***/ (function(module, exports, __webpack_require__) {
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+"use strict";
 
-	function now() {
-	  return (window.performance || Date).now() / 1000; // Seconds
-	}
 
-	var FPS = function () {
-	  function FPS() {
-	    _classCallCheck(this, FPS);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-	    this.prevTime = now();
-	    this.delta = 0;
-	    this.elapsed = 0;
-	    this.frames = 0;
-	    this.fps = 0;
-	    this.fpsAverage = 0;
-	  }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	  _createClass(FPS, [{
-	    key: "update",
-	    value: function update() {
-	      var time = now();
-	      this.frames += 1;
-	      this.delta = time - this.prevTime;
-	      this.elapsed += this.delta;
-	      this.fps = 1 / this.delta;
-	      this.fpsAverage = this.frames / this.elapsed;
-	      this.prevTime = time;
-	    }
-	  }]);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	  return FPS;
-	}();
+function now() {
+  return (window.performance || Date).now() / 1000; // Seconds
+}
 
-	exports.default = FPS;
+var FPS = function () {
+  function FPS() {
+    _classCallCheck(this, FPS);
 
-/***/ }
-/******/ ]);
+    this.prevTime = now();
+    this.delta = 0;
+    this.elapsed = 0;
+    this.frames = 0;
+    this.fps = 0;
+    this.fpsAverage = 0;
+  }
+
+  _createClass(FPS, [{
+    key: "update",
+    value: function update() {
+      var time = now();
+      this.frames += 1;
+      this.delta = time - this.prevTime;
+      this.elapsed += this.delta;
+      this.fps = 1 / this.delta;
+      this.fpsAverage = this.frames / this.elapsed;
+      this.prevTime = time;
+    }
+  }]);
+
+  return FPS;
+}();
+
+exports.default = FPS;
+
+/***/ })
+
+/******/ });

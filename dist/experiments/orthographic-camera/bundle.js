@@ -1,139 +1,165 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 52);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	"use strict";
+/***/ 52:
+/***/ (function(module, exports, __webpack_require__) {
 
-	// See:
-	// https://www.youtube.com/watch?v=k3adBAnDpos
-	// http://stackoverflow.com/questions/17558085/three-js-orthographic-camera
+"use strict";
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
 
-	// View size is how much vertical space to fit in the view
-	// This is in world coordinates
-	var VIEW_SIZE = 600;
+// See:
+// https://www.youtube.com/watch?v=k3adBAnDpos
+// http://stackoverflow.com/questions/17558085/three-js-orthographic-camera
 
-	// The aspect ratio provides information about how wide our view should
-	// be compared to how tall it should be
-	var ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var controls = void 0;
-	var ambientLight = void 0;
-	var light = void 0;
+// View size is how much vertical space to fit in the view
+// This is in world coordinates
+var VIEW_SIZE = 600;
 
-	var origin = new THREE.Vector3(0, 0, 0);
+// The aspect ratio provides information about how wide our view should
+// be compared to how tall it should be
+var ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-	function init() {
-	  scene = new THREE.Scene();
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var controls = void 0;
+var ambientLight = void 0;
+var light = void 0;
 
-	  gridHelper = new THREE.GridHelper(230, 3);
-	  scene.add(gridHelper);
+var origin = new THREE.Vector3(0, 0, 0);
 
-	  axisHelper = new THREE.AxisHelper(230);
-	  scene.add(axisHelper);
+function init() {
+  scene = new THREE.Scene();
 
-	  var boxSize = 100;
-	  var gapSize = 50;
-	  var gridSize = 3;
+  gridHelper = new THREE.GridHelper(230, 3);
+  scene.add(gridHelper);
 
-	  var areaSize = boxSize * gridSize + gapSize * (gridSize - 1);
-	  var start = -(areaSize / 2) + boxSize / 2;
-	  var end = areaSize / 2 + boxSize / 2;
+  axisHelper = new THREE.AxisHelper(230);
+  scene.add(axisHelper);
 
-	  for (var x = start; x <= end; x += boxSize + gapSize) {
-	    for (var z = start; z <= end; z += boxSize + gapSize) {
-	      var height = 1 + Math.random() * 199;
-	      var geometry = new THREE.BoxGeometry(100, height, 100);
-	      var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
-	      var mesh = new THREE.Mesh(geometry, material);
-	      mesh.position.set(x, height / 2, z);
-	      scene.add(mesh);
-	    }
-	  }
+  var boxSize = 100;
+  var gapSize = 50;
+  var gridSize = 3;
 
-	  ambientLight = new THREE.AmbientLight(0x444444);
-	  scene.add(ambientLight);
+  var areaSize = boxSize * gridSize + gapSize * (gridSize - 1);
+  var start = -(areaSize / 2) + boxSize / 2;
+  var end = areaSize / 2 + boxSize / 2;
 
-	  light = new THREE.DirectionalLight(0xffffff, 1, 1000);
-	  light.position.set(100, 300, 600);
-	  scene.add(light);
+  for (var x = start; x <= end; x += boxSize + gapSize) {
+    for (var z = start; z <= end; z += boxSize + gapSize) {
+      var height = 1 + Math.random() * 199;
+      var geometry = new THREE.BoxGeometry(100, height, 100);
+      var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(x, height / 2, z);
+      scene.add(mesh);
+    }
+  }
 
-	  camera = new THREE.OrthographicCamera(-(ASPECT_RATIO * VIEW_SIZE) / 2, ASPECT_RATIO * VIEW_SIZE / 2, VIEW_SIZE / 2, -(VIEW_SIZE / 2), -1000, 1000);
+  ambientLight = new THREE.AmbientLight(0x444444);
+  scene.add(ambientLight);
 
-	  camera.position.set(300, 300, 300);
+  light = new THREE.DirectionalLight(0xffffff, 1, 1000);
+  light.position.set(100, 300, 600);
+  scene.add(light);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera = new THREE.OrthographicCamera(-(ASPECT_RATIO * VIEW_SIZE) / 2, ASPECT_RATIO * VIEW_SIZE / 2, VIEW_SIZE / 2, -(VIEW_SIZE / 2), -1000, 1000);
 
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
-	  controls.target.set(origin.x, origin.y, origin.z);
+  camera.position.set(300, 300, 300);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	  document.body.appendChild(renderer.domElement);
-	}
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.target.set(origin.x, origin.y, origin.z);
 
-	function update() {
-	  controls.update();
-	}
+  THREEx.WindowResize(renderer, camera);
 
-	function animate() {
-	  requestAnimationFrame(animate);
-	  update();
-	  renderer.render(scene, camera);
-	}
+  document.body.appendChild(renderer.domElement);
+}
 
-	init();
-	animate();
+function update() {
+  controls.update();
+}
 
-/***/ }
-/******/ ]);
+function animate() {
+  requestAnimationFrame(animate);
+  update();
+  renderer.render(scene, camera);
+}
+
+init();
+animate();
+
+/***/ })
+
+/******/ });

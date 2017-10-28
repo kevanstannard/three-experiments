@@ -1,179 +1,205 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	"use strict";
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
 
-	/* eslint-disable no-param-reassign */
+"use strict";
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 1000;
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var gridHelper = void 0;
-	var controls = void 0;
-	var tree = void 0;
+/* eslint-disable no-param-reassign */
 
-	function Tree() {
-	  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 6;
-	  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 1000;
 
-	  this.depth = depth;
-	  this.size = size;
-	  this.growth = 0;
-	  this.hasBranches = this.depth > 1;
-	  this.branches = null;
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var gridHelper = void 0;
+var controls = void 0;
+var tree = void 0;
 
-	  var geometry = new THREE.BoxGeometry(size / 8, size, size / 8);
+function Tree() {
+  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 6;
+  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
 
-	  // Change the geometrys center position to be the base of the geometry
-	  geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, size / 2, 0));
+  this.depth = depth;
+  this.size = size;
+  this.growth = 0;
+  this.hasBranches = this.depth > 1;
+  this.branches = null;
 
-	  var material = new THREE.MeshNormalMaterial({ wireframe: true });
-	  THREE.Mesh.call(this, geometry, material);
-	}
+  var geometry = new THREE.BoxGeometry(size / 8, size, size / 8);
 
-	Tree.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+  // Change the geometrys center position to be the base of the geometry
+  geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, size / 2, 0));
 
-	  constructor: Tree,
+  var material = new THREE.MeshNormalMaterial({ wireframe: true });
+  THREE.Mesh.call(this, geometry, material);
+}
 
-	  addBranches: function addBranches() {
-	    var top = new THREE.Vector3(0, this.size, 0);
-	    var branchSize = this.size * 0.7;
-	    var branchDepth = this.depth - 1;
+Tree.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
 
-	    this.branches = [];
+  constructor: Tree,
 
-	    var branch1 = new Tree(branchDepth, branchSize);
-	    branch1.position.set(top.x, top.y, top.z);
-	    branch1.rotateZ(Math.PI * (1 / 4));
-	    branch1.rotation.y = 2 * Math.PI / 3 * 0;
-	    this.add(branch1);
-	    this.branches.push(branch1);
+  addBranches: function addBranches() {
+    var top = new THREE.Vector3(0, this.size, 0);
+    var branchSize = this.size * 0.7;
+    var branchDepth = this.depth - 1;
 
-	    var branch2 = new Tree(branchDepth, branchSize);
-	    branch2.position.set(top.x, top.y, top.z);
-	    branch2.rotateZ(Math.PI * (1 / 4));
-	    branch2.rotation.y = 2 * Math.PI / 3 * 1;
-	    this.add(branch2);
-	    this.branches.push(branch2);
+    this.branches = [];
 
-	    var branch3 = new Tree(branchDepth, branchSize);
-	    branch3.position.set(top.x, top.y, top.z);
-	    branch3.rotateZ(Math.PI * (1 / 4));
-	    branch3.rotation.y = 2 * Math.PI / 3 * 2;
-	    this.add(branch3);
-	    this.branches.push(branch3);
-	  },
-	  update: function update() {
-	    if (this.growth < 1) {
-	      this.growth += 0.005;
-	      this.scale.y = this.growth;
-	    } else if (this.hasBranches) {
-	      if (!this.branches) {
-	        this.addBranches();
-	      }
-	      this.branches.forEach(function (branch) {
-	        branch.rotation.y += 0.005;
-	        branch.update();
-	      });
-	    }
-	  }
-	});
+    var branch1 = new Tree(branchDepth, branchSize);
+    branch1.position.set(top.x, top.y, top.z);
+    branch1.rotateZ(Math.PI * (1 / 4));
+    branch1.rotation.y = 2 * Math.PI / 3 * 0;
+    this.add(branch1);
+    this.branches.push(branch1);
 
-	function init() {
-	  scene = new THREE.Scene();
+    var branch2 = new Tree(branchDepth, branchSize);
+    branch2.position.set(top.x, top.y, top.z);
+    branch2.rotateZ(Math.PI * (1 / 4));
+    branch2.rotation.y = 2 * Math.PI / 3 * 1;
+    this.add(branch2);
+    this.branches.push(branch2);
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+    var branch3 = new Tree(branchDepth, branchSize);
+    branch3.position.set(top.x, top.y, top.z);
+    branch3.rotateZ(Math.PI * (1 / 4));
+    branch3.rotation.y = 2 * Math.PI / 3 * 2;
+    this.add(branch3);
+    this.branches.push(branch3);
+  },
+  update: function update() {
+    if (this.growth < 1) {
+      this.growth += 0.005;
+      this.scale.y = this.growth;
+    } else if (this.hasBranches) {
+      if (!this.branches) {
+        this.addBranches();
+      }
+      this.branches.forEach(function (branch) {
+        branch.rotation.y += 0.005;
+        branch.update();
+      });
+    }
+  }
+});
 
-	  tree = new Tree();
-	  scene.add(tree);
+function init() {
+  scene = new THREE.Scene();
 
-	  // ambientLight = new THREE.AmbientLight(0x000000);
-	  // scene.add(ambientLight);
+  gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
 
-	  // pointLight = new THREE.PointLight(0xffffff, 2, 500);
-	  // pointLight.position.set(80, 80, 80);
-	  // scene.add(pointLight);
+  tree = new Tree();
+  scene.add(tree);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(0, 400, 400);
+  // ambientLight = new THREE.AmbientLight(0x000000);
+  // scene.add(ambientLight);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(window.innerWidth, window.innerHeight);
+  // pointLight = new THREE.PointLight(0xffffff, 2, 500);
+  // pointLight.position.set(80, 80, 80);
+  // scene.add(pointLight);
 
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
-	  var withinTree = new THREE.Vector3(tree.position.x, tree.position.y + 100, tree.position.z);
-	  controls.target.set(withinTree.x, withinTree.y, withinTree.z);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(0, 400, 400);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	  document.body.appendChild(renderer.domElement);
-	}
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  var withinTree = new THREE.Vector3(tree.position.x, tree.position.y + 100, tree.position.z);
+  controls.target.set(withinTree.x, withinTree.y, withinTree.z);
 
-	function update() {
-	  tree.update();
-	  tree.rotation.y -= 0.002;
-	  controls.update();
-	}
+  THREEx.WindowResize(renderer, camera);
 
-	function animate() {
-	  requestAnimationFrame(animate);
-	  update();
-	  renderer.render(scene, camera);
-	}
+  document.body.appendChild(renderer.domElement);
+}
 
-	init();
-	animate();
+function update() {
+  tree.update();
+  tree.rotation.y -= 0.002;
+  controls.update();
+}
 
-/***/ }
-/******/ ]);
+function animate() {
+  requestAnimationFrame(animate);
+  update();
+  renderer.render(scene, camera);
+}
+
+init();
+animate();
+
+/***/ })
+
+/******/ });

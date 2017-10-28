@@ -1,188 +1,214 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 45);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	'use strict';
+/***/ 45:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / 2 / SCREEN_HEIGHT;
+"use strict";
 
-	var scene = void 0;
-	var camera1 = void 0;
-	var camera2 = void 0;
-	var renderer1 = void 0;
-	var renderer2 = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var orbitControls1 = void 0;
-	var orbitControls2 = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
-	var mesh = void 0;
-	var controls = void 0;
-	var stats = void 0;
 
-	var origin = new THREE.Vector3(0, 0, 0);
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / 2 / SCREEN_HEIGHT;
 
-	function initStats() {
-	  stats = new Stats();
-	  stats.domElement.style.position = 'absolute';
-	  stats.domElement.style.left = '0px';
-	  stats.domElement.style.top = '20px';
-	  stats.setMode(0); // 0: fps, 1: ms
-	  document.getElementById('stats').appendChild(stats.domElement);
-	}
+var scene = void 0;
+var camera1 = void 0;
+var camera2 = void 0;
+var renderer1 = void 0;
+var renderer2 = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var orbitControls1 = void 0;
+var orbitControls2 = void 0;
+var pointLight = void 0;
+var ambientLight = void 0;
+var mesh = void 0;
+var controls = void 0;
+var stats = void 0;
 
-	function initControls() {
-	  controls = {
-	    xRotation: 0,
-	    yRotation: 0,
-	    zRotation: 0
-	  };
-	  var gui = new dat.GUI();
-	  gui.add(controls, 'xRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'yRotation', 0, Math.PI * 2);
-	  gui.add(controls, 'zRotation', 0, Math.PI * 2);
-	}
+var origin = new THREE.Vector3(0, 0, 0);
 
-	function init() {
-	  scene = new THREE.Scene();
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+function initControls() {
+  controls = {
+    xRotation: 0,
+    yRotation: 0,
+    zRotation: 0
+  };
+  var gui = new dat.GUI();
+  gui.add(controls, 'xRotation', 0, Math.PI * 2);
+  gui.add(controls, 'yRotation', 0, Math.PI * 2);
+  gui.add(controls, 'zRotation', 0, Math.PI * 2);
+}
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+function init() {
+  scene = new THREE.Scene();
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
+  gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
-	  scene.add(ambientLight);
+  axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
 
-	  pointLight = new THREE.PointLight(0xffff00, 2, 100);
-	  scene.add(pointLight);
+  var geometry = new THREE.BoxGeometry(50, 50, 50);
+  var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+  mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
 
-	  var pointLightHelper = new THREE.PointLightHelper(pointLight, 20);
-	  scene.add(pointLightHelper);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+  scene.add(ambientLight);
 
-	  camera1 = new THREE.PerspectiveCamera(30, ASPECT, 1, 1000);
-	  camera1.position.set(200, 200, 200);
-	  camera1.lookAt(origin);
+  pointLight = new THREE.PointLight(0xffff00, 2, 100);
+  scene.add(pointLight);
 
-	  var cameraHelper = new THREE.CameraHelper(camera1);
-	  scene.add(cameraHelper);
+  var pointLightHelper = new THREE.PointLightHelper(pointLight, 20);
+  scene.add(pointLightHelper);
 
-	  camera2 = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, 1, 5000);
-	  camera2.position.set(2000, 400, 200);
-	  camera2.lookAt(origin);
+  camera1 = new THREE.PerspectiveCamera(30, ASPECT, 1, 1000);
+  camera1.position.set(200, 200, 200);
+  camera1.lookAt(origin);
 
-	  renderer1 = new THREE.WebGLRenderer({ antialias: true });
-	  renderer1.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+  var cameraHelper = new THREE.CameraHelper(camera1);
+  scene.add(cameraHelper);
 
-	  renderer2 = new THREE.WebGLRenderer({ antialias: true });
-	  renderer2.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+  camera2 = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, 1, 5000);
+  camera2.position.set(2000, 400, 200);
+  camera2.lookAt(origin);
 
-	  orbitControls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
-	  orbitControls2 = new THREE.OrbitControls(camera2, renderer2.domElement);
+  renderer1 = new THREE.WebGLRenderer({ antialias: true });
+  renderer1.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
 
-	  THREEx.WindowResize(renderer1, camera1);
-	  THREEx.WindowResize(renderer2, camera2);
+  renderer2 = new THREE.WebGLRenderer({ antialias: true });
+  renderer2.setSize(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
 
-	  var container1 = document.createElement('div');
-	  var container2 = document.createElement('div');
+  orbitControls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+  orbitControls2 = new THREE.OrbitControls(camera2, renderer2.domElement);
 
-	  container1.style.position = 'absolute';
-	  container1.style.top = '0px';
-	  container1.style.bottom = '0px';
-	  container1.style.left = '0px';
-	  container1.style.right = SCREEN_WIDTH / 2 - 1 + 'px';
+  THREEx.WindowResize(renderer1, camera1);
+  THREEx.WindowResize(renderer2, camera2);
 
-	  container2.style.position = 'absolute';
-	  container2.style.top = '0px';
-	  container2.style.bottom = '0px';
-	  container2.style.left = SCREEN_WIDTH / 2 + 'px';
-	  container2.style.right = '0px';
+  var container1 = document.createElement('div');
+  var container2 = document.createElement('div');
 
-	  document.body.appendChild(container1);
-	  document.body.appendChild(container2);
+  container1.style.position = 'absolute';
+  container1.style.top = '0px';
+  container1.style.bottom = '0px';
+  container1.style.left = '0px';
+  container1.style.right = SCREEN_WIDTH / 2 - 1 + 'px';
 
-	  container1.appendChild(renderer1.domElement);
-	  container2.appendChild(renderer2.domElement);
+  container2.style.position = 'absolute';
+  container2.style.top = '0px';
+  container2.style.bottom = '0px';
+  container2.style.left = SCREEN_WIDTH / 2 + 'px';
+  container2.style.right = '0px';
 
-	  initStats();
-	  initControls();
-	}
+  document.body.appendChild(container1);
+  document.body.appendChild(container2);
 
-	function update() {
-	  var t = new Date().getTime() / 1000;
-	  pointLight.position.x = 100 * Math.sin(t);
-	  pointLight.position.z = 100 * Math.cos(t);
-	  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
-	  stats.update();
-	  orbitControls1.update();
-	  orbitControls2.update();
-	}
+  container1.appendChild(renderer1.domElement);
+  container2.appendChild(renderer2.domElement);
 
-	function render() {
-	  renderer1.render(scene, camera1);
-	  renderer2.render(scene, camera2);
-	}
+  initStats();
+  initControls();
+}
 
-	function tick() {
-	  update();
-	  render();
-	  requestAnimationFrame(tick);
-	}
+function update() {
+  var t = new Date().getTime() / 1000;
+  pointLight.position.x = 100 * Math.sin(t);
+  pointLight.position.z = 100 * Math.cos(t);
+  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);
+  stats.update();
+  orbitControls1.update();
+  orbitControls2.update();
+}
 
-	init();
-	tick();
+function render() {
+  renderer1.render(scene, camera1);
+  renderer2.render(scene, camera2);
+}
 
-/***/ }
-/******/ ]);
+function tick() {
+  update();
+  render();
+  requestAnimationFrame(tick);
+}
+
+init();
+tick();
+
+/***/ })
+
+/******/ });

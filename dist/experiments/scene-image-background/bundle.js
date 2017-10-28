@@ -1,167 +1,193 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 64);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	'use strict';
+/***/ 64:
+/***/ (function(module, exports, __webpack_require__) {
 
-	// Textures:
-	// http://www.humus.name/index.php?page=Textures
+"use strict";
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var orbitControls = void 0;
-	var pointLight = void 0;
-	var ambientLight = void 0;
-	var mesh = void 0;
-	var controls = void 0;
-	var stats = void 0;
-	var skyboxes = {};
+// Textures:
+// http://www.humus.name/index.php?page=Textures
 
-	var origin = new THREE.Vector3(0, 0, 0);
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	function initStats() {
-	  stats = new Stats();
-	  stats.domElement.style.position = 'absolute';
-	  stats.domElement.style.left = '0px';
-	  stats.domElement.style.top = '20px';
-	  stats.setMode(0); // 0: fps, 1: ms
-	  document.getElementById('stats').appendChild(stats.domElement);
-	}
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var orbitControls = void 0;
+var pointLight = void 0;
+var ambientLight = void 0;
+var mesh = void 0;
+var controls = void 0;
+var stats = void 0;
+var skyboxes = {};
 
-	function initControls() {
-	  controls = {
-	    skybox: 'langholmen'
-	  };
-	  var gui = new dat.GUI();
-	  gui.add(controls, 'skybox', ['sky', 'langholmen']);
-	}
+var origin = new THREE.Vector3(0, 0, 0);
 
-	function skyboxUrl(id, type) {
-	  return '../../assets/textures/skybox/' + id + '/' + type + '.jpg';
-	}
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
 
-	function skyboxUrls(id) {
-	  return [skyboxUrl(id, 'posx'), skyboxUrl(id, 'negx'), skyboxUrl(id, 'posy'), skyboxUrl(id, 'negy'), skyboxUrl(id, 'posz'), skyboxUrl(id, 'negz')];
-	}
+function initControls() {
+  controls = {
+    skybox: 'langholmen'
+  };
+  var gui = new dat.GUI();
+  gui.add(controls, 'skybox', ['sky', 'langholmen']);
+}
 
-	function skybox(id) {
-	  var urls = skyboxUrls(id);
-	  var box = new THREE.CubeTextureLoader().load(urls);
-	  box.format = THREE.RGBFormat;
-	  return box;
-	}
+function skyboxUrl(id, type) {
+  return '../../assets/textures/skybox/' + id + '/' + type + '.jpg';
+}
 
-	function init() {
-	  skyboxes.sky = skybox('sky');
-	  skyboxes.langholmen = skybox('langholmen');
+function skyboxUrls(id) {
+  return [skyboxUrl(id, 'posx'), skyboxUrl(id, 'negx'), skyboxUrl(id, 'posy'), skyboxUrl(id, 'negy'), skyboxUrl(id, 'posz'), skyboxUrl(id, 'negz')];
+}
 
-	  scene = new THREE.Scene();
-	  scene.background = skyboxes.langholmen;
+function skybox(id) {
+  var urls = skyboxUrls(id);
+  var box = new THREE.CubeTextureLoader().load(urls);
+  box.format = THREE.RGBFormat;
+  return box;
+}
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+function init() {
+  skyboxes.sky = skybox('sky');
+  skyboxes.langholmen = skybox('langholmen');
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+  scene = new THREE.Scene();
+  scene.background = skyboxes.langholmen;
 
-	  var geometry = new THREE.BoxGeometry(50, 50, 50);
-	  var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-	  mesh = new THREE.Mesh(geometry, material);
-	  scene.add(mesh);
+  gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-	  scene.add(ambientLight);
+  axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
 
-	  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-	  pointLight.position.set(50, 200, -100);
-	  scene.add(pointLight);
+  var geometry = new THREE.BoxGeometry(50, 50, 50);
+  var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+  mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(200, 200, 200);
-	  camera.lookAt(origin);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(window.innerWidth, window.innerHeight);
+  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+  pointLight.position.set(50, 200, -100);
+  scene.add(pointLight);
 
-	  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(origin);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	  document.body.appendChild(renderer.domElement);
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	  initStats();
-	  initControls();
-	}
+  THREEx.WindowResize(renderer, camera);
 
-	function update() {
-	  mesh.rotation.x += 0.01;
-	  mesh.rotation.y += 0.01;
-	  mesh.rotation.z += 0.01;
-	  scene.background = skyboxes[controls.skybox];
-	  stats.update();
-	  orbitControls.update();
-	}
+  document.body.appendChild(renderer.domElement);
 
-	function animate() {
-	  requestAnimationFrame(animate);
-	  update();
-	  renderer.render(scene, camera);
-	}
+  initStats();
+  initControls();
+}
 
-	init();
-	animate();
+function update() {
+  mesh.rotation.x += 0.01;
+  mesh.rotation.y += 0.01;
+  mesh.rotation.z += 0.01;
+  scene.background = skyboxes[controls.skybox];
+  stats.update();
+  orbitControls.update();
+}
 
-/***/ }
-/******/ ]);
+function animate() {
+  requestAnimationFrame(animate);
+  update();
+  renderer.render(scene, camera);
+}
+
+init();
+animate();
+
+/***/ })
+
+/******/ });

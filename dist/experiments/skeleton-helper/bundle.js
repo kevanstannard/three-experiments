@@ -1,210 +1,236 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 75);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	'use strict';
+/***/ 75:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+"use strict";
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var orbit = void 0;
-	var stats = void 0;
-	var lights = void 0;
-	var helper = void 0;
-	var bones = void 0;
-	// let skeleton;
 
-	var origin = new THREE.Vector3(0, 0, 0);
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	function initStats() {
-	  stats = new Stats();
-	  stats.domElement.style.position = 'absolute';
-	  stats.domElement.style.left = '0px';
-	  stats.domElement.style.top = '20px';
-	  stats.setMode(0); // 0: fps, 1: ms
-	  document.getElementById('stats').appendChild(stats.domElement);
-	}
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var orbit = void 0;
+var stats = void 0;
+var lights = void 0;
+var helper = void 0;
+var bones = void 0;
+// let skeleton;
 
-	function init() {
-	  scene = new THREE.Scene();
+var origin = new THREE.Vector3(0, 0, 0);
 
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(20, 30, 40);
-	  camera.lookAt(origin);
+function initStats() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '20px';
+  stats.setMode(0); // 0: fps, 1: ms
+  document.getElementById('stats').appendChild(stats.domElement);
+}
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+function init() {
+  scene = new THREE.Scene();
 
-	  orbit = new THREE.OrbitControls(camera, renderer.domElement);
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(20, 30, 40);
+  camera.lookAt(origin);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	  document.body.appendChild(renderer.domElement);
+  orbit = new THREE.OrbitControls(camera, renderer.domElement);
 
-	  initStats();
+  THREEx.WindowResize(renderer, camera);
 
-	  // const gridHelper = new THREE.GridHelper(40, 10);
-	  // scene.add(gridHelper);
+  document.body.appendChild(renderer.domElement);
 
-	  // const axisHelper = new THREE.AxisHelper(2);
-	  // scene.add(axisHelper);
+  initStats();
 
-	  lights = [];
-	  lights[0] = new THREE.PointLight(0xffffff, 1);
-	  lights[1] = new THREE.PointLight(0xffffff, 1);
-	  // lights[2] = new THREE.PointLight(0xffffff, 1);
+  // const gridHelper = new THREE.GridHelper(40, 10);
+  // scene.add(gridHelper);
 
-	  lights[0].position.set(200, 300, 400);
-	  lights[1].position.set(-200, -300, -400);
-	  // lights[2].position.set(-400, -500, 500);
+  // const axisHelper = new THREE.AxisHelper(2);
+  // scene.add(axisHelper);
 
-	  scene.add(lights[0]);
-	  scene.add(lights[1]);
-	  // scene.add(lights[2]);
+  lights = [];
+  lights[0] = new THREE.PointLight(0xffffff, 1);
+  lights[1] = new THREE.PointLight(0xffffff, 1);
+  // lights[2] = new THREE.PointLight(0xffffff, 1);
 
-	  var bodyBone = new THREE.Bone();
+  lights[0].position.set(200, 300, 400);
+  lights[1].position.set(-200, -300, -400);
+  // lights[2].position.set(-400, -500, 500);
 
-	  var headBone = new THREE.Bone();
+  scene.add(lights[0]);
+  scene.add(lights[1]);
+  // scene.add(lights[2]);
 
-	  var leftShoulderBone = new THREE.Bone();
-	  var leftHandBone = new THREE.Bone();
+  var bodyBone = new THREE.Bone();
 
-	  var rightShoulderBone = new THREE.Bone();
-	  var rightHandBone = new THREE.Bone();
+  var headBone = new THREE.Bone();
 
-	  var leftHipBone = new THREE.Bone();
-	  var leftFootBone = new THREE.Bone();
+  var leftShoulderBone = new THREE.Bone();
+  var leftHandBone = new THREE.Bone();
 
-	  var rightHipBone = new THREE.Bone();
-	  var rightFootBone = new THREE.Bone();
+  var rightShoulderBone = new THREE.Bone();
+  var rightHandBone = new THREE.Bone();
 
-	  bodyBone.position.set(0, 0, 0);
+  var leftHipBone = new THREE.Bone();
+  var leftFootBone = new THREE.Bone();
 
-	  headBone.position.set(0, 10, 0);
+  var rightHipBone = new THREE.Bone();
+  var rightFootBone = new THREE.Bone();
 
-	  leftShoulderBone.position.set(6, 6, 0);
-	  leftHandBone.position.set(0, -6, 0);
+  bodyBone.position.set(0, 0, 0);
 
-	  rightShoulderBone.position.set(-6, 6, 0);
-	  rightHandBone.position.set(0, -6, 0);
+  headBone.position.set(0, 10, 0);
 
-	  leftHipBone.position.set(2, -6, 0);
-	  leftFootBone.position.set(0, -6, 0);
+  leftShoulderBone.position.set(6, 6, 0);
+  leftHandBone.position.set(0, -6, 0);
 
-	  rightHipBone.position.set(-2, -6, 0);
-	  rightFootBone.position.set(0, -6, 0);
+  rightShoulderBone.position.set(-6, 6, 0);
+  rightHandBone.position.set(0, -6, 0);
 
-	  bodyBone.add(headBone);
+  leftHipBone.position.set(2, -6, 0);
+  leftFootBone.position.set(0, -6, 0);
 
-	  bodyBone.add(leftShoulderBone);
-	  leftShoulderBone.add(leftHandBone);
+  rightHipBone.position.set(-2, -6, 0);
+  rightFootBone.position.set(0, -6, 0);
 
-	  bodyBone.add(rightShoulderBone);
-	  rightShoulderBone.add(rightHandBone);
+  bodyBone.add(headBone);
 
-	  bodyBone.add(leftHipBone);
-	  leftHipBone.add(leftFootBone);
+  bodyBone.add(leftShoulderBone);
+  leftShoulderBone.add(leftHandBone);
 
-	  bodyBone.add(rightHipBone);
-	  rightHipBone.add(rightFootBone);
+  bodyBone.add(rightShoulderBone);
+  rightShoulderBone.add(rightHandBone);
 
-	  bones = [];
-	  bones.push(bodyBone);
-	  bones.push(headBone);
-	  bones.push(leftShoulderBone);
-	  bones.push(leftHandBone);
-	  bones.push(rightShoulderBone);
-	  bones.push(rightHandBone);
-	  bones.push(leftHipBone);
-	  bones.push(leftFootBone);
-	  bones.push(rightHipBone);
-	  bones.push(rightFootBone);
+  bodyBone.add(leftHipBone);
+  leftHipBone.add(leftFootBone);
 
-	  // Interesting, we don't actually need a skeleton ???
-	  // skeleton = new THREE.Skeleton(bones);
+  bodyBone.add(rightHipBone);
+  rightHipBone.add(rightFootBone);
 
-	  helper = new THREE.SkeletonHelper(bodyBone);
+  bones = [];
+  bones.push(bodyBone);
+  bones.push(headBone);
+  bones.push(leftShoulderBone);
+  bones.push(leftHandBone);
+  bones.push(rightShoulderBone);
+  bones.push(rightHandBone);
+  bones.push(leftHipBone);
+  bones.push(leftFootBone);
+  bones.push(rightHipBone);
+  bones.push(rightFootBone);
 
-	  scene.add(helper);
-	  scene.add(bodyBone);
-	}
+  // Interesting, we don't actually need a skeleton ???
+  // skeleton = new THREE.Skeleton(bones);
 
-	function update() {
-	  var time = Date.now() * 0.001;
-	  var angle = Math.sin(time);
+  helper = new THREE.SkeletonHelper(bodyBone);
 
-	  bones[1].rotation.y = Math.PI * angle / 8; // Head
-	  bones[2].rotation.x = Math.PI * angle / 4; // Left shoulder
-	  bones[4].rotation.x = -(Math.PI * angle) / 4; // Right shoulder
-	  bones[6].rotation.x = -(Math.PI * angle) / 4; // Left hip
-	  bones[8].rotation.x = Math.PI * angle / 4; // Right hip
+  scene.add(helper);
+  scene.add(bodyBone);
+}
 
-	  helper.update();
-	  stats.update();
-	  orbit.update();
-	}
+function update() {
+  var time = Date.now() * 0.001;
+  var angle = Math.sin(time);
 
-	function render() {
-	  renderer.render(scene, camera);
-	}
+  bones[1].rotation.y = Math.PI * angle / 8; // Head
+  bones[2].rotation.x = Math.PI * angle / 4; // Left shoulder
+  bones[4].rotation.x = -(Math.PI * angle) / 4; // Right shoulder
+  bones[6].rotation.x = -(Math.PI * angle) / 4; // Left hip
+  bones[8].rotation.x = Math.PI * angle / 4; // Right hip
 
-	function tick() {
-	  update();
-	  render();
-	  requestAnimationFrame(tick);
-	}
+  helper.update();
+  stats.update();
+  orbit.update();
+}
 
-	init();
-	tick();
+function render() {
+  renderer.render(scene, camera);
+}
 
-/***/ }
-/******/ ]);
+function tick() {
+  update();
+  render();
+  requestAnimationFrame(tick);
+}
+
+init();
+tick();
+
+/***/ })
+
+/******/ });

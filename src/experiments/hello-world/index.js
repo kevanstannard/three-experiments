@@ -1,3 +1,5 @@
+const Stats = require('libs/stats/r17/stats');
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -17,9 +19,9 @@ const origin = new THREE.Vector3(0, 0, 0);
 
 function initStats() {
   stats = new Stats();
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '20px';
+  stats.dom.style.position = 'absolute';
+  stats.dom.style.left = '0px';
+  stats.dom.style.top = '20px';
   stats.setMode(0); // 0: fps, 1: ms
   document.getElementById('stats').appendChild(stats.domElement);
 }

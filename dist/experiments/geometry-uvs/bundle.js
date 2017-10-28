@@ -1,325 +1,352 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
 
-	'use strict';
+/***/ 19:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var SCREEN_WIDTH = window.innerWidth;
-	var SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45;
-	var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-	var NEAR = 1;
-	var FAR = 10000;
+"use strict";
 
-	var scene = void 0;
-	var camera = void 0;
-	var renderer = void 0;
-	var axisHelper = void 0;
-	var gridHelper = void 0;
-	var controls = void 0;
-	var ambientLight = void 0;
-	var plane = void 0;
 
-	var origin = new THREE.Vector3(0, 0, 0);
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var VIEW_ANGLE = 45;
+var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+var NEAR = 1;
+var FAR = 10000;
 
-	var textures = {};
+var scene = void 0;
+var camera = void 0;
+var renderer = void 0;
+var axisHelper = void 0;
+var gridHelper = void 0;
+var controls = void 0;
+var ambientLight = void 0;
+var plane = void 0;
 
-	function loadTexture(id, url) {
-	  return new Promise(function (resolve) {
-	    var loader = new THREE.TextureLoader();
-	    loader.load(url, function (texture) {
-	      textures[id] = texture;
-	      resolve();
-	    });
-	  });
-	}
+var origin = new THREE.Vector3(0, 0, 0);
 
-	function load() {
-	  var promises = [];
-	  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));
-	  return Promise.all(promises);
-	}
+var textures = {};
 
-	function UVSizeAnimation(geometry) {
-	  this.geometry = geometry;
-	  this.original = geometry.clone();
-	  this.deltaMin = 0.5;
-	  this.deltaMax = 1;
-	  this.delta = this.deltaMax;
-	  this.speed = 0.005;
-	  this.direction = -1;
-	}
+function loadTexture(id, url) {
+  return new Promise(function (resolve) {
+    var loader = new THREE.TextureLoader();
+    loader.load(url, function (texture) {
+      textures[id] = texture;
+      resolve();
+    });
+  });
+}
 
-	UVSizeAnimation.prototype = {
-	  updateDelta: function updateDelta() {
-	    var newDelta = this.delta + this.speed * this.direction;
-	    if (newDelta < this.deltaMin) {
-	      newDelta = this.deltaMin;
-	      this.direction = 1;
-	    } else if (newDelta > this.deltaMax) {
-	      newDelta = this.deltaMax;
-	      this.direction = -1;
-	    }
-	    this.delta = newDelta;
-	  },
-	  update: function update() {
-	    this.updateDelta();
-	    var triangles = this.original.faceVertexUvs[0];
-	    for (var i = 0; i < triangles.length; i += 1) {
-	      var tri = this.geometry.faceVertexUvs[0][i];
-	      var orig = this.original.faceVertexUvs[0][i];
-	      for (var j = 0; j < tri.length; j += 1) {
-	        tri[j].x = orig[j].x * this.delta;
-	        tri[j].y = orig[j].y * this.delta;
-	      }
-	    }
-	    this.geometry.uvsNeedUpdate = true;
-	  }
-	};
+function load() {
+  var promises = [];
+  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));
+  return Promise.all(promises);
+}
 
-	function AnimatedPlaneGeometry(size) {
-	  THREE.PlaneGeometry.call(this, size, size, 1);
-	  this.animation = new UVSizeAnimation(this);
-	}
+function UVSizeAnimation(geometry) {
+  this.geometry = geometry;
+  this.original = geometry.clone();
+  this.deltaMin = 0.5;
+  this.deltaMax = 1;
+  this.delta = this.deltaMax;
+  this.speed = 0.005;
+  this.direction = -1;
+}
 
-	AnimatedPlaneGeometry.prototype = Object.assign(Object.create(THREE.PlaneGeometry.prototype), {
-	  constructor: AnimatedPlaneGeometry,
-	  update: function update() {
-	    this.animation.update();
-	  }
-	});
+UVSizeAnimation.prototype = {
+  updateDelta: function updateDelta() {
+    var newDelta = this.delta + this.speed * this.direction;
+    if (newDelta < this.deltaMin) {
+      newDelta = this.deltaMin;
+      this.direction = 1;
+    } else if (newDelta > this.deltaMax) {
+      newDelta = this.deltaMax;
+      this.direction = -1;
+    }
+    this.delta = newDelta;
+  },
+  update: function update() {
+    this.updateDelta();
+    var triangles = this.original.faceVertexUvs[0];
+    for (var i = 0; i < triangles.length; i += 1) {
+      var tri = this.geometry.faceVertexUvs[0][i];
+      var orig = this.original.faceVertexUvs[0][i];
+      for (var j = 0; j < tri.length; j += 1) {
+        tri[j].x = orig[j].x * this.delta;
+        tri[j].y = orig[j].y * this.delta;
+      }
+    }
+    this.geometry.uvsNeedUpdate = true;
+  }
+};
 
-	function AnimatedPlane() {
-	  this.geometry = new AnimatedPlaneGeometry(100);
-	  this.material = new THREE.MeshBasicMaterial({
-	    side: THREE.DoubleSide,
-	    map: textures.free
-	  });
-	  THREE.Mesh.call(this, this.geometry, this.material);
-	}
+function AnimatedPlaneGeometry(size) {
+  THREE.PlaneGeometry.call(this, size, size, 1);
+  this.animation = new UVSizeAnimation(this);
+}
 
-	AnimatedPlane.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-	  constructor: AnimatedPlane,
-	  update: function update() {
-	    this.geometry.update();
-	  }
-	});
+AnimatedPlaneGeometry.prototype = Object.assign(Object.create(THREE.PlaneGeometry.prototype), {
+  constructor: AnimatedPlaneGeometry,
+  update: function update() {
+    this.animation.update();
+  }
+});
 
-	function init() {
-	  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	  camera.position.set(100, 120, 140);
-	  camera.lookAt(origin);
+function AnimatedPlane() {
+  this.geometry = new AnimatedPlaneGeometry(100);
+  this.material = new THREE.MeshBasicMaterial({
+    side: THREE.DoubleSide,
+    map: textures.free
+    // wireframe: true,
+  });
+  THREE.Mesh.call(this, this.geometry, this.material);
+}
 
-	  scene = new THREE.Scene();
+AnimatedPlane.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
+  constructor: AnimatedPlane,
+  update: function update() {
+    this.geometry.update();
+  }
+});
 
-	  gridHelper = new THREE.GridHelper(100, 10);
-	  scene.add(gridHelper);
+function init() {
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  camera.position.set(100, 120, 140);
+  camera.lookAt(origin);
 
-	  axisHelper = new THREE.AxisHelper(100);
-	  scene.add(axisHelper);
+  scene = new THREE.Scene();
 
-	  plane = new AnimatedPlane();
-	  scene.add(plane);
+  gridHelper = new THREE.GridHelper(100, 10);
+  scene.add(gridHelper);
 
-	  // console.log(plane.geometry);
+  axisHelper = new THREE.AxisHelper(100);
+  scene.add(axisHelper);
 
-	  // console.log(geometry);
-	  // console.log(JSON.stringify(geometry.faceVertexUvs, null, 2));
+  plane = new AnimatedPlane();
+  scene.add(plane);
 
-	  // geometry.vertices
-	  //
-	  // [
-	  //   {
-	  //     "x": -50,
-	  //     "y": 50,
-	  //     "z": 0
-	  //   },
-	  //   {
-	  //     "x": 50,
-	  //     "y": 50,
-	  //     "z": 0
-	  //   },
-	  //   {
-	  //     "x": -50,
-	  //     "y": -50,
-	  //     "z": 0
-	  //   },
-	  //   {
-	  //     "x": 50,
-	  //     "y": -50,
-	  //     "z": 0
-	  //   }
-	  // ]
+  // console.log(plane.geometry);
 
-	  // geometry.faceVertexUvs
-	  //
-	  // [
-	  //   [
-	  //     [
-	  //       {
-	  //         "x": 0,
-	  //         "y": 1
-	  //       },
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0
-	  //       },
-	  //       {
-	  //         "x": 1,
-	  //         "y": 1
-	  //       }
-	  //     ],
-	  //     [
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0
-	  //       },
-	  //       {
-	  //         "x": 1,
-	  //         "y": 0
-	  //       },
-	  //       {
-	  //         "x": 1,
-	  //         "y": 1
-	  //       }
-	  //     ]
-	  //   ]
-	  // ]
+  // console.log(geometry);
+  // console.log(JSON.stringify(geometry.faceVertexUvs, null, 2));
 
-	  // geometry.faces
-	  // [
-	  //   {
-	  //     "a": 0,
-	  //     "b": 2,
-	  //     "c": 1,
-	  //     "normal": {
-	  //       "x": 0,
-	  //       "y": 0,
-	  //       "z": 1
-	  //     },
-	  //     "vertexNormals": [
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       },
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       },
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       }
-	  //     ],
-	  //     "color": 16777215,
-	  //     "vertexColors": [],
-	  //     "materialIndex": 0
-	  //   },
-	  //   {
-	  //     "a": 2,
-	  //     "b": 3,
-	  //     "c": 1,
-	  //     "normal": {
-	  //       "x": 0,
-	  //       "y": 0,
-	  //       "z": 1
-	  //     },
-	  //     "vertexNormals": [
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       },
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       },
-	  //       {
-	  //         "x": 0,
-	  //         "y": 0,
-	  //         "z": 1
-	  //       }
-	  //     ],
-	  //     "color": 16777215,
-	  //     "vertexColors": [],
-	  //     "materialIndex": 0
-	  //   }
-	  // ]
+  // geometry.vertices
+  //
+  // [
+  //   {
+  //     "x": -50,
+  //     "y": 50,
+  //     "z": 0
+  //   },
+  //   {
+  //     "x": 50,
+  //     "y": 50,
+  //     "z": 0
+  //   },
+  //   {
+  //     "x": -50,
+  //     "y": -50,
+  //     "z": 0
+  //   },
+  //   {
+  //     "x": 50,
+  //     "y": -50,
+  //     "z": 0
+  //   }
+  // ]
 
-	  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-	  scene.add(ambientLight);
+  // geometry.faceVertexUvs
+  //
+  // [
+  //   [
+  //     [
+  //       {
+  //         "x": 0,
+  //         "y": 1
+  //       },
+  //       {
+  //         "x": 0,
+  //         "y": 0
+  //       },
+  //       {
+  //         "x": 1,
+  //         "y": 1
+  //       }
+  //     ],
+  //     [
+  //       {
+  //         "x": 0,
+  //         "y": 0
+  //       },
+  //       {
+  //         "x": 1,
+  //         "y": 0
+  //       },
+  //       {
+  //         "x": 1,
+  //         "y": 1
+  //       }
+  //     ]
+  //   ]
+  // ]
 
-	  renderer = new THREE.WebGLRenderer({ antialias: true });
-	  renderer.setSize(window.innerWidth, window.innerHeight);
+  // geometry.faces
+  // [
+  //   {
+  //     "a": 0,
+  //     "b": 2,
+  //     "c": 1,
+  //     "normal": {
+  //       "x": 0,
+  //       "y": 0,
+  //       "z": 1
+  //     },
+  //     "vertexNormals": [
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       },
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       },
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       }
+  //     ],
+  //     "color": 16777215,
+  //     "vertexColors": [],
+  //     "materialIndex": 0
+  //   },
+  //   {
+  //     "a": 2,
+  //     "b": 3,
+  //     "c": 1,
+  //     "normal": {
+  //       "x": 0,
+  //       "y": 0,
+  //       "z": 1
+  //     },
+  //     "vertexNormals": [
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       },
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       },
+  //       {
+  //         "x": 0,
+  //         "y": 0,
+  //         "z": 1
+  //       }
+  //     ],
+  //     "color": 16777215,
+  //     "vertexColors": [],
+  //     "materialIndex": 0
+  //   }
+  // ]
 
-	  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
 
-	  THREEx.WindowResize(renderer, camera);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-	  document.body.appendChild(renderer.domElement);
-	}
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	function update() {
-	  plane.update();
-	  controls.update();
-	}
+  THREEx.WindowResize(renderer, camera);
 
-	function animate() {
-	  requestAnimationFrame(animate);
-	  update();
-	  renderer.render(scene, camera);
-	}
+  document.body.appendChild(renderer.domElement);
+}
 
-	load().then(function () {
-	  init();
-	  animate();
-	});
+function update() {
+  plane.update();
+  controls.update();
+}
 
-/***/ }
-/******/ ]);
+function animate() {
+  requestAnimationFrame(animate);
+  update();
+  renderer.render(scene, camera);
+}
+
+load().then(function () {
+  init();
+  animate();
+});
+
+/***/ })
+
+/******/ });

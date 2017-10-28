@@ -54,45 +54,44 @@ export default function (experiments, buildType) {
   });
 
   // Copy the static files
-  plugins.push(new CopyWebpackPlugin([
-    {
-      from: path.join(rootDir, 'src/assets'),
-      to: path.join(rootDir, 'dist/assets'),
-    },
-    {
-      from: path.join(rootDir, 'src/libs'),
-      to: path.join(rootDir, 'dist/libs'),
-    },
-    {
-      from: path.join(rootDir, 'src/modules'),
-      to: path.join(rootDir, 'dist/modules'),
-    },
-    {
-      from: path.join(rootDir, 'src/index-experiments.html'),
-      to: path.join(rootDir, 'index.html'),
-      transform: transformIndexExperiments(experimentConfigs),
-    },
-  ]));
+  plugins.push(
+    new CopyWebpackPlugin([
+      {
+        from: path.join(rootDir, 'src/assets'),
+        to: path.join(rootDir, 'dist/assets'),
+      },
+      {
+        from: path.join(rootDir, 'src/libs'),
+        to: path.join(rootDir, 'dist/libs'),
+      },
+      {
+        from: path.join(rootDir, 'src/modules'),
+        to: path.join(rootDir, 'dist/modules'),
+      },
+      {
+        from: path.join(rootDir, 'src/index-experiments.html'),
+        to: path.join(rootDir, 'index.html'),
+        transform: transformIndexExperiments(experimentConfigs),
+      },
+    ]),
+  );
 
   return {
     entry,
     plugins,
-    debug: false,
     output: {
       path: rootDir,
       filename: 'dist/experiments/[name]/bundle.js',
     },
     resolve: {
-      root: [
-        path.resolve('./src'),
-      ],
+      modules: ['node_modules', 'src'],
     },
     module: {
       loaders: [
         {
           test: /\.js$/,
           exclude: /(node_modules)/,
-          loader: 'babel',
+          loader: 'babel-loader',
           query: {
             presets: ['es2015', 'stage-0'],
           },
