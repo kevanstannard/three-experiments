@@ -4,8 +4,8 @@ export default {
   tags: 'Vector',
   public: true,
   scripts: [
-    '../../libs/three/r83/three.min.js',
-    '../../libs/three/r83/controls/OrbitControls.js',
+    '../../libs/three/r92/three.min.js',
+    '../../libs/three/r92/controls/OrbitControls.js',
     '../../libs/threex/THREEx.WindowResize.js',
   ],
   styles: [],
