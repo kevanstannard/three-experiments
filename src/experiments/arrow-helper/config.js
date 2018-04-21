@@ -2,7 +2,7 @@ export default {
   title: 'Arrow Helper',
   description: 'Simple ArrowHelper experiment',
   tags: 'Vector, ArrowHelper',
-  public: false,
+  public: true,
   scripts: [
     // 'http://127.0.0.1:8080/build/three.js', // For three.js dev
     '../../libs/three/r87/three.min.js',
