@@ -20,18 +20,29 @@ let prevTime = Date.now();
 
 const origin = new THREE.Vector3(0, 0, 0);
 
-const bot = new Bot({
-  name: 'Bot',
-  radius: 10,
-  color: 0xaa33aa,
-  speed: 70,
-  boundary: {
-    x1: -50,
-    x2: 50,
-    z1: -50,
-    z2: 50,
-  },
-});
+const botCount = 4;
+const bots = [];
+
+for (let i = 0; i < botCount; i += 1) {
+  const red = Math.round(Math.random() * 255);
+  const green = Math.round(Math.random() * 255);
+  const blue = Math.round(Math.random() * 255);
+  const color = (red * 256 ** 0) + (green * 256 ** 1) + (blue * 256 ** 2);
+
+  const bot = new Bot({
+    name: 'Bot',
+    radius: 20 - (i * 5),
+    color,
+    speed: 25 + (i * 25),
+    boundary: {
+      x1: -50,
+      x2: 50,
+      z1: -50,
+      z2: 50,
+    },
+  });
+  bots.push(bot);
+}
 
 function init() {
   scene = new THREE.Scene();
@@ -46,7 +57,7 @@ function init() {
   camera.position.set(200, 200, 200);
   camera.lookAt(origin);
 
-  scene.add(bot);
+  bots.forEach(bot => scene.add(bot));
 
   ambientLight = new THREE.AmbientLight(0x444444);
   scene.add(ambientLight);
@@ -69,7 +80,7 @@ function update() {
   const time = Date.now();
   const delta = time - prevTime;
   prevTime = time;
-  bot.update(delta);
+  bots.forEach(bot => bot.update(delta));
   controls.update();
 }
 
