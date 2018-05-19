@@ -20,8 +20,13 @@ let prevTime = Date.now();
 
 const origin = new THREE.Vector3(0, 0, 0);
 
-const botCount = 4;
+const botCount = 10;
 const bots = [];
+
+const minSize = 5;
+const maxSize = 20;
+const intervalCount = botCount - 1;
+const interval = (maxSize - minSize) / intervalCount;
 
 for (let i = 0; i < botCount; i += 1) {
   const red = Math.round(Math.random() * 255);
@@ -31,14 +36,14 @@ for (let i = 0; i < botCount; i += 1) {
 
   const bot = new Bot({
     name: 'Bot',
-    radius: 20 - (i * 5),
+    radius: maxSize - (i * interval),
     color,
-    speed: 25 + (i * 25),
+    speed: 25 + (i * 5),
     boundary: {
-      x1: -50,
-      x2: 50,
-      z1: -50,
-      z2: 50,
+      x1: -100,
+      x2: 100,
+      z1: -100,
+      z2: 100,
     },
   });
   bots.push(bot);
@@ -47,7 +52,7 @@ for (let i = 0; i < botCount; i += 1) {
 function init() {
   scene = new THREE.Scene();
 
-  gridHelper = new THREE.GridHelper(100, 10);
+  gridHelper = new THREE.GridHelper(200, 10);
   scene.add(gridHelper);
 
   axesHelper = new THREE.AxesHelper(100);

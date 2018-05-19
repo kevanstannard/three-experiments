@@ -22,10 +22,10 @@ export default class Bot extends THREE.Object3D {
     this.speed = speed;
 
     this.targetPositions = [
-      new THREE.Vector3(x1, radius, z1),
-      new THREE.Vector3(x1, radius, z2),
-      new THREE.Vector3(x2, radius, z2),
-      new THREE.Vector3(x2, radius, z1),
+      new THREE.Vector3(x1, 0, z1),
+      new THREE.Vector3(x1, 0, z2),
+      new THREE.Vector3(x2, 0, z2),
+      new THREE.Vector3(x2, 0, z1),
     ];
 
     this.isMoving = false;
