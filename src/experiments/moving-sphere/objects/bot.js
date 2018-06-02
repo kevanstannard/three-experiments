@@ -6,11 +6,8 @@ export default class Bot extends THREE.Object3D {
       name,
       radius,
       color,
-      boundary,
-      speed,
+      move,
     } = props;
-
-    const { x1, x2, z1, z2 } = boundary;
 
     const geometry = new THREE.SphereBufferGeometry(radius, 32, 32);
     const material = new THREE.MeshBasicMaterial({ color });
@@ -19,36 +16,11 @@ export default class Bot extends THREE.Object3D {
 
     this.name = name;
     this.radius = radius;
-    this.speed = speed;
-
-    this.targetPositions = [
-      new THREE.Vector3(x1, 0, z1),
-      new THREE.Vector3(x1, 0, z2),
-      new THREE.Vector3(x2, 0, z2),
-      new THREE.Vector3(x2, 0, z1),
-    ];
-
-    this.isMoving = false;
-    this.targetPositionIndex = 1;
-    this.targetPosition = this.targetPositions[this.targetPositionIndex];
-
-    this.position.copy(this.targetPositions[0]);
+    this.move = move;
   }
 
   update(delta) {
-    const distanceToMove = delta / 1000 * this.speed;
-    const vectorToTarget = this.targetPosition.clone().sub(this.position);
-    const distanceToTarget = this.position.distanceTo(this.targetPosition);
-
-    let moveVector;
-    if (distanceToMove >= distanceToTarget) {
-      moveVector = vectorToTarget;
-      this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.length;
-      this.targetPosition = this.targetPositions[this.targetPositionIndex];
-    } else {
-      moveVector = vectorToTarget.normalize().multiplyScalar(distanceToMove);
-    }
-
+    const moveVector = this.move.getMoveVector(this.position, delta);
     this.position.add(moveVector);
   }
 }

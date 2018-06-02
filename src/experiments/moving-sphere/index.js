@@ -1,3 +1,4 @@
+import PerimeterMove from './move/perimeter';
 import Bot from './objects/bot';
 
 const SCREEN_WIDTH = window.innerWidth;
@@ -20,7 +21,7 @@ let prevTime = Date.now();
 
 const origin = new THREE.Vector3(0, 0, 0);
 
-const botCount = 10;
+const botCount = 20;
 const bots = [];
 
 const minSize = 5;
@@ -28,7 +29,25 @@ const maxSize = 20;
 const intervalCount = botCount - 1;
 const interval = (maxSize - minSize) / intervalCount;
 
+const boundary1 = [
+  new THREE.Vector3(-50, 0, -50),
+  new THREE.Vector3(50, 0, -50),
+  new THREE.Vector3(50, 0, 50),
+  new THREE.Vector3(-50, 0, 50),
+];
+
+const boundary2 = [
+  new THREE.Vector3(-100, 0, -100),
+  new THREE.Vector3(100, 0, -100),
+  new THREE.Vector3(100, 0, 100),
+  new THREE.Vector3(-100, 0, 100),
+];
+
 for (let i = 0; i < botCount; i += 1) {
+  const speed = 25 + (i * 5);
+  const boundary = (i % 2 === 0) ? boundary1 : boundary2;
+  const move = new PerimeterMove({ speed, boundary });
+
   const red = Math.round(Math.random() * 255);
   const green = Math.round(Math.random() * 255);
   const blue = Math.round(Math.random() * 255);
@@ -38,13 +57,7 @@ for (let i = 0; i < botCount; i += 1) {
     name: 'Bot',
     radius: maxSize - (i * interval),
     color,
-    speed: 25 + (i * 5),
-    boundary: {
-      x1: -100,
-      x2: 100,
-      z1: -100,
-      z2: 100,
-    },
+    move,
   });
   bots.push(bot);
 }
