@@ -1,6 +1,6 @@
 export default {
   title: 'Moving Sphere',
-  description: 'Simple moving sphere',
+  description: 'Simple moving spheres',
   tags: 'Sphere',
   public: true,
   scripts: [
