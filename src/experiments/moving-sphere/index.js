@@ -1,5 +1,6 @@
+import StationaryMove from './move/stationary';
 import PerimeterMove from './move/perimeter';
-import CircleMove from './move/circle-target';
+import CircleTargetMove from './move/circle-target';
 import Bot from './objects/bot';
 
 const SCREEN_WIDTH = window.innerWidth;
@@ -23,6 +24,14 @@ let prevTime = Date.now();
 const origin = new THREE.Vector3(0, 0, 0);
 
 const bots = [];
+
+const bot0 = new Bot({
+  name: 'Bot 0',
+  radius: 10,
+  color: '#777777',
+  move: new StationaryMove(),
+});
+bots.push(bot0);
 
 const bot1 = new Bot({
   name: 'Bot 1',
@@ -60,7 +69,7 @@ const bot3 = new Bot({
   name: 'Bot 3',
   radius: 5,
   color: '#ffff00',
-  move: new CircleMove({
+  move: new CircleTargetMove({
     speed: Math.PI / 2,
     radius: 20,
     target: bot1,
