@@ -1,3 +1,5 @@
+import Car from './objects/car';
+
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const VIEW_ANGLE = 45;
@@ -13,7 +15,7 @@ let gridHelper;
 let pointLight;
 let ambientLight;
 let keyboard;
-let mesh;
+let car;
 
 const key = {
   FORWARD: 'W',
@@ -38,10 +40,13 @@ function init() {
   axisHelper = new THREE.AxisHelper(100);
   scene.add(axisHelper);
 
-  const geometry = new THREE.BoxGeometry(50, 50, 50);
-  const material = new THREE.MeshLambertMaterial({ color: 0x888888 });
-  mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  car = new Car({
+    name: 'Car 1',
+    color: 0x888888,
+    size: 20,
+  });
+
+  scene.add(car);
 
   ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
@@ -66,18 +71,18 @@ function update() {
   keyboard.update();
   // keyboard.debug();
 
-  if (keyboard.pressed(key.LEFT)) { mesh.rotateY(rotationSpeed); }
-  if (keyboard.pressed(key.RIGHT)) { mesh.rotateY(-rotationSpeed); }
+  if (keyboard.pressed(key.LEFT)) { car.rotateY(rotationSpeed); }
+  if (keyboard.pressed(key.RIGHT)) { car.rotateY(-rotationSpeed); }
 
-  const forwardDirection = mesh.getWorldDirection();
+  const forwardDirection = car.getWorldDirection();
   const backwardDirection = forwardDirection.clone().negate();
 
-  if (keyboard.pressed(key.FORWARD)) { mesh.position.add(forwardDirection); }
-  if (keyboard.pressed(key.BACKWARD)) { mesh.position.add(backwardDirection); }
-  if (keyboard.pressed(key.UP)) { mesh.position.y += 1; }
-  if (keyboard.pressed(key.DOWN)) { mesh.position.y -= 1; }
+  if (keyboard.pressed(key.FORWARD)) { car.position.add(forwardDirection); }
+  if (keyboard.pressed(key.BACKWARD)) { car.position.add(backwardDirection); }
+  if (keyboard.pressed(key.UP)) { car.position.y += 1; }
+  if (keyboard.pressed(key.DOWN)) { car.position.y -= 1; }
 
-  camera.lookAt(mesh.position);
+  camera.lookAt(car.position);
 }
 
 function animate() {
