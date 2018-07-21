@@ -1,4 +1,5 @@
-const rotationAngle = (Math.PI / 180) * 2;
+const moveSpeed = 50; // units per second
+const rotationSpeed = (Math.PI / 180) * 120; // radians per second
 
 export default class Car extends THREE.Object3D {
   constructor(props) {
@@ -22,23 +23,29 @@ export default class Car extends THREE.Object3D {
     this.name = name;
   }
 
-  rotateLeft() {
+  rotateLeft(delta) {
+    const rotationAngle = rotationSpeed * delta;
     this.rotateY(rotationAngle);
   }
 
-  rotateRight() {
+  rotateRight(delta) {
+    const rotationAngle = rotationSpeed * delta;
     this.rotateY(-rotationAngle);
   }
 
   // TODO: Make the speed relative to the size of the car
   // For example: speed = size / 50 * forward direction
-  moveForward() {
+  moveForward(delta) {
+    const distance = moveSpeed * delta;
     const forwardDirection = this.getWorldDirection(); // Note: This is a unit vector
+    forwardDirection.multiplyScalar(distance);
     this.position.add(forwardDirection);
   }
 
-  moveBackward() {
+  moveBackward(delta) {
+    const distance = moveSpeed * delta;
     const backwardDirection = this.getWorldDirection().negate();
+    backwardDirection.multiplyScalar(distance);
     this.position.add(backwardDirection);
   }
 }
