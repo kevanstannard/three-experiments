@@ -67,18 +67,26 @@ function init() {
   document.body.appendChild(renderer.domElement);
 }
 
+function updateCamera() {
+  const carDirection = car.getWorldDirection(); // Unit vector
+  const reverseDirection = carDirection.negate();
+  const heightVector = new THREE.Vector3(0, 400, 0);
+  const cameraVector = reverseDirection.multiplyScalar(600).add(heightVector);
+  const cameraPosition = car.position.clone().add(cameraVector);
+  camera.position.copy(cameraPosition);
+  camera.lookAt(car.position);
+}
+
 function update() {
   const delta = clock.getDelta();
 
   keyboard.update();
-  // keyboard.debug();
-
   if (keyboard.pressed(key.LEFT)) { car.rotateLeft(delta); }
   if (keyboard.pressed(key.RIGHT)) { car.rotateRight(delta); }
   if (keyboard.pressed(key.FORWARD)) { car.moveForward(delta); }
   if (keyboard.pressed(key.BACKWARD)) { car.moveBackward(delta); }
 
-  camera.lookAt(car.position);
+  updateCamera();
 }
 
 function animate() {
