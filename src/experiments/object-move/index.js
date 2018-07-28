@@ -1,4 +1,5 @@
 import Car from './objects/car';
+import BotCar from './objects/bot-car';
 
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
@@ -16,7 +17,10 @@ let pointLight;
 let ambientLight;
 let keyboard;
 let car;
+let botCars;
 let clock;
+
+const botCarCount = 3;
 
 const key = {
   FORWARD: 'W',
@@ -42,12 +46,23 @@ function init() {
   scene.add(axisHelper);
 
   car = new Car({
-    name: 'Car 1',
+    name: 'Player',
     color: 0x888888,
     size: 20,
   });
 
   scene.add(car);
+
+  botCars = [];
+  for (let i = 0; i < botCarCount; i += 1) {
+    const botCar = new BotCar({
+      name: 'Bot',
+      color: 0xff8888,
+      size: 20,
+    });
+    botCars.push(botCar);
+    scene.add(botCar);
+  }
 
   ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
@@ -87,6 +102,8 @@ function update() {
   if (keyboard.pressed(key.BACKWARD)) { car.moveBackward(delta); }
 
   updateCamera();
+
+  botCars.forEach(botCar => botCar.update(delta));
 }
 
 function animate() {
