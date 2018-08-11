@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 25:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88,6 +88,15 @@ var ambientLight = void 0;
 var keyboard = void 0;
 var mesh = void 0;
 
+var key = {
+  FORWARD: 'W',
+  BACKWARD: 'S',
+  LEFT: 'A',
+  RIGHT: 'D',
+  UP: 'space',
+  DOWN: 'shift'
+};
+
 var origin = new THREE.Vector3(0, 0, 0);
 
 function init() {
@@ -95,7 +104,7 @@ function init() {
 
   scene = new THREE.Scene();
 
-  gridHelper = new THREE.GridHelper(100, 10);
+  gridHelper = new THREE.GridHelper(1000, 50);
   scene.add(gridHelper);
 
   axisHelper = new THREE.AxisHelper(100);
@@ -129,18 +138,26 @@ function update() {
   keyboard.update();
   // keyboard.debug();
 
-  if (keyboard.pressed('A')) {
+  if (keyboard.pressed(key.LEFT)) {
     mesh.position.x -= 1;
   }
-  if (keyboard.pressed('D')) {
+  if (keyboard.pressed(key.RIGHT)) {
     mesh.position.x += 1;
   }
-  if (keyboard.pressed('W')) {
+  if (keyboard.pressed(key.FORWARD)) {
     mesh.position.z -= 1;
   }
-  if (keyboard.pressed('S')) {
+  if (keyboard.pressed(key.BACKWARD)) {
     mesh.position.z += 1;
   }
+  if (keyboard.pressed(key.UP)) {
+    mesh.position.y += 1;
+  }
+  if (keyboard.pressed(key.DOWN)) {
+    mesh.position.y -= 1;
+  }
+
+  camera.lookAt(mesh.position);
 }
 
 function animate() {

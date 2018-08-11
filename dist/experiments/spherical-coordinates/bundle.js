@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 88);
+/******/ 	return __webpack_require__(__webpack_require__.s = 99);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,15 +109,49 @@ function loadFonts() {
 
 /***/ }),
 
-/***/ 88:
+/***/ 100:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _fonts = __webpack_require__(0);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _CircleLineGeometry = __webpack_require__(89);
+exports.default = function (radius, segments, thetaStart, thetaLength) {
+  var args = {
+    radius: radius || 50,
+    segments: segments || 8,
+    thetaStart: thetaStart || 0,
+    thetaLength: thetaLength || 2 * Math.PI
+  };
+
+  var geometry = new THREE.Geometry();
+
+  var delta = (args.thetaStart + args.thetaLength - args.thetaStart) / args.segments;
+
+  for (var i = 0; i <= args.segments; i += 1) {
+    var angle = args.thetaStart + delta * i;
+    var x = args.radius * Math.cos(angle);
+    var y = args.radius * Math.sin(angle);
+    geometry.vertices.push(new THREE.Vector3(x, y, 0));
+  }
+
+  return geometry;
+};
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _fonts = __webpack_require__(1);
+
+var _CircleLineGeometry = __webpack_require__(100);
 
 var _CircleLineGeometry2 = _interopRequireDefault(_CircleLineGeometry);
 
@@ -298,40 +332,6 @@ load().then(function () {
   init();
   animate();
 });
-
-/***/ }),
-
-/***/ 89:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (radius, segments, thetaStart, thetaLength) {
-  var args = {
-    radius: radius || 50,
-    segments: segments || 8,
-    thetaStart: thetaStart || 0,
-    thetaLength: thetaLength || 2 * Math.PI
-  };
-
-  var geometry = new THREE.Geometry();
-
-  var delta = (args.thetaStart + args.thetaLength - args.thetaStart) / args.segments;
-
-  for (var i = 0; i <= args.segments; i += 1) {
-    var angle = args.thetaStart + delta * i;
-    var x = args.radius * Math.cos(angle);
-    var y = args.radius * Math.sin(angle);
-    geometry.vertices.push(new THREE.Vector3(x, y, 0));
-  }
-
-  return geometry;
-};
 
 /***/ })
 

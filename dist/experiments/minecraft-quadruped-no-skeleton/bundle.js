@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 38);
+/******/ 	return __webpack_require__(__webpack_require__.s = 40);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17154,11 +17154,11 @@
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(4)(module)))
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports) {
 
 var g;
@@ -17186,7 +17186,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -17215,7 +17215,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 38:
+/***/ 40:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17223,15 +17223,15 @@ module.exports = function(module) {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _Pivot = __webpack_require__(39);
+var _Pivot = __webpack_require__(41);
 
 var _Pivot2 = _interopRequireDefault(_Pivot);
 
-var _MinecraftBoxGeometry = __webpack_require__(40);
+var _MinecraftBoxGeometry = __webpack_require__(42);
 
 var _MinecraftBoxGeometry2 = _interopRequireDefault(_MinecraftBoxGeometry);
 
-var _pig = __webpack_require__(41);
+var _pig = __webpack_require__(43);
 
 var _pig2 = _interopRequireDefault(_pig);
 
@@ -17372,7 +17372,7 @@ tick();
 
 /***/ }),
 
-/***/ 39:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17395,7 +17395,7 @@ exports.default = Pivot;
 
 /***/ }),
 
-/***/ 40:
+/***/ 42:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17585,7 +17585,7 @@ function MinecraftHeadGeometry(u, v, width, height, depth) {
 
 /***/ }),
 
-/***/ 41:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17595,9 +17595,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lodash = __webpack_require__(1);
+var _lodash = __webpack_require__(2);
 
-var _quadruped = __webpack_require__(42);
+var _quadruped = __webpack_require__(44);
 
 var _quadruped2 = _interopRequireDefault(_quadruped);
 
@@ -17688,7 +17688,7 @@ exports.default = merged;
 
 /***/ }),
 
-/***/ 42:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

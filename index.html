@@ -26,6 +26,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/arrow-helper/index.html">Arrow Helper</a>
+      
+        
+        
+          <span class="tag">Vector</span>
+        
+          <span class="tag"> ArrowHelper</span>
+        
+      
+      
+        - Simple ArrowHelper experiment
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/blender-cube-obj/index.html">Blender Cube OBJ</a>
       
         
@@ -361,6 +377,20 @@
   
     
     <li class="public">
+      <a href="dist/experiments/moving-spheres/index.html">Moving Sphere</a>
+      
+        
+        
+          <span class="tag">Sphere</span>
+        
+      
+      
+        - Simple moving spheres
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/multi-material-loader/index.html">Multi Material Loader</a>
       
         
@@ -440,6 +470,15 @@
       
       
         - Example to keep an object at a constant size on the screen
+      
+    </li>
+  
+    
+    <li class="public">
+      <a href="dist/experiments/object-move/index.html">Object Move</a>
+      
+      
+        - Experiment to move an object with the keyboard
       
     </li>
   
@@ -857,6 +896,22 @@
   
     
     <li class="public">
+      <a href="dist/experiments/vector-addition/index.html">Vector Addition</a>
+      
+        
+        
+          <span class="tag">Vector</span>
+        
+          <span class="tag"> ArrowHelper</span>
+        
+      
+      
+        - Simple Vector addition experiment
+      
+    </li>
+  
+    
+    <li class="public">
       <a href="dist/experiments/vector-projection/index.html">Vector Projection</a>
       
         
@@ -897,12 +952,28 @@ window.experiments = [
     "tags": "Vector",
     "public": true,
     "scripts": [
-      "../../libs/three/r83/three.min.js",
-      "../../libs/three/r83/controls/OrbitControls.js",
+      "../../libs/three/r92/three.min.js",
+      "../../libs/three/r92/controls/OrbitControls.js",
       "../../libs/threex/THREEx.WindowResize.js"
     ],
     "styles": [],
     "id": "align-object-to-vector"
+  },
+  {
+    "title": "Arrow Helper",
+    "description": "Simple ArrowHelper experiment",
+    "tags": "Vector, ArrowHelper",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r87/three.min.js",
+      "../../libs/three/r87/controls/OrbitControls.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "arrow-helper"
   },
   {
     "title": "Blender Cube OBJ",
@@ -1261,6 +1332,22 @@ window.experiments = [
     "id": "moving-relative-objects"
   },
   {
+    "title": "Moving Sphere",
+    "description": "Simple moving spheres",
+    "tags": "Sphere",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r92/three.min.js",
+      "../../libs/three/r92/controls/OrbitControls.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "moving-spheres"
+  },
+  {
     "title": "Multi Material Loader",
     "description": "Loading multiple materials",
     "tags": "Material, MultiMaterial, Loader",
@@ -1358,6 +1445,19 @@ window.experiments = [
     ],
     "styles": [],
     "id": "object-constant-size"
+  },
+  {
+    "title": "Object Move",
+    "description": "Experiment to move an object with the keyboard",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r87/three.min.js",
+      "../../libs/three/r87/controls/OrbitControls.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/stemkoski/KeyboardState.js"
+    ],
+    "styles": [],
+    "id": "object-move"
   },
   {
     "title": "Orbit Controls",
@@ -1819,6 +1919,22 @@ window.experiments = [
       "../../libs/dat.gui/0.6.2/dat.gui.css"
     ],
     "id": "trackball-controls"
+  },
+  {
+    "title": "Vector Addition",
+    "description": "Simple Vector addition experiment",
+    "tags": "Vector, ArrowHelper",
+    "public": true,
+    "scripts": [
+      "../../libs/three/r87/three.min.js",
+      "../../libs/three/r87/controls/OrbitControls.js",
+      "../../libs/threex/THREEx.WindowResize.js",
+      "../../libs/dat.gui/0.6.2/dat.gui.min.js"
+    ],
+    "styles": [
+      "../../libs/dat.gui/0.6.2/dat.gui.css"
+    ],
+    "id": "vector-addition"
   },
   {
     "title": "Vector Projection",

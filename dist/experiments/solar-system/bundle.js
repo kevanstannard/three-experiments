@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 77);
+/******/ 	return __webpack_require__(__webpack_require__.s = 88);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 4:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -108,7 +108,7 @@ exports.default = Orbit;
 
 /***/ }),
 
-/***/ 5:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -124,21 +124,21 @@ function orbitPeriodScale(periodDays) {
 
 /***/ }),
 
-/***/ 77:
+/***/ 88:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _scaled = __webpack_require__(78);
+var _scaled = __webpack_require__(89);
 
 var _scaled2 = _interopRequireDefault(_scaled);
 
-var _factory = __webpack_require__(81);
+var _factory = __webpack_require__(92);
 
 var _factory2 = _interopRequireDefault(_factory);
 
-var _solarSystem = __webpack_require__(85);
+var _solarSystem = __webpack_require__(96);
 
 var _solarSystem2 = _interopRequireDefault(_solarSystem);
 
@@ -241,7 +241,7 @@ tick();
 
 /***/ }),
 
-/***/ 78:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -253,7 +253,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _index = __webpack_require__(79);
+var _index = __webpack_require__(90);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -298,7 +298,7 @@ exports.default = scaleStar(_index2.default);
 
 /***/ }),
 
-/***/ 79:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -308,7 +308,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _constants = __webpack_require__(80);
+var _constants = __webpack_require__(91);
 
 exports.default = {
   name: 'sol',
@@ -393,7 +393,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 80:
+/***/ 91:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -407,7 +407,7 @@ var ONE_BILLION = exports.ONE_BILLION = ONE_MILLION * 1000;
 
 /***/ }),
 
-/***/ 81:
+/***/ 92:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -417,15 +417,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _star = __webpack_require__(82);
+var _star = __webpack_require__(93);
 
 var _star2 = _interopRequireDefault(_star);
 
-var _planet = __webpack_require__(83);
+var _planet = __webpack_require__(94);
 
 var _planet2 = _interopRequireDefault(_planet);
 
-var _moon = __webpack_require__(84);
+var _moon = __webpack_require__(95);
 
 var _moon2 = _interopRequireDefault(_moon);
 
@@ -462,7 +462,7 @@ exports.default = createStar;
 
 /***/ }),
 
-/***/ 82:
+/***/ 93:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,11 +474,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _orbit = __webpack_require__(4);
+var _orbit = __webpack_require__(6);
 
 var _orbit2 = _interopRequireDefault(_orbit);
 
-var _orbitPeriodScale = __webpack_require__(5);
+var _orbitPeriodScale = __webpack_require__(7);
 
 var _orbitPeriodScale2 = _interopRequireDefault(_orbitPeriodScale);
 
@@ -557,7 +557,7 @@ exports.default = Star;
 
 /***/ }),
 
-/***/ 83:
+/***/ 94:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -569,11 +569,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _orbit = __webpack_require__(4);
+var _orbit = __webpack_require__(6);
 
 var _orbit2 = _interopRequireDefault(_orbit);
 
-var _orbitPeriodScale = __webpack_require__(5);
+var _orbitPeriodScale = __webpack_require__(7);
 
 var _orbitPeriodScale2 = _interopRequireDefault(_orbitPeriodScale);
 
@@ -661,7 +661,7 @@ exports.default = Planet;
 
 /***/ }),
 
-/***/ 84:
+/***/ 95:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -711,7 +711,7 @@ exports.default = Moon;
 
 /***/ }),
 
-/***/ 85:
+/***/ 96:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

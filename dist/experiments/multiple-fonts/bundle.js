@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 46);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,13 +109,13 @@ function loadFonts() {
 
 /***/ }),
 
-/***/ 46:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _fonts = __webpack_require__(0);
+var _fonts = __webpack_require__(1);
 
 var SCREEN_WIDTH = window.innerWidth; // References
 // https://github.com/mrdoob/three.js/tree/master/examples/fonts
