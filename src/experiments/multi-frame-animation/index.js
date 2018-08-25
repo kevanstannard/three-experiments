@@ -12,10 +12,14 @@ let camera;
 let renderer;
 let orbitControls;
 let bot;
+let clock;
 
 const origin = new THREE.Vector3(0, 0, 0);
 
 function init() {
+  clock = new THREE.Clock();
+  clock.start();
+
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -49,8 +53,9 @@ function init() {
 }
 
 function update() {
+  const delta = clock.getDelta();
   orbitControls.update();
-  bot.update();
+  bot.update(delta);
 }
 
 function render() {
