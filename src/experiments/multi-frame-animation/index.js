@@ -50,6 +50,7 @@ function init() {
 
 function update() {
   orbitControls.update();
+  bot.update();
 }
 
 function render() {

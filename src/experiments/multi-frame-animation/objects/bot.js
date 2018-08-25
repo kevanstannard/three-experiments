@@ -1,77 +1,90 @@
-const bot = {
+// Notes:
+// * A bone pivot is relative to the parent bone pivot.
+// * A box offset is relative to its bones pivot.
+
+const botBone = {
   name: 'body',
-  size: new THREE.Vector3(32, 64, 16),
   pivot: new THREE.Vector3(0, 0, 0),
-  offset: new THREE.Vector3(0, 0, 0),
+  boxes: [
+    {
+      size: new THREE.Vector3(32, 64, 16),
+      offset: new THREE.Vector3(0, 0, 0),
+    },
+  ],
   children: [
     {
       name: 'head',
-      size: new THREE.Vector3(32, 32, 32),
       pivot: new THREE.Vector3(0, 32, 0),
-      offset: new THREE.Vector3(0, 16, 0),
+      boxes: [
+        {
+          name: 'head',
+          size: new THREE.Vector3(32, 32, 32),
+          offset: new THREE.Vector3(0, 16, 0),
+        },
+        {
+          name: 'eye',
+          size: new THREE.Vector3(24, 8, 4),
+          offset: new THREE.Vector3(0, 16, 16),
+        },
+      ],
       children: [],
     },
     {
       name: 'leftArm',
-      size: new THREE.Vector3(16, 64, 16),
       pivot: new THREE.Vector3(24, 32, 0),
-      offset: new THREE.Vector3(0, -32, 0),
+      boxes: [
+        {
+          size: new THREE.Vector3(16, 64, 16),
+          offset: new THREE.Vector3(0, -32, 0),
+        },
+      ],
       children: [],
     },
     {
       name: 'rightArm',
-      size: new THREE.Vector3(16, 64, 16),
       pivot: new THREE.Vector3(-24, 32, 0),
-      offset: new THREE.Vector3(0, -32, 0),
+      boxes: [
+        {
+          size: new THREE.Vector3(16, 64, 16),
+          offset: new THREE.Vector3(0, -32, 0),
+        },
+      ],
       children: [],
     },
     {
       name: 'leftLeg',
-      size: new THREE.Vector3(16, 64, 16),
       pivot: new THREE.Vector3(8, -32, 0),
-      offset: new THREE.Vector3(0, -32, 0),
+      boxes: [
+        {
+          size: new THREE.Vector3(16, 64, 16),
+          offset: new THREE.Vector3(0, -32, 0),
+        },
+      ],
       children: [],
     },
     {
       name: 'rightLeg',
-      size: new THREE.Vector3(16, 64, 16),
       pivot: new THREE.Vector3(-8, -32, 0),
-      offset: new THREE.Vector3(0, -32, 0),
+      boxes: [
+        {
+          size: new THREE.Vector3(16, 64, 16),
+          offset: new THREE.Vector3(0, -32, 0),
+        },
+      ],
       children: [],
     },
   ],
-};
-
-const addBox = (parent, box) => {
-  const geometry = new THREE.BoxGeometry(box.size.x, box.size.y, box.size.z);
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xffff00,
-    transparent: true,
-    opacity: 0.8,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.copy(box.offset);
-
-  const pivot = new THREE.Object3D();
-  pivot.position.copy(box.pivot);
-
-  const pivotGeometry = new THREE.SphereGeometry(4, 4, 4);
-  const pivotMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
-  const pivotMesh = new THREE.Mesh(pivotGeometry, pivotMaterial);
-
-  pivot.add(mesh);
-  pivot.add(pivotMesh);
-
-  parent.add(pivot);
-
-  box.children.forEach(child => addBox(pivot, child));
 };
 
 export default class Bot extends THREE.Object3D {
   constructor() {
     super();
 
-    addBox(this, bot);
+    this.bones = {};
+
+    this.addBone(this, botBone);
+
+    // console.log(this.bones);
 
     // const headSize = new THREE.Vector3(32, 16, 32);
     // const bodySize = new THREE.Vector3(headSize.x, headSize.y * 1.5, headSize.z);
@@ -160,5 +173,43 @@ export default class Bot extends THREE.Object3D {
     // this.add(leftArmJoint);
     // this.add(rightLegJoint);
     // this.add(leftLegJoint);
+  }
+
+  addBone(parent, bone) {
+    const pivot = new THREE.Object3D();
+    pivot.position.copy(bone.pivot);
+
+    const pivotGeometry = new THREE.SphereGeometry(4, 4, 4);
+    const pivotMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const pivotMesh = new THREE.Mesh(pivotGeometry, pivotMaterial);
+
+    pivot.add(pivotMesh);
+
+    const boxMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffff00,
+      transparent: true,
+      opacity: 0.8,
+    });
+
+    bone.boxes.forEach((box) => {
+      const boxGeometry = new THREE.BoxGeometry(box.size.x, box.size.y, box.size.z);
+      const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+      boxMesh.position.copy(box.offset);
+      pivot.add(boxMesh);
+    });
+
+    parent.add(pivot);
+
+    this.bones[bone.name] = pivot;
+
+    bone.children.forEach(child => this.addBone(pivot, child));
+  }
+
+  update() {
+    this.bones.head.rotation.y += 0.01;
+    this.bones.leftArm.rotation.x += 0.01;
+    this.bones.rightArm.rotation.x += 0.01;
+    this.bones.leftLeg.rotation.x += 0.01;
+    this.bones.rightLeg.rotation.x += 0.01;
   }
 }
