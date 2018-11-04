@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,367 +79,34 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 72);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/room-flickering-light/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 72:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/room-flickering-light/Bug.js":
+/*!******************************************************!*\
+  !*** ./src/experiments/room-flickering-light/Bug.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-var _Bug = __webpack_require__(73);
-
-var _Bug2 = _interopRequireDefault(_Bug);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-// let axisHelper;
-var orbitControls = void 0;
-// let ambientLight;
-var stats = void 0;
-// let rectLight;
-// let rectLightHelper;
-var lights = [];
-var bugs = [];
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-// function Wall(width, height) {
-//   const material = new THREE.MeshStandardMaterial({
-//     color: 0xffffff,
-//     metalness: 0,
-//     roughness: 1,
-//     side: THREE.DoubleSide,
-//   });
-//   const geometry = new THREE.PlaneBufferGeometry(width, height);
-//   THREE.Mesh.call(this, geometry, material);
-//   this.receiveShadow = true;
-// }
-//
-// Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-//   constructor: Wall,
-// });
-
-function Wall(width, height) {
-  THREE.Object3D.call(this);
-  var material = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    metalness: 0,
-    roughness: 1,
-    side: THREE.DoubleSide
-  });
-  var geometry = new THREE.PlaneBufferGeometry(width, height);
-  this.wall = new THREE.Mesh(geometry, material);
-  this.add(this.wall);
-
-  var numStains = Math.floor(Math.random() * 5);
-  for (var i = 0; i < numStains; i += 1) {
-    var stainSize = 50 + Math.random() * 200;
-    var stainGeometry = new THREE.CircleBufferGeometry(stainSize);
-    var stainMaterial = new THREE.MeshStandardMaterial({
-      color: 0xdddddd,
-      metalness: 0,
-      roughness: 1
-    });
-    this.stain = new THREE.Mesh(stainGeometry, stainMaterial);
-    this.stain.position.z = 0.5;
-    this.stain.position.x = -100 + Math.random() * 200;
-    this.stain.position.y = -100 + Math.random() * 200;
-    this.add(this.stain);
-  }
-
-  // this.mesh.receiveShadow = true;
-}
-
-Wall.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
-  constructor: Wall
-});
-
-function Room(width, height, depth) {
-  THREE.Object3D.call(this);
-
-  var back = new Wall(width, height);
-  back.position.set(0, 0, -depth / 2);
-  this.add(back);
-
-  var right = new Wall(depth, height);
-  right.rotation.y = Math.PI / 2;
-  right.position.set(-width / 2, 0, 0);
-  this.add(right);
-
-  var left = new Wall(depth, height);
-  left.rotation.y = -Math.PI / 2;
-  left.position.set(width / 2, 0, 0);
-  this.add(left);
-
-  var bottom = new Wall(width, depth);
-  bottom.rotation.x = -Math.PI / 2;
-  bottom.position.set(0, -height / 2, 0);
-  this.add(bottom);
-
-  var top = new Wall(width, depth);
-  top.rotation.x = Math.PI / 2;
-  top.position.set(0, height / 2, 0);
-  this.add(top);
-}
-
-Room.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
-  constructor: Room
-});
-
-function Light() {
-  THREE.RectAreaLight.call(this, 0xFFFFFF, 100, 5, 40);
-  // this.castShadow = true;
-
-  this.helper = new THREE.RectAreaLightHelper(this);
-  this.add(this.helper);
-
-  // console.log(this.helper);
-
-  this.ON = Symbol('On');
-  this.OFF = Symbol('Off');
-  this.DIM = Symbol('Dim');
-
-  this.modes = [this.ON, this.DIM, this.OFF];
-
-  this.nextMode();
-}
-
-Light.prototype = Object.assign(Object.create(THREE.RectAreaLight.prototype), {
-  constructor: Light,
-  nextMode: function nextMode() {
-    var nextMode = void 0;
-    if (this.currentMode) {
-      if (this.currentMode.mode === this.OFF) {
-        if (Math.random() > 0.2) {
-          nextMode = this.DIM;
-        }
-      } else if (this.currentMode.mode === this.DIM) {
-        if (Math.random() > 0.2) {
-          nextMode = this.OFF;
-        }
-      }
-    }
-    if (!nextMode) {
-      nextMode = this.modes[Math.floor(Math.random() * 2)];
-    }
-    switch (nextMode) {
-      case this.OFF:
-        {
-          var duration = Math.floor(Math.random() * 0.1 * 60); // 60 FPS
-          this.currentMode = { mode: nextMode, duration: duration };
-          break;
-        }
-      case this.DIM:
-        {
-          var _duration = Math.floor(Math.random() * 0.1 * 60); // 60 FPS
-          var intensity = Math.random() / 4;
-          this.currentMode = { mode: nextMode, intensity: intensity, duration: _duration };
-          break;
-        }
-      default:
-        {
-          var _duration2 = Math.floor(Math.random() * 3 * 60); // 60 FPS
-          this.currentMode = { mode: nextMode, duration: _duration2 };
-        }
-    }
-  },
-  update: function update() {
-    switch (this.currentMode.mode) {
-      case this.OFF:
-        {
-          this.intensity = 0;
-          break;
-        }
-      case this.DIM:
-        {
-          this.intensity = this.currentMode.intensity;
-          break;
-        }
-      default:
-        {
-          this.intensity = 1000;
-        }
-    }
-    this.currentMode.duration = this.currentMode.duration - 1;
-    this.helper.update();
-    if (this.currentMode.duration <= 0) {
-      this.nextMode();
-    }
-  }
-});
-
-function initStats() {
-  stats = new Stats();
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '20px';
-  stats.setMode(0); // 0: fps, 1: ms
-  document.getElementById('stats').appendChild(stats.domElement);
-}
-
-function init() {
-  scene = new THREE.Scene();
-
-  // axisHelper = new THREE.AxisHelper(50);
-  // scene.add(axisHelper);
-
-  // ambientLight = new THREE.AmbientLight(0x000000, 0.1);
-  // scene.add(ambientLight);
-
-  var roomWidth = 250;
-  var roomHeight = 100;
-  var roomDepth = 300;
-  var room = new Room(roomWidth, roomHeight, roomDepth);
-  scene.add(room);
-
-  for (var i = 0; i < 30; i += 1) {
-    var bug = new _Bug2.default();
-    var x = -roomWidth / 2 + 1;
-    var y = -20 + Math.random() * 40;
-    var z = -20 + Math.random() * 40;
-    bug.position.set(x, y, z);
-    bug.rotation.y = Math.PI / 2;
-    bugs.push(bug);
-    scene.add(bug);
-  }
-
-  var light1 = new Light();
-  var light1Pos = {
-    x: 0,
-    y: roomHeight / 2 - 1,
-    z: 0
-  };
-  light1.position.set(light1Pos.x, light1Pos.y, light1Pos.z);
-  light1.lookAt(new THREE.Vector3(light1Pos.x, light1Pos.y - 1, light1Pos.z));
-  lights.push(light1);
-  scene.add(light1);
-
-  var light2 = new Light();
-  var light2Pos = {
-    x: -roomWidth / 4,
-    y: roomHeight / 2 - 1,
-    z: 0
-  };
-  light2.position.set(light2Pos.x, light2Pos.y, light2Pos.z);
-  light2.lookAt(new THREE.Vector3(light2Pos.x, light2Pos.y - 1, light2Pos.z));
-  lights.push(light2);
-  scene.add(light2);
-
-  var light3 = new Light();
-  var light3Pos = {
-    x: roomWidth / 4,
-    y: roomHeight / 2 - 1,
-    z: 0
-  };
-  light3.position.set(light3Pos.x, light3Pos.y, light3Pos.z);
-  light3.lookAt(new THREE.Vector3(light3Pos.x, light3Pos.y - 1, light3Pos.z));
-  lights.push(light3);
-  scene.add(light3);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(75, 0, 150);
-  camera.lookAt(origin);
-
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-
-  initStats();
-}
-
-function update() {
-  lights.forEach(function (light) {
-    return light.update();
-  });
-  bugs.forEach(function (bug) {
-    return bug.update();
-  });
-  stats.update();
-  orbitControls.update();
-}
-
-function render() {
-  renderer.render(scene, camera);
-}
-
-function tick() {
-  update();
-  render();
-  requestAnimationFrame(tick);
-}
-
-init();
-tick();
+eval("__webpack_require__.r(__webpack_exports__);\nfunction Bug() {\n  THREE.Object3D.call(this); // const geometry = new THREE.SphereGeometry(1, 2, 2, 0, Math.PI);\n\n  var geometry = new THREE.CircleBufferGeometry(0.5);\n  var material = new THREE.MeshBasicMaterial({\n    color: 0x000000\n  });\n  this.sphere = new THREE.Mesh(geometry, material);\n  this.sphere.castShadow = true;\n  this.sphere.receiveShadow = false;\n  this.add(this.sphere);\n}\n\nBug.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {\n  constructor: Bug,\n  update: function update() {\n    if (this.moveSteps) {\n      this.sphere.position.x += this.moveDelta.x;\n      this.sphere.position.y += this.moveDelta.y;\n      this.moveSteps -= 1;\n      return;\n    }\n\n    var wantsToMove = Math.random() > 0.9999;\n\n    if (wantsToMove) {\n      this.moveTarget = {\n        x: -20 + Math.random() * 40,\n        y: -20 + Math.random() * 40\n      };\n      this.moveSteps = 60 * 3;\n      this.moveDelta = {\n        x: this.moveTarget.x / this.moveSteps,\n        y: this.moveTarget.y / this.moveSteps\n      };\n    }\n  }\n});\n/* harmony default export */ __webpack_exports__[\"default\"] = (Bug);\n\n//# sourceURL=webpack:///./src/experiments/room-flickering-light/Bug.js?");
 
 /***/ }),
 
-/***/ 73:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/room-flickering-light/index.js":
+/*!********************************************************!*\
+  !*** ./src/experiments/room-flickering-light/index.js ***!
+  \********************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-function Bug() {
-  THREE.Object3D.call(this);
-  // const geometry = new THREE.SphereGeometry(1, 2, 2, 0, Math.PI);
-  var geometry = new THREE.CircleBufferGeometry(0.5);
-  var material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-  this.sphere = new THREE.Mesh(geometry, material);
-  this.sphere.castShadow = true;
-  this.sphere.receiveShadow = false;
-  this.add(this.sphere);
-}
-
-Bug.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
-  constructor: Bug,
-  update: function update() {
-    if (this.moveSteps) {
-      this.sphere.position.x += this.moveDelta.x;
-      this.sphere.position.y += this.moveDelta.y;
-      this.moveSteps -= 1;
-      return;
-    }
-    var wantsToMove = Math.random() > 0.9999;
-    if (wantsToMove) {
-      this.moveTarget = {
-        x: -20 + Math.random() * 40,
-        y: -20 + Math.random() * 40
-      };
-      this.moveSteps = 60 * 3;
-      this.moveDelta = {
-        x: this.moveTarget.x / this.moveSteps,
-        y: this.moveTarget.y / this.moveSteps
-      };
-    }
-  }
-});
-
-exports.default = Bug;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Bug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Bug */ \"./src/experiments/room-flickering-light/Bug.js\");\n\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer; // let axisHelper;\n\nvar orbitControls; // let ambientLight;\n\nvar stats; // let rectLight;\n// let rectLightHelper;\n\nvar lights = [];\nvar bugs = [];\nvar origin = new THREE.Vector3(0, 0, 0); // function Wall(width, height) {\n//   const material = new THREE.MeshStandardMaterial({\n//     color: 0xffffff,\n//     metalness: 0,\n//     roughness: 1,\n//     side: THREE.DoubleSide,\n//   });\n//   const geometry = new THREE.PlaneBufferGeometry(width, height);\n//   THREE.Mesh.call(this, geometry, material);\n//   this.receiveShadow = true;\n// }\n//\n// Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {\n//   constructor: Wall,\n// });\n\nfunction Wall(width, height) {\n  THREE.Object3D.call(this);\n  var material = new THREE.MeshStandardMaterial({\n    color: 0xffffff,\n    metalness: 0,\n    roughness: 1,\n    side: THREE.DoubleSide\n  });\n  var geometry = new THREE.PlaneBufferGeometry(width, height);\n  this.wall = new THREE.Mesh(geometry, material);\n  this.add(this.wall);\n  var numStains = Math.floor(Math.random() * 5);\n\n  for (var i = 0; i < numStains; i += 1) {\n    var stainSize = 50 + Math.random() * 200;\n    var stainGeometry = new THREE.CircleBufferGeometry(stainSize);\n    var stainMaterial = new THREE.MeshStandardMaterial({\n      color: 0xdddddd,\n      metalness: 0,\n      roughness: 1\n    });\n    this.stain = new THREE.Mesh(stainGeometry, stainMaterial);\n    this.stain.position.z = 0.5;\n    this.stain.position.x = -100 + Math.random() * 200;\n    this.stain.position.y = -100 + Math.random() * 200;\n    this.add(this.stain);\n  } // this.mesh.receiveShadow = true;\n\n}\n\nWall.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {\n  constructor: Wall\n});\n\nfunction Room(width, height, depth) {\n  THREE.Object3D.call(this);\n  var back = new Wall(width, height);\n  back.position.set(0, 0, -depth / 2);\n  this.add(back);\n  var right = new Wall(depth, height);\n  right.rotation.y = Math.PI / 2;\n  right.position.set(-width / 2, 0, 0);\n  this.add(right);\n  var left = new Wall(depth, height);\n  left.rotation.y = -Math.PI / 2;\n  left.position.set(width / 2, 0, 0);\n  this.add(left);\n  var bottom = new Wall(width, depth);\n  bottom.rotation.x = -Math.PI / 2;\n  bottom.position.set(0, -height / 2, 0);\n  this.add(bottom);\n  var top = new Wall(width, depth);\n  top.rotation.x = Math.PI / 2;\n  top.position.set(0, height / 2, 0);\n  this.add(top);\n}\n\nRoom.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {\n  constructor: Room\n});\n\nfunction Light() {\n  THREE.RectAreaLight.call(this, 0xFFFFFF, 100, 5, 40); // this.castShadow = true;\n\n  this.helper = new THREE.RectAreaLightHelper(this);\n  this.add(this.helper); // console.log(this.helper);\n\n  this.ON = Symbol('On');\n  this.OFF = Symbol('Off');\n  this.DIM = Symbol('Dim');\n  this.modes = [this.ON, this.DIM, this.OFF];\n  this.nextMode();\n}\n\nLight.prototype = Object.assign(Object.create(THREE.RectAreaLight.prototype), {\n  constructor: Light,\n  nextMode: function nextMode() {\n    var nextMode;\n\n    if (this.currentMode) {\n      if (this.currentMode.mode === this.OFF) {\n        if (Math.random() > 0.2) {\n          nextMode = this.DIM;\n        }\n      } else if (this.currentMode.mode === this.DIM) {\n        if (Math.random() > 0.2) {\n          nextMode = this.OFF;\n        }\n      }\n    }\n\n    if (!nextMode) {\n      nextMode = this.modes[Math.floor(Math.random() * 2)];\n    }\n\n    switch (nextMode) {\n      case this.OFF:\n        {\n          var duration = Math.floor(Math.random() * 0.1 * 60); // 60 FPS\n\n          this.currentMode = {\n            mode: nextMode,\n            duration: duration\n          };\n          break;\n        }\n\n      case this.DIM:\n        {\n          var _duration = Math.floor(Math.random() * 0.1 * 60); // 60 FPS\n\n\n          var intensity = Math.random() / 4;\n          this.currentMode = {\n            mode: nextMode,\n            intensity: intensity,\n            duration: _duration\n          };\n          break;\n        }\n\n      default:\n        {\n          var _duration2 = Math.floor(Math.random() * 3 * 60); // 60 FPS\n\n\n          this.currentMode = {\n            mode: nextMode,\n            duration: _duration2\n          };\n        }\n    }\n  },\n  update: function update() {\n    switch (this.currentMode.mode) {\n      case this.OFF:\n        {\n          this.intensity = 0;\n          break;\n        }\n\n      case this.DIM:\n        {\n          this.intensity = this.currentMode.intensity;\n          break;\n        }\n\n      default:\n        {\n          this.intensity = 1000;\n        }\n    }\n\n    this.currentMode.duration = this.currentMode.duration - 1;\n    this.helper.update();\n\n    if (this.currentMode.duration <= 0) {\n      this.nextMode();\n    }\n  }\n});\n\nfunction initStats() {\n  stats = new Stats();\n  stats.domElement.style.position = 'absolute';\n  stats.domElement.style.left = '0px';\n  stats.domElement.style.top = '20px';\n  stats.setMode(0); // 0: fps, 1: ms\n\n  document.getElementById('stats').appendChild(stats.domElement);\n}\n\nfunction init() {\n  scene = new THREE.Scene(); // axisHelper = new THREE.AxisHelper(50);\n  // scene.add(axisHelper);\n  // ambientLight = new THREE.AmbientLight(0x000000, 0.1);\n  // scene.add(ambientLight);\n\n  var roomWidth = 250;\n  var roomHeight = 100;\n  var roomDepth = 300;\n  var room = new Room(roomWidth, roomHeight, roomDepth);\n  scene.add(room);\n\n  for (var i = 0; i < 30; i += 1) {\n    var bug = new _Bug__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\n    var x = -roomWidth / 2 + 1;\n    var y = -20 + Math.random() * 40;\n    var z = -20 + Math.random() * 40;\n    bug.position.set(x, y, z);\n    bug.rotation.y = Math.PI / 2;\n    bugs.push(bug);\n    scene.add(bug);\n  }\n\n  var light1 = new Light();\n  var light1Pos = {\n    x: 0,\n    y: roomHeight / 2 - 1,\n    z: 0\n  };\n  light1.position.set(light1Pos.x, light1Pos.y, light1Pos.z);\n  light1.lookAt(new THREE.Vector3(light1Pos.x, light1Pos.y - 1, light1Pos.z));\n  lights.push(light1);\n  scene.add(light1);\n  var light2 = new Light();\n  var light2Pos = {\n    x: -roomWidth / 4,\n    y: roomHeight / 2 - 1,\n    z: 0\n  };\n  light2.position.set(light2Pos.x, light2Pos.y, light2Pos.z);\n  light2.lookAt(new THREE.Vector3(light2Pos.x, light2Pos.y - 1, light2Pos.z));\n  lights.push(light2);\n  scene.add(light2);\n  var light3 = new Light();\n  var light3Pos = {\n    x: roomWidth / 4,\n    y: roomHeight / 2 - 1,\n    z: 0\n  };\n  light3.position.set(light3Pos.x, light3Pos.y, light3Pos.z);\n  light3.lookAt(new THREE.Vector3(light3Pos.x, light3Pos.y - 1, light3Pos.z));\n  lights.push(light3);\n  scene.add(light3);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n  renderer.shadowMap.enabled = true;\n  renderer.shadowMap.type = THREE.PCFSoftShadowMap;\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(75, 0, 150);\n  camera.lookAt(origin);\n  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n  initStats();\n}\n\nfunction update() {\n  lights.forEach(function (light) {\n    return light.update();\n  });\n  bugs.forEach(function (bug) {\n    return bug.update();\n  });\n  stats.update();\n  orbitControls.update();\n}\n\nfunction render() {\n  renderer.render(scene, camera);\n}\n\nfunction tick() {\n  update();\n  render();\n  requestAnimationFrame(tick);\n}\n\ninit();\ntick();\n\n//# sourceURL=webpack:///./src/experiments/room-flickering-light/index.js?");
 
 /***/ })
 

@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,189 +79,34 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 51);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/multi-frame-animation/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 51:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/multi-frame-animation/index.js":
+/*!********************************************************!*\
+  !*** ./src/experiments/multi-frame-animation/index.js ***!
+  \********************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-var _bot = __webpack_require__(52);
-
-var _bot2 = _interopRequireDefault(_bot);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var orbitControls = void 0;
-var bot = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-function init() {
-  scene = new THREE.Scene();
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-
-  var gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
-
-  var axisHelper = new THREE.AxesHelper(100);
-  scene.add(axisHelper);
-
-  bot = new _bot2.default();
-  scene.add(bot);
-
-  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(50, 200, -100);
-  scene.add(pointLight);
-}
-
-function update() {
-  orbitControls.update();
-}
-
-function render() {
-  renderer.render(scene, camera);
-}
-
-function tick() {
-  update();
-  render();
-  requestAnimationFrame(tick);
-}
-
-init();
-tick();
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _objects_bot__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./objects/bot */ \"./src/experiments/multi-frame-animation/objects/bot.js\");\n\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar orbitControls;\nvar bot;\nvar clock;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction init() {\n  clock = new THREE.Clock();\n  clock.start();\n  scene = new THREE.Scene();\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(200, 200, 200);\n  camera.lookAt(origin);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n  var gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n  var axisHelper = new THREE.AxesHelper(100);\n  scene.add(axisHelper);\n  bot = new _objects_bot__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\n  scene.add(bot);\n  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n  scene.add(ambientLight);\n  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);\n  pointLight.position.set(50, 200, -100);\n  scene.add(pointLight);\n}\n\nfunction update() {\n  var delta = clock.getDelta();\n  orbitControls.update();\n  bot.update(delta);\n}\n\nfunction render() {\n  renderer.render(scene, camera);\n}\n\nfunction tick() {\n  update();\n  render();\n  requestAnimationFrame(tick);\n}\n\ninit();\ntick();\n\n//# sourceURL=webpack:///./src/experiments/multi-frame-animation/index.js?");
 
 /***/ }),
 
-/***/ 52:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/multi-frame-animation/objects/bot.js":
+/*!**************************************************************!*\
+  !*** ./src/experiments/multi-frame-animation/objects/bot.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Bot = function (_THREE$Object3D) {
-  _inherits(Bot, _THREE$Object3D);
-
-  function Bot() {
-    _classCallCheck(this, Bot);
-
-    var _this = _possibleConstructorReturn(this, (Bot.__proto__ || Object.getPrototypeOf(Bot)).call(this));
-
-    var headSize = new THREE.Vector3(32, 16, 32);
-    var bodySize = new THREE.Vector3(headSize.x, headSize.y * 1.5, headSize.z);
-    var armSize = new THREE.Vector3(headSize.x, bodySize.y / 2, headSize.z / 2);
-    var legSize = new THREE.Vector3(headSize.x / 2 - 2, bodySize.y, headSize.z);
-
-    var headJointPosition = new THREE.Vector3(0, bodySize.y / 2 + headSize.y / 2 + 1, 0);
-
-    var leftArmJointPosition = new THREE.Vector3(bodySize.x / 2 + armSize.x / 2 + 1, -armSize.y / 2, 0);
-
-    var rightArmJointPosition = new THREE.Vector3(-(bodySize.x / 2 + armSize.x / 2 + 1), -armSize.y / 2, 0);
-
-    var armPosition = new THREE.Vector3(0, armSize.y / 2, 0);
-
-    var leftLegJointPosition = new THREE.Vector3(bodySize.x / 4, -(bodySize.y / 2 + 1), 0);
-
-    var rightLegJointPosition = new THREE.Vector3(-(bodySize.x / 4), -(bodySize.y / 2 + 1), 0);
-
-    var legPosition = new THREE.Vector3(0, -legSize.y / 2, 0);
-
-    var jointGeometry = new THREE.SphereGeometry(headSize.x / 2);
-    var jointMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-
-    var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-
-    var bodyGeometry = new THREE.BoxGeometry(bodySize.x, bodySize.y, bodySize.z);
-    var body = new THREE.Mesh(bodyGeometry, material);
-
-    var headJoint = new THREE.Mesh(jointGeometry, jointMaterial);
-    var headGeometry = new THREE.BoxGeometry(headSize.x, headSize.y, headSize.z);
-    var head = new THREE.Mesh(headGeometry, material);
-    headJoint.add(head);
-    headJoint.position.copy(headJointPosition);
-
-    var armGeometry = new THREE.BoxGeometry(armSize.x, armSize.y, armSize.z);
-
-    var rightArmJoint = new THREE.Object3D();
-    var rightArm = new THREE.Mesh(armGeometry, material);
-    rightArmJoint.add(rightArm);
-    rightArm.position.copy(armPosition);
-    rightArmJoint.position.copy(leftArmJointPosition);
-
-    var leftArmJoint = new THREE.Object3D();
-    var leftArm = new THREE.Mesh(armGeometry, material);
-    leftArmJoint.add(leftArm);
-    leftArm.position.copy(armPosition);
-    leftArmJoint.position.copy(rightArmJointPosition);
-
-    var legGeometry = new THREE.BoxGeometry(legSize.x, legSize.y, legSize.z);
-
-    var rightLegJoint = new THREE.Object3D();
-    var rightLeg = new THREE.Mesh(legGeometry, material);
-    rightLegJoint.add(rightLeg);
-    rightLeg.position.copy(legPosition);
-    rightLegJoint.position.copy(rightLegJointPosition);
-
-    var leftLegJoint = new THREE.Object3D();
-    var leftLeg = new THREE.Mesh(legGeometry, material);
-    leftLegJoint.add(leftLeg);
-    leftLeg.position.copy(legPosition);
-    leftLegJoint.position.copy(leftLegJointPosition);
-
-    _this.add(headJoint);
-    _this.add(body);
-    _this.add(rightArmJoint);
-    _this.add(leftArmJoint);
-    _this.add(rightLegJoint);
-    _this.add(leftLegJoint);
-    return _this;
-  }
-
-  return Bot;
-}(THREE.Object3D);
-
-exports.default = Bot;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bot; });\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\n// Notes:\n// * A bone pivot is relative to the parent bone pivot.\n// * A box offset is relative to its bones pivot.\nvar botBone = {\n  name: 'body',\n  pivot: [0, 0, 0],\n  boxes: [{\n    size: [32, 64, 16],\n    offset: [0, 0, 0]\n  }],\n  children: [{\n    name: 'head',\n    pivot: [0, 32, 0],\n    boxes: [{\n      name: 'head',\n      size: [32, 32, 32],\n      offset: [0, 16, 0]\n    }, {\n      name: 'eye',\n      size: [24, 8, 4],\n      offset: [0, 16, 16]\n    }],\n    children: []\n  }, {\n    name: 'leftArm',\n    pivot: [24, 32, 0],\n    boxes: [{\n      size: [16, 64, 16],\n      offset: [0, -32, 0]\n    }],\n    children: []\n  }, {\n    name: 'rightArm',\n    pivot: [-24, 32, 0],\n    boxes: [{\n      size: [16, 64, 16],\n      offset: [0, -32, 0]\n    }],\n    children: []\n  }, {\n    name: 'leftLeg',\n    pivot: [8, -32, 0],\n    boxes: [{\n      size: [16, 64, 16],\n      offset: [0, -32, 0]\n    }],\n    children: []\n  }, {\n    name: 'rightLeg',\n    pivot: [-8, -32, 0],\n    boxes: [{\n      size: [16, 64, 16],\n      offset: [0, -32, 0]\n    }],\n    children: []\n  }]\n};\nvar ANIMATION_WALKING = 'WALKING';\nvar limbRotationDistance = Math.PI / 6;\n\nvar Bot =\n/*#__PURE__*/\nfunction (_THREE$Object3D) {\n  _inherits(Bot, _THREE$Object3D);\n\n  function Bot() {\n    var _this;\n\n    _classCallCheck(this, Bot);\n\n    _this = _possibleConstructorReturn(this, _getPrototypeOf(Bot).call(this));\n    _this.bones = {};\n\n    _this.addBone(_assertThisInitialized(_assertThisInitialized(_this)), botBone);\n\n    _this.currentAnimation = ANIMATION_WALKING;\n    _this.timeElapsed = 0;\n    return _this;\n  }\n\n  _createClass(Bot, [{\n    key: \"addBone\",\n    value: function addBone(parent, bone) {\n      var _this2 = this;\n\n      var pivot = new THREE.Object3D();\n\n      var _bone$pivot = _slicedToArray(bone.pivot, 3),\n          pivotX = _bone$pivot[0],\n          pivotY = _bone$pivot[1],\n          pivotZ = _bone$pivot[2];\n\n      pivot.position.set(pivotX, pivotY, pivotZ);\n      var pivotGeometry = new THREE.SphereGeometry(4, 4, 4);\n      var pivotMaterial = new THREE.MeshStandardMaterial({\n        color: 0xffffff\n      });\n      var pivotMesh = new THREE.Mesh(pivotGeometry, pivotMaterial);\n      pivot.add(pivotMesh);\n      var boxMaterial = new THREE.MeshStandardMaterial({\n        color: 0xffff00,\n        transparent: true,\n        opacity: 0.8\n      });\n      bone.boxes.forEach(function (box) {\n        var _box$offset = _slicedToArray(box.offset, 3),\n            offsetX = _box$offset[0],\n            offsetY = _box$offset[1],\n            offsetZ = _box$offset[2];\n\n        var _box$size = _slicedToArray(box.size, 3),\n            sizeX = _box$size[0],\n            sizeY = _box$size[1],\n            sizeZ = _box$size[2];\n\n        var boxGeometry = new THREE.BoxGeometry(sizeX, sizeY, sizeZ);\n        var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);\n        boxMesh.position.set(offsetX, offsetY, offsetZ);\n        pivot.add(boxMesh);\n      });\n      parent.add(pivot);\n      this.bones[bone.name] = pivot;\n      bone.children.forEach(function (child) {\n        return _this2.addBone(pivot, child);\n      });\n    }\n  }, {\n    key: \"update\",\n    value: function update(delta) {\n      this.timeElapsed += delta;\n\n      switch (this.currentAnimation) {\n        case ANIMATION_WALKING:\n          {\n            var radians = this.timeElapsed * Math.PI * 2;\n            var position = Math.cos(radians);\n            var rotation = position * limbRotationDistance;\n            this.bones.rightLeg.rotation.x = -rotation;\n            this.bones.leftLeg.rotation.x = rotation;\n            this.bones.rightArm.rotation.x = rotation;\n            this.bones.leftArm.rotation.x = -rotation;\n            break;\n          }\n\n        default:\n          {// Do nothing\n          }\n      }\n    }\n  }]);\n\n  return Bot;\n}(THREE.Object3D);\n\n\n\n//# sourceURL=webpack:///./src/experiments/multi-frame-animation/objects/bot.js?");
 
 /***/ })
 

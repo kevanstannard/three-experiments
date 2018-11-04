@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,293 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/geometry-uvs/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 22:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/geometry-uvs/index.js":
+/*!***********************************************!*\
+  !*** ./src/experiments/geometry-uvs/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axisHelper = void 0;
-var gridHelper = void 0;
-var controls = void 0;
-var ambientLight = void 0;
-var plane = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-var textures = {};
-
-function loadTexture(id, url) {
-  return new Promise(function (resolve) {
-    var loader = new THREE.TextureLoader();
-    loader.load(url, function (texture) {
-      textures[id] = texture;
-      resolve();
-    });
-  });
-}
-
-function load() {
-  var promises = [];
-  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));
-  return Promise.all(promises);
-}
-
-function UVSizeAnimation(geometry) {
-  this.geometry = geometry;
-  this.original = geometry.clone();
-  this.deltaMin = 0.5;
-  this.deltaMax = 1;
-  this.delta = this.deltaMax;
-  this.speed = 0.005;
-  this.direction = -1;
-}
-
-UVSizeAnimation.prototype = {
-  updateDelta: function updateDelta() {
-    var newDelta = this.delta + this.speed * this.direction;
-    if (newDelta < this.deltaMin) {
-      newDelta = this.deltaMin;
-      this.direction = 1;
-    } else if (newDelta > this.deltaMax) {
-      newDelta = this.deltaMax;
-      this.direction = -1;
-    }
-    this.delta = newDelta;
-  },
-  update: function update() {
-    this.updateDelta();
-    var triangles = this.original.faceVertexUvs[0];
-    for (var i = 0; i < triangles.length; i += 1) {
-      var tri = this.geometry.faceVertexUvs[0][i];
-      var orig = this.original.faceVertexUvs[0][i];
-      for (var j = 0; j < tri.length; j += 1) {
-        tri[j].x = orig[j].x * this.delta;
-        tri[j].y = orig[j].y * this.delta;
-      }
-    }
-    this.geometry.uvsNeedUpdate = true;
-  }
-};
-
-function AnimatedPlaneGeometry(size) {
-  THREE.PlaneGeometry.call(this, size, size, 1);
-  this.animation = new UVSizeAnimation(this);
-}
-
-AnimatedPlaneGeometry.prototype = Object.assign(Object.create(THREE.PlaneGeometry.prototype), {
-  constructor: AnimatedPlaneGeometry,
-  update: function update() {
-    this.animation.update();
-  }
-});
-
-function AnimatedPlane() {
-  this.geometry = new AnimatedPlaneGeometry(100);
-  this.material = new THREE.MeshBasicMaterial({
-    side: THREE.DoubleSide,
-    map: textures.free
-    // wireframe: true,
-  });
-  THREE.Mesh.call(this, this.geometry, this.material);
-}
-
-AnimatedPlane.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-  constructor: AnimatedPlane,
-  update: function update() {
-    this.geometry.update();
-  }
-});
-
-function init() {
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(100, 120, 140);
-  camera.lookAt(origin);
-
-  scene = new THREE.Scene();
-
-  gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
-
-  axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
-
-  plane = new AnimatedPlane();
-  scene.add(plane);
-
-  // console.log(plane.geometry);
-
-  // console.log(geometry);
-  // console.log(JSON.stringify(geometry.faceVertexUvs, null, 2));
-
-  // geometry.vertices
-  //
-  // [
-  //   {
-  //     "x": -50,
-  //     "y": 50,
-  //     "z": 0
-  //   },
-  //   {
-  //     "x": 50,
-  //     "y": 50,
-  //     "z": 0
-  //   },
-  //   {
-  //     "x": -50,
-  //     "y": -50,
-  //     "z": 0
-  //   },
-  //   {
-  //     "x": 50,
-  //     "y": -50,
-  //     "z": 0
-  //   }
-  // ]
-
-  // geometry.faceVertexUvs
-  //
-  // [
-  //   [
-  //     [
-  //       {
-  //         "x": 0,
-  //         "y": 1
-  //       },
-  //       {
-  //         "x": 0,
-  //         "y": 0
-  //       },
-  //       {
-  //         "x": 1,
-  //         "y": 1
-  //       }
-  //     ],
-  //     [
-  //       {
-  //         "x": 0,
-  //         "y": 0
-  //       },
-  //       {
-  //         "x": 1,
-  //         "y": 0
-  //       },
-  //       {
-  //         "x": 1,
-  //         "y": 1
-  //       }
-  //     ]
-  //   ]
-  // ]
-
-  // geometry.faces
-  // [
-  //   {
-  //     "a": 0,
-  //     "b": 2,
-  //     "c": 1,
-  //     "normal": {
-  //       "x": 0,
-  //       "y": 0,
-  //       "z": 1
-  //     },
-  //     "vertexNormals": [
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       },
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       },
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       }
-  //     ],
-  //     "color": 16777215,
-  //     "vertexColors": [],
-  //     "materialIndex": 0
-  //   },
-  //   {
-  //     "a": 2,
-  //     "b": 3,
-  //     "c": 1,
-  //     "normal": {
-  //       "x": 0,
-  //       "y": 0,
-  //       "z": 1
-  //     },
-  //     "vertexNormals": [
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       },
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       },
-  //       {
-  //         "x": 0,
-  //         "y": 0,
-  //         "z": 1
-  //       }
-  //     ],
-  //     "color": 16777215,
-  //     "vertexColors": [],
-  //     "materialIndex": 0
-  //   }
-  // ]
-
-  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-function update() {
-  plane.update();
-  controls.update();
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  update();
-  renderer.render(scene, camera);
-}
-
-load().then(function () {
-  init();
-  animate();
-});
+eval("var SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axisHelper;\nvar gridHelper;\nvar controls;\nvar ambientLight;\nvar plane;\nvar origin = new THREE.Vector3(0, 0, 0);\nvar textures = {};\n\nfunction loadTexture(id, url) {\n  return new Promise(function (resolve) {\n    var loader = new THREE.TextureLoader();\n    loader.load(url, function (texture) {\n      textures[id] = texture;\n      resolve();\n    });\n  });\n}\n\nfunction load() {\n  var promises = [];\n  promises.push(loadTexture('free', '../../assets/textures/misc/free.jpg'));\n  return Promise.all(promises);\n}\n\nfunction UVSizeAnimation(geometry) {\n  this.geometry = geometry;\n  this.original = geometry.clone();\n  this.deltaMin = 0.5;\n  this.deltaMax = 1;\n  this.delta = this.deltaMax;\n  this.speed = 0.005;\n  this.direction = -1;\n}\n\nUVSizeAnimation.prototype = {\n  updateDelta: function updateDelta() {\n    var newDelta = this.delta + this.speed * this.direction;\n\n    if (newDelta < this.deltaMin) {\n      newDelta = this.deltaMin;\n      this.direction = 1;\n    } else if (newDelta > this.deltaMax) {\n      newDelta = this.deltaMax;\n      this.direction = -1;\n    }\n\n    this.delta = newDelta;\n  },\n  update: function update() {\n    this.updateDelta();\n    var triangles = this.original.faceVertexUvs[0];\n\n    for (var i = 0; i < triangles.length; i += 1) {\n      var tri = this.geometry.faceVertexUvs[0][i];\n      var orig = this.original.faceVertexUvs[0][i];\n\n      for (var j = 0; j < tri.length; j += 1) {\n        tri[j].x = orig[j].x * this.delta;\n        tri[j].y = orig[j].y * this.delta;\n      }\n    }\n\n    this.geometry.uvsNeedUpdate = true;\n  }\n};\n\nfunction AnimatedPlaneGeometry(size) {\n  THREE.PlaneGeometry.call(this, size, size, 1);\n  this.animation = new UVSizeAnimation(this);\n}\n\nAnimatedPlaneGeometry.prototype = Object.assign(Object.create(THREE.PlaneGeometry.prototype), {\n  constructor: AnimatedPlaneGeometry,\n  update: function update() {\n    this.animation.update();\n  }\n});\n\nfunction AnimatedPlane() {\n  this.geometry = new AnimatedPlaneGeometry(100);\n  this.material = new THREE.MeshBasicMaterial({\n    side: THREE.DoubleSide,\n    map: textures.free // wireframe: true,\n\n  });\n  THREE.Mesh.call(this, this.geometry, this.material);\n}\n\nAnimatedPlane.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {\n  constructor: AnimatedPlane,\n  update: function update() {\n    this.geometry.update();\n  }\n});\n\nfunction init() {\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(100, 120, 140);\n  camera.lookAt(origin);\n  scene = new THREE.Scene();\n  gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n  axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper);\n  plane = new AnimatedPlane();\n  scene.add(plane); // console.log(plane.geometry);\n  // console.log(geometry);\n  // console.log(JSON.stringify(geometry.faceVertexUvs, null, 2));\n  // geometry.vertices\n  //\n  // [\n  //   {\n  //     \"x\": -50,\n  //     \"y\": 50,\n  //     \"z\": 0\n  //   },\n  //   {\n  //     \"x\": 50,\n  //     \"y\": 50,\n  //     \"z\": 0\n  //   },\n  //   {\n  //     \"x\": -50,\n  //     \"y\": -50,\n  //     \"z\": 0\n  //   },\n  //   {\n  //     \"x\": 50,\n  //     \"y\": -50,\n  //     \"z\": 0\n  //   }\n  // ]\n  // geometry.faceVertexUvs\n  //\n  // [\n  //   [\n  //     [\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 1\n  //       },\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0\n  //       },\n  //       {\n  //         \"x\": 1,\n  //         \"y\": 1\n  //       }\n  //     ],\n  //     [\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0\n  //       },\n  //       {\n  //         \"x\": 1,\n  //         \"y\": 0\n  //       },\n  //       {\n  //         \"x\": 1,\n  //         \"y\": 1\n  //       }\n  //     ]\n  //   ]\n  // ]\n  // geometry.faces\n  // [\n  //   {\n  //     \"a\": 0,\n  //     \"b\": 2,\n  //     \"c\": 1,\n  //     \"normal\": {\n  //       \"x\": 0,\n  //       \"y\": 0,\n  //       \"z\": 1\n  //     },\n  //     \"vertexNormals\": [\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       },\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       },\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       }\n  //     ],\n  //     \"color\": 16777215,\n  //     \"vertexColors\": [],\n  //     \"materialIndex\": 0\n  //   },\n  //   {\n  //     \"a\": 2,\n  //     \"b\": 3,\n  //     \"c\": 1,\n  //     \"normal\": {\n  //       \"x\": 0,\n  //       \"y\": 0,\n  //       \"z\": 1\n  //     },\n  //     \"vertexNormals\": [\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       },\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       },\n  //       {\n  //         \"x\": 0,\n  //         \"y\": 0,\n  //         \"z\": 1\n  //       }\n  //     ],\n  //     \"color\": 16777215,\n  //     \"vertexColors\": [],\n  //     \"materialIndex\": 0\n  //   }\n  // ]\n\n  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n  scene.add(ambientLight);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(window.innerWidth, window.innerHeight);\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nfunction update() {\n  plane.update();\n  controls.update();\n}\n\nfunction animate() {\n  requestAnimationFrame(animate);\n  update();\n  renderer.render(scene, camera);\n}\n\nload().then(function () {\n  init();\n  animate();\n});\n\n//# sourceURL=webpack:///./src/experiments/geometry-uvs/index.js?");
 
 /***/ })
 

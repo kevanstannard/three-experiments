@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,364 +79,70 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 46);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/moving-spheres/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 46:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/moving-spheres/index.js":
+/*!*************************************************!*\
+  !*** ./src/experiments/moving-spheres/index.js ***!
+  \*************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-var _stationary = __webpack_require__(47);
-
-var _stationary2 = _interopRequireDefault(_stationary);
-
-var _perimeter = __webpack_require__(48);
-
-var _perimeter2 = _interopRequireDefault(_perimeter);
-
-var _circleTarget = __webpack_require__(49);
-
-var _circleTarget2 = _interopRequireDefault(_circleTarget);
-
-var _bot = __webpack_require__(50);
-
-var _bot2 = _interopRequireDefault(_bot);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axesHelper = void 0;
-var gridHelper = void 0;
-var controls = void 0;
-var pointLight = void 0;
-var ambientLight = void 0;
-
-var prevTime = Date.now();
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-var bots = [];
-
-var bot0 = new _bot2.default({
-  name: 'Bot 0',
-  radius: 10,
-  color: '#777777',
-  move: new _stationary2.default()
-});
-bots.push(bot0);
-
-var bot1 = new _bot2.default({
-  name: 'Bot 1',
-  radius: 10,
-  color: '#ff0000',
-  move: new _perimeter2.default({
-    speed: 40,
-    boundary: [new THREE.Vector3(-50, 0, -50), new THREE.Vector3(50, 0, -50), new THREE.Vector3(50, 0, 50), new THREE.Vector3(-50, 0, 50)]
-  })
-});
-bots.push(bot1);
-
-var bot2 = new _bot2.default({
-  name: 'Bot 2',
-  radius: 30,
-  color: '#0000ff',
-  move: new _perimeter2.default({
-    speed: 20,
-    boundary: [new THREE.Vector3(-100, 0, -100), new THREE.Vector3(100, 0, -100), new THREE.Vector3(100, 0, 100), new THREE.Vector3(-100, 0, 100)]
-  })
-});
-bots.push(bot2);
-
-var bot3 = new _bot2.default({
-  name: 'Bot 3',
-  radius: 5,
-  color: '#ffff00',
-  move: new _circleTarget2.default({
-    speed: Math.PI / 2,
-    radius: 20,
-    target: bot1
-  })
-});
-bots.push(bot3);
-
-function init() {
-  scene = new THREE.Scene();
-
-  gridHelper = new THREE.GridHelper(200, 10);
-  scene.add(gridHelper);
-
-  axesHelper = new THREE.AxesHelper(100);
-  scene.add(axesHelper);
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
-
-  bots.forEach(function (bot) {
-    return scene.add(bot);
-  });
-
-  ambientLight = new THREE.AmbientLight(0x444444);
-  scene.add(ambientLight);
-
-  pointLight = new THREE.PointLight(0x0000ff, 1, 1000);
-  pointLight.position.set(100, 100, 100);
-  scene.add(pointLight);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-function update() {
-  var time = Date.now();
-  var delta = time - prevTime;
-  prevTime = time;
-  bots.forEach(function (bot) {
-    return bot.update(delta);
-  });
-  controls.update();
-}
-
-function render() {
-  renderer.render(scene, camera);
-}
-
-function tick() {
-  update();
-  render();
-  requestAnimationFrame(tick);
-}
-
-init();
-tick();
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _move_stationary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./move/stationary */ \"./src/experiments/moving-spheres/move/stationary.js\");\n/* harmony import */ var _move_perimeter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./move/perimeter */ \"./src/experiments/moving-spheres/move/perimeter.js\");\n/* harmony import */ var _move_circle_target__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./move/circle-target */ \"./src/experiments/moving-spheres/move/circle-target.js\");\n/* harmony import */ var _objects_bot__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./objects/bot */ \"./src/experiments/moving-spheres/objects/bot.js\");\n\n\n\n\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axesHelper;\nvar gridHelper;\nvar controls;\nvar pointLight;\nvar ambientLight;\nvar prevTime = Date.now();\nvar origin = new THREE.Vector3(0, 0, 0);\nvar bots = [];\nvar bot0 = new _objects_bot__WEBPACK_IMPORTED_MODULE_3__[\"default\"]({\n  name: 'Bot 0',\n  radius: 10,\n  color: '#777777',\n  move: new _move_stationary__WEBPACK_IMPORTED_MODULE_0__[\"default\"]()\n});\nbots.push(bot0);\nvar bot1 = new _objects_bot__WEBPACK_IMPORTED_MODULE_3__[\"default\"]({\n  name: 'Bot 1',\n  radius: 10,\n  color: '#ff0000',\n  move: new _move_perimeter__WEBPACK_IMPORTED_MODULE_1__[\"default\"]({\n    speed: 40,\n    boundary: [new THREE.Vector3(-50, 0, -50), new THREE.Vector3(50, 0, -50), new THREE.Vector3(50, 0, 50), new THREE.Vector3(-50, 0, 50)]\n  })\n});\nbots.push(bot1);\nvar bot2 = new _objects_bot__WEBPACK_IMPORTED_MODULE_3__[\"default\"]({\n  name: 'Bot 2',\n  radius: 30,\n  color: '#0000ff',\n  move: new _move_perimeter__WEBPACK_IMPORTED_MODULE_1__[\"default\"]({\n    speed: 20,\n    boundary: [new THREE.Vector3(-100, 0, -100), new THREE.Vector3(100, 0, -100), new THREE.Vector3(100, 0, 100), new THREE.Vector3(-100, 0, 100)]\n  })\n});\nbots.push(bot2);\nvar bot3 = new _objects_bot__WEBPACK_IMPORTED_MODULE_3__[\"default\"]({\n  name: 'Bot 3',\n  radius: 5,\n  color: '#ffff00',\n  move: new _move_circle_target__WEBPACK_IMPORTED_MODULE_2__[\"default\"]({\n    speed: Math.PI / 2,\n    radius: 20,\n    target: bot1\n  })\n});\nbots.push(bot3);\n\nfunction init() {\n  scene = new THREE.Scene();\n  gridHelper = new THREE.GridHelper(200, 10);\n  scene.add(gridHelper);\n  axesHelper = new THREE.AxesHelper(100);\n  scene.add(axesHelper);\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(200, 200, 200);\n  camera.lookAt(origin);\n  bots.forEach(function (bot) {\n    return scene.add(bot);\n  });\n  ambientLight = new THREE.AmbientLight(0x444444);\n  scene.add(ambientLight);\n  pointLight = new THREE.PointLight(0x0000ff, 1, 1000);\n  pointLight.position.set(100, 100, 100);\n  scene.add(pointLight);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(window.innerWidth, window.innerHeight);\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nfunction update() {\n  var time = Date.now();\n  var delta = time - prevTime;\n  prevTime = time;\n  bots.forEach(function (bot) {\n    return bot.update(delta);\n  });\n  controls.update();\n}\n\nfunction render() {\n  renderer.render(scene, camera);\n}\n\nfunction tick() {\n  update();\n  render();\n  requestAnimationFrame(tick);\n}\n\ninit();\ntick();\n\n//# sourceURL=webpack:///./src/experiments/moving-spheres/index.js?");
 
 /***/ }),
 
-/***/ 47:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/moving-spheres/move/circle-target.js":
+/*!**************************************************************!*\
+  !*** ./src/experiments/moving-spheres/move/circle-target.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/* eslint class-methods-use-this: off */
-
-var zero = new THREE.Vector3();
-
-var Stationary = function () {
-  function Stationary() {
-    _classCallCheck(this, Stationary);
-  }
-
-  _createClass(Stationary, [{
-    key: "getMoveVector",
-    value: function getMoveVector() {
-      return zero;
-    }
-  }]);
-
-  return Stationary;
-}();
-
-exports.default = Stationary;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return CircleTarget; });\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar CircleTarget =\n/*#__PURE__*/\nfunction () {\n  function CircleTarget(_ref) {\n    var speed = _ref.speed,\n        radius = _ref.radius,\n        target = _ref.target;\n\n    _classCallCheck(this, CircleTarget);\n\n    this.speed = speed; // radians per second\n\n    this.radius = radius;\n    this.target = target;\n    this.angle = 0;\n  }\n\n  _createClass(CircleTarget, [{\n    key: \"getMoveVector\",\n    value: function getMoveVector(currentPosition, delta) {\n      var angleToMove = delta / 1000 * this.speed;\n      this.angle = this.angle + angleToMove;\n      var x = this.radius * Math.cos(this.angle);\n      var z = this.radius * Math.sin(this.angle);\n      var y = 0;\n      var targetPosition = new THREE.Vector3(this.target.position.x + x, this.target.position.y + y, this.target.position.z + z);\n      var moveVector = targetPosition.clone().sub(currentPosition);\n      return moveVector;\n    }\n  }]);\n\n  return CircleTarget;\n}();\n\n\n\n//# sourceURL=webpack:///./src/experiments/moving-spheres/move/circle-target.js?");
 
 /***/ }),
 
-/***/ 48:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/moving-spheres/move/perimeter.js":
+/*!**********************************************************!*\
+  !*** ./src/experiments/moving-spheres/move/perimeter.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Perimeter = function () {
-  function Perimeter(_ref) {
-    var speed = _ref.speed,
-        boundary = _ref.boundary;
-
-    _classCallCheck(this, Perimeter);
-
-    this.speed = speed;
-    this.targetPositions = boundary;
-    this.targetPositionIndex = -1;
-    this.targetPosition = null;
-  }
-
-  _createClass(Perimeter, [{
-    key: "getMoveVector",
-    value: function getMoveVector(currentPosition, delta) {
-      if (!this.targetPosition) {
-        this.targetPositionIndex = 1;
-        this.targetPosition = this.targetPositions[this.targetPositionIndex];
-        return this.targetPositions[0];
-      }
-
-      var distanceToMove = delta / 1000 * this.speed;
-      var vectorToTarget = this.targetPosition.clone().sub(currentPosition);
-      var distanceToTarget = currentPosition.distanceTo(this.targetPosition);
-
-      var moveVector = void 0;
-      if (distanceToMove >= distanceToTarget) {
-        moveVector = vectorToTarget;
-        this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.length;
-        this.targetPosition = this.targetPositions[this.targetPositionIndex];
-      } else {
-        moveVector = vectorToTarget.normalize().multiplyScalar(distanceToMove);
-      }
-
-      return moveVector;
-    }
-  }]);
-
-  return Perimeter;
-}();
-
-exports.default = Perimeter;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Perimeter; });\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar Perimeter =\n/*#__PURE__*/\nfunction () {\n  function Perimeter(_ref) {\n    var speed = _ref.speed,\n        boundary = _ref.boundary;\n\n    _classCallCheck(this, Perimeter);\n\n    this.speed = speed;\n    this.targetPositions = boundary;\n    this.targetPositionIndex = -1;\n    this.targetPosition = null;\n  }\n\n  _createClass(Perimeter, [{\n    key: \"getMoveVector\",\n    value: function getMoveVector(currentPosition, delta) {\n      if (!this.targetPosition) {\n        this.targetPositionIndex = 1;\n        this.targetPosition = this.targetPositions[this.targetPositionIndex];\n        return this.targetPositions[0];\n      }\n\n      var distanceToMove = delta / 1000 * this.speed;\n      var vectorToTarget = this.targetPosition.clone().sub(currentPosition);\n      var distanceToTarget = currentPosition.distanceTo(this.targetPosition);\n      var moveVector;\n\n      if (distanceToMove >= distanceToTarget) {\n        moveVector = vectorToTarget;\n        this.targetPositionIndex = (this.targetPositionIndex + 1) % this.targetPositions.length;\n        this.targetPosition = this.targetPositions[this.targetPositionIndex];\n      } else {\n        moveVector = vectorToTarget.normalize().multiplyScalar(distanceToMove);\n      }\n\n      return moveVector;\n    }\n  }]);\n\n  return Perimeter;\n}();\n\n\n\n//# sourceURL=webpack:///./src/experiments/moving-spheres/move/perimeter.js?");
 
 /***/ }),
 
-/***/ 49:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/moving-spheres/move/stationary.js":
+/*!***********************************************************!*\
+  !*** ./src/experiments/moving-spheres/move/stationary.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var CircleTarget = function () {
-  function CircleTarget(_ref) {
-    var speed = _ref.speed,
-        radius = _ref.radius,
-        target = _ref.target;
-
-    _classCallCheck(this, CircleTarget);
-
-    this.speed = speed; // radians per second
-    this.radius = radius;
-    this.target = target;
-    this.angle = 0;
-  }
-
-  _createClass(CircleTarget, [{
-    key: "getMoveVector",
-    value: function getMoveVector(currentPosition, delta) {
-      var angleToMove = delta / 1000 * this.speed;
-      this.angle = this.angle + angleToMove;
-
-      var x = this.radius * Math.cos(this.angle);
-      var z = this.radius * Math.sin(this.angle);
-      var y = 0;
-
-      var targetPosition = new THREE.Vector3(this.target.position.x + x, this.target.position.y + y, this.target.position.z + z);
-
-      var moveVector = targetPosition.clone().sub(currentPosition);
-
-      return moveVector;
-    }
-  }]);
-
-  return CircleTarget;
-}();
-
-exports.default = CircleTarget;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Stationary; });\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\n/* eslint class-methods-use-this: off */\nvar zero = new THREE.Vector3();\n\nvar Stationary =\n/*#__PURE__*/\nfunction () {\n  function Stationary() {\n    _classCallCheck(this, Stationary);\n  }\n\n  _createClass(Stationary, [{\n    key: \"getMoveVector\",\n    value: function getMoveVector() {\n      return zero;\n    }\n  }]);\n\n  return Stationary;\n}();\n\n\n\n//# sourceURL=webpack:///./src/experiments/moving-spheres/move/stationary.js?");
 
 /***/ }),
 
-/***/ 50:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/moving-spheres/objects/bot.js":
+/*!*******************************************************!*\
+  !*** ./src/experiments/moving-spheres/objects/bot.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Bot = function (_THREE$Object3D) {
-  _inherits(Bot, _THREE$Object3D);
-
-  function Bot(props) {
-    _classCallCheck(this, Bot);
-
-    var _this = _possibleConstructorReturn(this, (Bot.__proto__ || Object.getPrototypeOf(Bot)).call(this));
-
-    var name = props.name,
-        radius = props.radius,
-        color = props.color,
-        move = props.move;
-
-
-    var geometry = new THREE.SphereBufferGeometry(radius, 32, 32);
-    var material = new THREE.MeshBasicMaterial({ color: color });
-    var mesh = new THREE.Mesh(geometry, material);
-    _this.add(mesh);
-
-    _this.name = name;
-    _this.radius = radius;
-    _this.move = move;
-    return _this;
-  }
-
-  _createClass(Bot, [{
-    key: "update",
-    value: function update(delta) {
-      var moveVector = this.move.getMoveVector(this.position, delta);
-      this.position.add(moveVector);
-    }
-  }]);
-
-  return Bot;
-}(THREE.Object3D);
-
-exports.default = Bot;
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bot; });\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nvar Bot =\n/*#__PURE__*/\nfunction (_THREE$Object3D) {\n  _inherits(Bot, _THREE$Object3D);\n\n  function Bot(props) {\n    var _this;\n\n    _classCallCheck(this, Bot);\n\n    _this = _possibleConstructorReturn(this, _getPrototypeOf(Bot).call(this));\n    var name = props.name,\n        radius = props.radius,\n        color = props.color,\n        move = props.move;\n    var geometry = new THREE.SphereBufferGeometry(radius, 32, 32);\n    var material = new THREE.MeshBasicMaterial({\n      color: color\n    });\n    var mesh = new THREE.Mesh(geometry, material);\n\n    _this.add(mesh);\n\n    _this.name = name;\n    _this.radius = radius;\n    _this.move = move;\n    return _this;\n  }\n\n  _createClass(Bot, [{\n    key: \"update\",\n    value: function update(delta) {\n      var moveVector = this.move.getMoveVector(this.position, delta);\n      this.position.add(moveVector);\n    }\n  }]);\n\n  return Bot;\n}(THREE.Object3D);\n\n\n\n//# sourceURL=webpack:///./src/experiments/moving-spheres/objects/bot.js?");
 
 /***/ })
 

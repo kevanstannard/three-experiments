@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,125 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 57);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/multiple-objects-joined/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 57:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/multiple-objects-joined/index.js":
+/*!**********************************************************!*\
+  !*** ./src/experiments/multiple-objects-joined/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axisHelper = void 0;
-var gridHelper = void 0;
-var thing = void 0;
-var controls = void 0;
-var pointLight = void 0;
-
-var angle = 0;
-var radius = 40;
-var origin = new THREE.Vector3(0, 0, 0);
-
-function init() {
-  scene = new THREE.Scene();
-
-  gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
-
-  axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(100, 100, 100);
-  camera.lookAt(origin);
-
-  var material = new THREE.MeshLambertMaterial({ wireframe: false });
-
-  thing = new THREE.Object3D();
-
-  var largeSize = 20;
-  var smallSize = largeSize / 4;
-
-  var positions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-
-  positions.forEach(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        largePosX = _ref2[0],
-        largePosY = _ref2[1];
-
-    var largeX = largePosX * largeSize;
-    var largeY = largePosY * largeSize;
-    var largeGeometry = new THREE.BoxGeometry(largeSize, largeSize, largeSize);
-    var largeBox = new THREE.Mesh(largeGeometry, material);
-    largeBox.position.set(largeX, largeY, 0);
-    thing.add(largeBox);
-
-    positions.forEach(function (_ref3) {
-      var _ref4 = _slicedToArray(_ref3, 2),
-          smallPosX = _ref4[0],
-          smallPosY = _ref4[1];
-
-      var smallX = smallPosX * smallSize * 2.5;
-      var smallY = smallPosY * smallSize * 2.5;
-      var smallGeometry = new THREE.SphereGeometry(smallSize, 16, 16);
-      var smallBox = new THREE.Mesh(smallGeometry, material);
-      smallBox.position.set(smallX, smallY, 0);
-      largeBox.add(smallBox);
-    });
-  });
-
-  scene.add(thing);
-
-  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(100, 100, 100);
-  scene.add(pointLight);
-
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-function update() {
-  angle += 0.005;
-  var x = radius * Math.cos(angle);
-  var y = radius * Math.sin(angle);
-  var z = 0;
-  thing.position.set(x, y, z);
-  thing.rotation.x += 0.005;
-  thing.rotation.y += 0.005;
-  thing.rotation.z += 0.005;
-
-  controls.update();
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  update();
-  renderer.render(scene, camera);
-}
-
-init();
-animate();
+eval("function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axisHelper;\nvar gridHelper;\nvar thing;\nvar controls;\nvar pointLight;\nvar angle = 0;\nvar radius = 40;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction init() {\n  scene = new THREE.Scene();\n  gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n  axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper);\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(100, 100, 100);\n  camera.lookAt(origin);\n  var material = new THREE.MeshLambertMaterial({\n    wireframe: false\n  });\n  thing = new THREE.Object3D();\n  var largeSize = 20;\n  var smallSize = largeSize / 4;\n  var positions = [[0, 1], [1, 0], [0, -1], [-1, 0]];\n  positions.forEach(function (_ref) {\n    var _ref2 = _slicedToArray(_ref, 2),\n        largePosX = _ref2[0],\n        largePosY = _ref2[1];\n\n    var largeX = largePosX * largeSize;\n    var largeY = largePosY * largeSize;\n    var largeGeometry = new THREE.BoxGeometry(largeSize, largeSize, largeSize);\n    var largeBox = new THREE.Mesh(largeGeometry, material);\n    largeBox.position.set(largeX, largeY, 0);\n    thing.add(largeBox);\n    positions.forEach(function (_ref3) {\n      var _ref4 = _slicedToArray(_ref3, 2),\n          smallPosX = _ref4[0],\n          smallPosY = _ref4[1];\n\n      var smallX = smallPosX * smallSize * 2.5;\n      var smallY = smallPosY * smallSize * 2.5;\n      var smallGeometry = new THREE.SphereGeometry(smallSize, 16, 16);\n      var smallBox = new THREE.Mesh(smallGeometry, material);\n      smallBox.position.set(smallX, smallY, 0);\n      largeBox.add(smallBox);\n    });\n  });\n  scene.add(thing);\n  pointLight = new THREE.PointLight(0xffffff, 1, 1000);\n  pointLight.position.set(100, 100, 100);\n  scene.add(pointLight);\n  renderer = new THREE.WebGLRenderer();\n  renderer.setSize(window.innerWidth, window.innerHeight);\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nfunction update() {\n  angle += 0.005;\n  var x = radius * Math.cos(angle);\n  var y = radius * Math.sin(angle);\n  var z = 0;\n  thing.position.set(x, y, z);\n  thing.rotation.x += 0.005;\n  thing.rotation.y += 0.005;\n  thing.rotation.z += 0.005;\n  controls.update();\n}\n\nfunction animate() {\n  requestAnimationFrame(animate);\n  update();\n  renderer.render(scene, camera);\n}\n\ninit();\nanimate();\n\n//# sourceURL=webpack:///./src/experiments/multiple-objects-joined/index.js?");
 
 /***/ })
 

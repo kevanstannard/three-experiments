@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,222 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 76);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/shadows-on-material/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 76:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/shadows-on-material/index.js":
+/*!******************************************************!*\
+  !*** ./src/experiments/shadows-on-material/index.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axisHelper = void 0;
-var gridHelper = void 0;
-var box = void 0;
-var floor = void 0;
-var controls = void 0;
-var redLight = void 0;
-var blueLight = void 0;
-var greenLight = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-function init() {
-  //
-  //
-  // SCENE
-  //
-  //
-
-  scene = new THREE.Scene();
-
-  //
-  //
-  // GRID HELPER
-  //
-  //
-
-  gridHelper = new THREE.GridHelper(100, 10);
-  gridHelper.material.transparent = true;
-  gridHelper.material.opacity = 0.25;
-  scene.add(gridHelper);
-
-  //
-  //
-  // AXIS HELPER
-  //
-  //
-
-  axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
-
-  //
-  //
-  // CAMERA
-  //
-  //
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
-
-  //
-  //
-  // FLOOR
-  //
-  //
-
-  var loader = new THREE.TextureLoader();
-  loader.load('../../assets/textures/misc/green-eye.png', function (texture) {
-    var floorGeometry = new THREE.PlaneGeometry(200, 200);
-    var floorMaterial = new THREE.MeshLambertMaterial({
-      side: THREE.DoubleSide,
-      map: texture,
-      transparent: true
-    });
-    floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.receiveShadow = true;
-    scene.add(floor);
-  });
-
-  //
-  //
-  // BOX
-  //
-  //
-
-  var boxGeometry = new THREE.BoxGeometry(20, 20, 20);
-  var boxMaterial = new THREE.MeshStandardMaterial();
-  box = new THREE.Mesh(boxGeometry, boxMaterial);
-  box.position.y = 40;
-  box.castShadow = true;
-  box.receiveShadow = false;
-
-  scene.add(box);
-
-  //
-  //
-  // LIGHTS
-  //
-  //
-
-  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  redLight = new THREE.PointLight(0xff0000, 2, 500);
-  redLight.castShadow = true;
-  redLight.position.set(-50, 100, 50);
-  scene.add(redLight);
-
-  blueLight = new THREE.PointLight(0x0000ff, 2, 500);
-  blueLight.castShadow = true;
-  blueLight.position.set(50, 100, -50);
-  scene.add(blueLight);
-
-  greenLight = new THREE.PointLight(0x00ff00, 1, 500);
-  greenLight.castShadow = true;
-  greenLight.position.set(50, 100, 50);
-  scene.add(greenLight);
-
-  //
-  //
-  // HELPERS
-  //
-  //
-
-  var sphereSize = 4;
-
-  var redPointLightHelper = new THREE.PointLightHelper(redLight, sphereSize);
-  scene.add(redPointLightHelper);
-
-  var redLightShadowHelper = new THREE.CameraHelper(redLight.shadow.camera);
-  redLightShadowHelper.material.transparent = true;
-  redLightShadowHelper.material.opacity = 0.25;
-  scene.add(redLightShadowHelper);
-
-  var bluePointLightHelper = new THREE.PointLightHelper(blueLight, sphereSize);
-  scene.add(bluePointLightHelper);
-
-  var blueLightShadowHelper = new THREE.CameraHelper(blueLight.shadow.camera);
-  blueLightShadowHelper.material.transparent = true;
-  blueLightShadowHelper.material.opacity = 0.25;
-  scene.add(blueLightShadowHelper);
-
-  var greenPointLightHelper = new THREE.PointLightHelper(greenLight, sphereSize);
-  scene.add(greenPointLightHelper);
-
-  var greenLightShadowHelper = new THREE.CameraHelper(greenLight.shadow.camera);
-  greenLightShadowHelper.material.transparent = true;
-  greenLightShadowHelper.material.opacity = 0.25;
-  scene.add(greenLightShadowHelper);
-
-  //
-  //
-  // RENDERER
-  //
-  //
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  // Enable shadows
-  renderer.shadowMap.enabled = true;
-
-  // Antialias the shadows
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  //
-  //
-  // ORBIT CONTROLS
-  //
-  //
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-var radius = 0.25;
-var angle = 0;
-
-function update() {
-  box.rotation.x += 0.01;
-  box.rotation.y += 0.01;
-  box.rotation.z += 0.01;
-
-  if (floor) {
-    angle += 0.01;
-    floor.rotation.x = Math.PI / 2 + radius * Math.cos(angle);
-    floor.rotation.y = radius * Math.sin(angle);
-    floor.rotation.z += 0.01;
-  }
-
-  controls.update();
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  update();
-  renderer.render(scene, camera);
-}
-
-init();
-animate();
+eval("var SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axisHelper;\nvar gridHelper;\nvar box;\nvar floor;\nvar controls;\nvar redLight;\nvar blueLight;\nvar greenLight;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction init() {\n  //\n  //\n  // SCENE\n  //\n  //\n  scene = new THREE.Scene(); //\n  //\n  // GRID HELPER\n  //\n  //\n\n  gridHelper = new THREE.GridHelper(100, 10);\n  gridHelper.material.transparent = true;\n  gridHelper.material.opacity = 0.25;\n  scene.add(gridHelper); //\n  //\n  // AXIS HELPER\n  //\n  //\n\n  axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper); //\n  //\n  // CAMERA\n  //\n  //\n\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(200, 200, 200);\n  camera.lookAt(origin); //\n  //\n  // FLOOR\n  //\n  //\n\n  var loader = new THREE.TextureLoader();\n  loader.load('../../assets/textures/misc/green-eye.png', function (texture) {\n    var floorGeometry = new THREE.PlaneGeometry(200, 200);\n    var floorMaterial = new THREE.MeshLambertMaterial({\n      side: THREE.DoubleSide,\n      map: texture,\n      transparent: true\n    });\n    floor = new THREE.Mesh(floorGeometry, floorMaterial);\n    floor.receiveShadow = true;\n    scene.add(floor);\n  }); //\n  //\n  // BOX\n  //\n  //\n\n  var boxGeometry = new THREE.BoxGeometry(20, 20, 20);\n  var boxMaterial = new THREE.MeshStandardMaterial();\n  box = new THREE.Mesh(boxGeometry, boxMaterial);\n  box.position.y = 40;\n  box.castShadow = true;\n  box.receiveShadow = false;\n  scene.add(box); //\n  //\n  // LIGHTS\n  //\n  //\n\n  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n  scene.add(ambientLight);\n  redLight = new THREE.PointLight(0xff0000, 2, 500);\n  redLight.castShadow = true;\n  redLight.position.set(-50, 100, 50);\n  scene.add(redLight);\n  blueLight = new THREE.PointLight(0x0000ff, 2, 500);\n  blueLight.castShadow = true;\n  blueLight.position.set(50, 100, -50);\n  scene.add(blueLight);\n  greenLight = new THREE.PointLight(0x00ff00, 1, 500);\n  greenLight.castShadow = true;\n  greenLight.position.set(50, 100, 50);\n  scene.add(greenLight); //\n  //\n  // HELPERS\n  //\n  //\n\n  var sphereSize = 4;\n  var redPointLightHelper = new THREE.PointLightHelper(redLight, sphereSize);\n  scene.add(redPointLightHelper);\n  var redLightShadowHelper = new THREE.CameraHelper(redLight.shadow.camera);\n  redLightShadowHelper.material.transparent = true;\n  redLightShadowHelper.material.opacity = 0.25;\n  scene.add(redLightShadowHelper);\n  var bluePointLightHelper = new THREE.PointLightHelper(blueLight, sphereSize);\n  scene.add(bluePointLightHelper);\n  var blueLightShadowHelper = new THREE.CameraHelper(blueLight.shadow.camera);\n  blueLightShadowHelper.material.transparent = true;\n  blueLightShadowHelper.material.opacity = 0.25;\n  scene.add(blueLightShadowHelper);\n  var greenPointLightHelper = new THREE.PointLightHelper(greenLight, sphereSize);\n  scene.add(greenPointLightHelper);\n  var greenLightShadowHelper = new THREE.CameraHelper(greenLight.shadow.camera);\n  greenLightShadowHelper.material.transparent = true;\n  greenLightShadowHelper.material.opacity = 0.25;\n  scene.add(greenLightShadowHelper); //\n  //\n  // RENDERER\n  //\n  //\n\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(window.innerWidth, window.innerHeight); // Enable shadows\n\n  renderer.shadowMap.enabled = true; // Antialias the shadows\n\n  renderer.shadowMap.type = THREE.PCFSoftShadowMap; //\n  //\n  // ORBIT CONTROLS\n  //\n  //\n\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nvar radius = 0.25;\nvar angle = 0;\n\nfunction update() {\n  box.rotation.x += 0.01;\n  box.rotation.y += 0.01;\n  box.rotation.z += 0.01;\n\n  if (floor) {\n    angle += 0.01;\n    floor.rotation.x = Math.PI / 2 + radius * Math.cos(angle);\n    floor.rotation.y = radius * Math.sin(angle);\n    floor.rotation.z += 0.01;\n  }\n\n  controls.update();\n}\n\nfunction animate() {\n  requestAnimationFrame(animate);\n  update();\n  renderer.render(scene, camera);\n}\n\ninit();\nanimate();\n\n//# sourceURL=webpack:///./src/experiments/shadows-on-material/index.js?");
 
 /***/ })
 

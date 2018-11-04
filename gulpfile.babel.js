@@ -1,15 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import gulp from 'gulp';
-import gutil from 'gulp-util';
-import clean from 'gulp-clean';
-import express from 'express';
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import fs from "fs";
+import path from "path";
+import gulp from "gulp";
+import gutil from "gulp-util";
+import clean from "gulp-clean";
+import express from "express";
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
 
-import webpackConfig from './webpack/config';
+import webpackConfig from "./webpack/config";
 
-const EXPERIMENTS_DIR = path.join(__dirname, 'src/experiments');
+const EXPERIMENTS_DIR = path.join(__dirname, "src/experiments");
 
 function getExperiments() {
   return new Promise((resolve, reject) => {
@@ -24,13 +24,13 @@ function getExperiments() {
 
 function build(experiments) {
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(experiments, 'build');
+    const config = webpackConfig(experiments, "build");
     const compiler = webpack(config);
     compiler.run((error, stats) => {
       if (error) {
         return reject(error);
       }
-      gutil.log('[webpack:build]', stats.toString({ colors: true }));
+      gutil.log("[webpack:build]", stats.toString({ colors: true }));
       return resolve(config);
     });
   });
@@ -38,42 +38,34 @@ function build(experiments) {
 
 function dev(experiments) {
   const PORT = 8001;
-  const HOST = 'localhost';
+  const HOST = "localhost";
   return new Promise((resolve, reject) => {
-    const config = webpackConfig(experiments, 'serve');
+    const config = webpackConfig(experiments, "serve");
     const compiler = webpack(config);
     const devServerConfig = {
       stats: { colors: true },
-      setup: (experiment) => {
-        experiment.use('/dist', express.static('./src'));
-      },
+      before: experiment => {
+        experiment.use("/dist", express.static("./src"));
+      }
     };
-    new WebpackDevServer(compiler, devServerConfig)
-      .listen(PORT, HOST, (error) => {
+    new WebpackDevServer(compiler, devServerConfig).listen(
+      PORT,
+      HOST,
+      error => {
         if (error) {
           return reject(error);
         }
-        gutil.log('[webpack:serve]', `http://${HOST}:${PORT}/`);
+        gutil.log("[webpack:serve]", `http://${HOST}:${PORT}/`);
         return resolve();
-      },
+      }
     );
   });
 }
 
-gulp.task('clean', () =>
-  gulp
-    .src(['./dist', './index.html'], { read: false })
-    .pipe(clean()),
+gulp.task("clean", () =>
+  gulp.src(["./dist", "./index.html"], { read: false }).pipe(clean())
 );
 
-gulp.task('build', ['clean'], (callback) => {
-  getExperiments()
-    .then(build)
-    .catch(callback);
-});
+gulp.task("build", gulp.series(["clean"], () => getExperiments().then(build)));
 
-gulp.task('dev', (callback) => {
-  getExperiments()
-    .then(dev)
-    .catch(callback);
-});
+gulp.task("dev", () => getExperiments().then(dev));

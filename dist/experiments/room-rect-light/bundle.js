@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,158 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 74);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/room-rect-light/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 74:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/room-rect-light/index.js":
+/*!**************************************************!*\
+  !*** ./src/experiments/room-rect-light/index.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axisHelper = void 0;
-var orbitControls = void 0;
-// let ambientLight;
-var stats = void 0;
-var rectLight = void 0;
-var rectLightHelper = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-function Wall(width, height) {
-  var material = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    metalness: 0,
-    roughness: 1,
-    side: THREE.DoubleSide
-  });
-  var geometry = new THREE.PlaneBufferGeometry(width, height);
-  THREE.Mesh.call(this, geometry, material);
-}
-
-Wall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-  constructor: Wall
-});
-
-function Room(width, height, depth) {
-  THREE.Object3D.call(this);
-
-  var back = new Wall(width, height);
-  back.position.set(0, 0, -depth / 2);
-  this.add(back);
-
-  var right = new Wall(depth, height);
-  right.rotation.y = Math.PI / 2;
-  right.position.set(-width / 2, 0, 0);
-  this.add(right);
-
-  var left = new Wall(depth, height);
-  left.rotation.y = -Math.PI / 2;
-  left.position.set(width / 2, 0, 0);
-  this.add(left);
-
-  var bottom = new Wall(width, depth);
-  bottom.rotation.x = -Math.PI / 2;
-  bottom.position.set(0, -height / 2, 0);
-  this.add(bottom);
-
-  var top = new Wall(width, depth);
-  top.rotation.x = Math.PI / 2;
-  top.position.set(0, height / 2, 0);
-  this.add(top);
-}
-
-Room.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
-  constructor: Room
-});
-
-function initStats() {
-  stats = new Stats();
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '20px';
-  stats.setMode(0); // 0: fps, 1: ms
-  document.getElementById('stats').appendChild(stats.domElement);
-}
-
-function init() {
-  scene = new THREE.Scene();
-
-  axisHelper = new THREE.AxisHelper(50);
-  scene.add(axisHelper);
-
-  // ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  // scene.add(ambientLight);
-
-  var roomSize = 100;
-  var room = new Room(roomSize, roomSize, roomSize);
-  scene.add(room);
-
-  rectLight = new THREE.RectAreaLight(0xFFFFFF, 1000, 5, 20);
-  rectLight.matrixAutoUpdate = true;
-  rectLight.position.set(5, 5, 0);
-
-  rectLightHelper = new THREE.RectAreaLightHelper(rectLight);
-  rectLight.add(rectLightHelper);
-
-  scene.add(rectLight);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(0, 0, 200);
-  camera.lookAt(origin);
-
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-
-  initStats();
-}
-
-function update() {
-  var t = Date.now() / 1000;
-  var r = 15.0;
-  var lx = r * Math.cos(t);
-  var lz = r * Math.sin(t);
-  var ly = 5.0 + 5.0 * Math.sin(t / 3.0);
-  rectLight.position.set(lx, ly, lz);
-  rectLight.lookAt(origin);
-  rectLight.updateMatrixWorld();
-
-  rectLightHelper.update();
-  stats.update();
-  orbitControls.update();
-}
-
-function render() {
-  renderer.render(scene, camera);
-}
-
-function tick() {
-  update();
-  render();
-  requestAnimationFrame(tick);
-}
-
-init();
-tick();
+eval("var SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axisHelper;\nvar orbitControls; // let ambientLight;\n\nvar stats;\nvar rectLight;\nvar rectLightHelper;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction Wall(width, height) {\n  var material = new THREE.MeshStandardMaterial({\n    color: 0xffffff,\n    metalness: 0,\n    roughness: 1,\n    side: THREE.DoubleSide\n  });\n  var geometry = new THREE.PlaneBufferGeometry(width, height);\n  THREE.Mesh.call(this, geometry, material);\n}\n\nWall.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {\n  constructor: Wall\n});\n\nfunction Room(width, height, depth) {\n  THREE.Object3D.call(this);\n  var back = new Wall(width, height);\n  back.position.set(0, 0, -depth / 2);\n  this.add(back);\n  var right = new Wall(depth, height);\n  right.rotation.y = Math.PI / 2;\n  right.position.set(-width / 2, 0, 0);\n  this.add(right);\n  var left = new Wall(depth, height);\n  left.rotation.y = -Math.PI / 2;\n  left.position.set(width / 2, 0, 0);\n  this.add(left);\n  var bottom = new Wall(width, depth);\n  bottom.rotation.x = -Math.PI / 2;\n  bottom.position.set(0, -height / 2, 0);\n  this.add(bottom);\n  var top = new Wall(width, depth);\n  top.rotation.x = Math.PI / 2;\n  top.position.set(0, height / 2, 0);\n  this.add(top);\n}\n\nRoom.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {\n  constructor: Room\n});\n\nfunction initStats() {\n  stats = new Stats();\n  stats.domElement.style.position = 'absolute';\n  stats.domElement.style.left = '0px';\n  stats.domElement.style.top = '20px';\n  stats.setMode(0); // 0: fps, 1: ms\n\n  document.getElementById('stats').appendChild(stats.domElement);\n}\n\nfunction init() {\n  scene = new THREE.Scene();\n  axisHelper = new THREE.AxisHelper(50);\n  scene.add(axisHelper); // ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n  // scene.add(ambientLight);\n\n  var roomSize = 100;\n  var room = new Room(roomSize, roomSize, roomSize);\n  scene.add(room);\n  rectLight = new THREE.RectAreaLight(0xFFFFFF, 1000, 5, 20);\n  rectLight.matrixAutoUpdate = true;\n  rectLight.position.set(5, 5, 0);\n  rectLightHelper = new THREE.RectAreaLightHelper(rectLight);\n  rectLight.add(rectLightHelper);\n  scene.add(rectLight);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(0, 0, 200);\n  camera.lookAt(origin);\n  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n  initStats();\n}\n\nfunction update() {\n  var t = Date.now() / 1000;\n  var r = 15.0;\n  var lx = r * Math.cos(t);\n  var lz = r * Math.sin(t);\n  var ly = 5.0 + 5.0 * Math.sin(t / 3.0);\n  rectLight.position.set(lx, ly, lz);\n  rectLight.lookAt(origin);\n  rectLight.updateMatrixWorld();\n  rectLightHelper.update();\n  stats.update();\n  orbitControls.update();\n}\n\nfunction render() {\n  renderer.render(scene, camera);\n}\n\nfunction tick() {\n  update();\n  render();\n  requestAnimationFrame(tick);\n}\n\ninit();\ntick();\n\n//# sourceURL=webpack:///./src/experiments/room-rect-light/index.js?");
 
 /***/ })
 

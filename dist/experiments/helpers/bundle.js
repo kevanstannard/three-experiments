@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,82 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/helpers/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 25:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/helpers/index.js":
+/*!******************************************!*\
+  !*** ./src/experiments/helpers/index.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 0.1;
-var FAR = 20000;
-
-var controls = void 0;
-var renderer = void 0;
-var scene = void 0;
-var camera = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-function renderGridHelper() {
-  var gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
-}
-
-function renderAxisHelper() {
-  var axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
-}
-
-function renderArrowHelper() {
-  var arrowDir = new THREE.Vector3(3, 2, 1).normalize();
-  var arrowLength = 100;
-  var arrowColor = 0xffff00;
-  var headLength = 12;
-  var headWidth = 4;
-  var arrowHelper = new THREE.ArrowHelper(arrowDir, origin, arrowLength, arrowColor, headLength, headWidth);
-  scene.add(arrowHelper);
-}
-
-function init() {
-  scene = new THREE.Scene();
-
-  renderGridHelper();
-  renderAxisHelper();
-  renderArrowHelper();
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(200, 200, 200);
-  camera.lookAt(origin);
-  scene.add(camera);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-init();
-animate();
+eval("var SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 0.1;\nvar FAR = 20000;\nvar controls;\nvar renderer;\nvar scene;\nvar camera;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction renderGridHelper() {\n  var gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n}\n\nfunction renderAxisHelper() {\n  var axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper);\n}\n\nfunction renderArrowHelper() {\n  var arrowDir = new THREE.Vector3(3, 2, 1).normalize();\n  var arrowLength = 100;\n  var arrowColor = 0xffff00;\n  var headLength = 12;\n  var headWidth = 4;\n  var arrowHelper = new THREE.ArrowHelper(arrowDir, origin, arrowLength, arrowColor, headLength, headWidth);\n  scene.add(arrowHelper);\n}\n\nfunction init() {\n  scene = new THREE.Scene();\n  renderGridHelper();\n  renderAxisHelper();\n  renderArrowHelper();\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(200, 200, 200);\n  camera.lookAt(origin);\n  scene.add(camera);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nfunction animate() {\n  requestAnimationFrame(animate);\n  controls.update();\n  renderer.render(scene, camera);\n}\n\ninit();\nanimate();\n\n//# sourceURL=webpack:///./src/experiments/helpers/index.js?");
 
 /***/ })
 

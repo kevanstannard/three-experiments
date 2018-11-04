@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,146 +79,21 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/align-object-to-vector/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./src/experiments/align-object-to-vector/index.js":
+/*!*********************************************************!*\
+  !*** ./src/experiments/align-object-to-vector/index.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45;
-var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-var NEAR = 1;
-var FAR = 10000;
-
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var axisHelper = void 0;
-var gridHelper = void 0;
-var controls = void 0;
-var pointLight = void 0;
-var ambientLight = void 0;
-
-var directionVectorAngle = 0;
-var directionVectorHelper = void 0;
-var directionVectorRadius = 50;
-var directionVector = new THREE.Vector3(1, 1, 1).normalize();
-
-var box1 = void 0;
-var box2 = void 0;
-
-var origin = new THREE.Vector3(0, 0, 0);
-
-function Box(size) {
-  var geometry = new THREE.BoxGeometry(size, size, size);
-  var material = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true });
-  THREE.Mesh.call(this, geometry, material);
-
-  // Define a vector in world coordinates for this box to look at
-  this.lookAtVector = new THREE.Vector3();
-
-  // Set the initial direction of the arrow
-  // This MUST have the  correct orientation for the initial box
-  // so that when the box is rotated, then this arrow will rotate with it
-  var direction = new THREE.Vector3(0, 0, 1);
-
-  // Create a vector to hold the arrows position
-  var position = new THREE.Vector3();
-
-  // Create the arrow
-  this.arrow = new THREE.ArrowHelper(direction, position, size, 0xffffff);
-
-  // And make it a child of the box
-  this.add(this.arrow);
-}
-
-Box.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {
-
-  constructor: Box,
-
-  setDirection: function setDirection(vector) {
-    this.lookAtVector.set(this.position.x + vector.x, this.position.y + vector.y, this.position.z + vector.z);
-    this.lookAt(this.lookAtVector);
-  }
-});
-
-function init() {
-  scene = new THREE.Scene();
-
-  gridHelper = new THREE.GridHelper(100, 10);
-  scene.add(gridHelper);
-
-  axisHelper = new THREE.AxisHelper(100);
-  scene.add(axisHelper);
-
-  directionVectorHelper = new THREE.ArrowHelper(directionVector, origin, 50);
-  scene.add(directionVectorHelper);
-
-  box1 = new Box(20);
-  box1.position.set(50, 50, 0);
-  scene.add(box1);
-
-  box2 = new Box(30);
-  box2.position.set(0, 50, 50);
-  scene.add(box2);
-
-  ambientLight = new THREE.AmbientLight(0x444444);
-  scene.add(ambientLight);
-
-  pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-  pointLight.position.set(50, 50, 50);
-  scene.add(pointLight);
-
-  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(150, 150, 150);
-  camera.lookAt(origin);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  THREEx.WindowResize(renderer, camera);
-
-  document.body.appendChild(renderer.domElement);
-}
-
-function updateBoxes() {
-  box1.setDirection(directionVector);
-  box2.setDirection(directionVector);
-}
-
-function updateDirectionVector() {
-  directionVectorAngle += 0.01;
-  var x = directionVectorRadius * Math.cos(directionVectorAngle);
-  var y = directionVectorRadius * Math.sin(directionVectorAngle);
-  var z = directionVectorRadius * Math.sin(directionVectorAngle) * Math.cos(directionVectorAngle);
-  directionVector.set(x, y, z).normalize();
-  directionVectorHelper.setDirection(directionVector);
-}
-
-function update() {
-  updateDirectionVector();
-  updateBoxes();
-  controls.update();
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  update();
-  renderer.render(scene, camera);
-}
-
-init();
-animate();
+eval("var SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar axisHelper;\nvar gridHelper;\nvar controls;\nvar pointLight;\nvar ambientLight;\nvar directionVectorAngle = 0;\nvar directionVectorHelper;\nvar directionVectorRadius = 50;\nvar directionVector = new THREE.Vector3(1, 1, 1).normalize();\nvar box1;\nvar box2;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction Box(size) {\n  var geometry = new THREE.BoxGeometry(size, size, size);\n  var material = new THREE.MeshLambertMaterial({\n    color: 0xffffff,\n    wireframe: true\n  });\n  THREE.Mesh.call(this, geometry, material); // Define a vector in world coordinates for this box to look at\n\n  this.lookAtVector = new THREE.Vector3(); // Set the initial direction of the arrow\n  // This MUST have the  correct orientation for the initial box\n  // so that when the box is rotated, then this arrow will rotate with it\n\n  var direction = new THREE.Vector3(0, 0, 1); // Create a vector to hold the arrows position\n\n  var position = new THREE.Vector3(); // Create the arrow\n\n  this.arrow = new THREE.ArrowHelper(direction, position, size, 0xffffff); // And make it a child of the box\n\n  this.add(this.arrow);\n}\n\nBox.prototype = Object.assign(Object.create(THREE.Mesh.prototype), {\n  constructor: Box,\n  setDirection: function setDirection(vector) {\n    this.lookAtVector.set(this.position.x + vector.x, this.position.y + vector.y, this.position.z + vector.z);\n    this.lookAt(this.lookAtVector);\n  }\n});\n\nfunction init() {\n  scene = new THREE.Scene();\n  gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n  axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper);\n  directionVectorHelper = new THREE.ArrowHelper(directionVector, origin, 50);\n  scene.add(directionVectorHelper);\n  box1 = new Box(20);\n  box1.position.set(50, 50, 0);\n  scene.add(box1);\n  box2 = new Box(30);\n  box2.position.set(0, 50, 50);\n  scene.add(box2);\n  ambientLight = new THREE.AmbientLight(0x444444);\n  scene.add(ambientLight);\n  pointLight = new THREE.PointLight(0xffffff, 1, 1000);\n  pointLight.position.set(50, 50, 50);\n  scene.add(pointLight);\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(150, 150, 150);\n  camera.lookAt(origin);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(window.innerWidth, window.innerHeight);\n  controls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n}\n\nfunction updateBoxes() {\n  box1.setDirection(directionVector);\n  box2.setDirection(directionVector);\n}\n\nfunction updateDirectionVector() {\n  directionVectorAngle += 0.01;\n  var x = directionVectorRadius * Math.cos(directionVectorAngle);\n  var y = directionVectorRadius * Math.sin(directionVectorAngle);\n  var z = directionVectorRadius * Math.sin(directionVectorAngle) * Math.cos(directionVectorAngle);\n  directionVector.set(x, y, z).normalize();\n  directionVectorHelper.setDirection(directionVector);\n}\n\nfunction update() {\n  updateDirectionVector();\n  updateBoxes();\n  controls.update();\n}\n\nfunction animate() {\n  requestAnimationFrame(animate);\n  update();\n  renderer.render(scene, camera);\n}\n\ninit();\nanimate();\n\n//# sourceURL=webpack:///./src/experiments/align-object-to-vector/index.js?");
 
 /***/ })
 
