@@ -1,99 +1,21 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/experiments/hello-world/index.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/experiments/hello-world/index.js":
 /*!**********************************************!*\
   !*** ./src/experiments/hello-world/index.js ***!
   \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("var Stats = __webpack_require__(/*! libs/stats/r17/stats */ \"./src/libs/stats/r17/stats.js\");\n\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar orbitControls;\nvar mesh;\nvar controls;\nvar stats;\nvar origin = new THREE.Vector3(0, 0, 0);\n\nfunction initStats() {\n  stats = new Stats();\n  stats.dom.style.position = 'absolute';\n  stats.dom.style.left = '0px';\n  stats.dom.style.top = '20px';\n  stats.setMode(0); // 0: fps, 1: ms\n\n  document.getElementById('stats').appendChild(stats.domElement);\n}\n\nfunction initControls() {\n  controls = {\n    xRotation: 0,\n    yRotation: 0,\n    zRotation: 0\n  };\n  var gui = new dat.GUI();\n  gui.domElement.parentElement.style.zIndex = 2;\n  gui.add(controls, 'xRotation', 0, Math.PI * 2);\n  gui.add(controls, 'yRotation', 0, Math.PI * 2);\n  gui.add(controls, 'zRotation', 0, Math.PI * 2);\n}\n\nfunction init() {\n  scene = new THREE.Scene();\n  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n  camera.position.set(200, 200, 200);\n  camera.lookAt(origin);\n  renderer = new THREE.WebGLRenderer({\n    antialias: true\n  });\n  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);\n  THREEx.WindowResize(renderer, camera);\n  document.body.appendChild(renderer.domElement);\n  initStats();\n  initControls();\n  var gridHelper = new THREE.GridHelper(100, 10);\n  scene.add(gridHelper);\n  var axisHelper = new THREE.AxisHelper(100);\n  scene.add(axisHelper);\n  var geometry = new THREE.BoxGeometry(50, 50, 50);\n  var material = new THREE.MeshStandardMaterial({\n    color: 0xff0000\n  });\n  mesh = new THREE.Mesh(geometry, material);\n  scene.add(mesh);\n  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n  scene.add(ambientLight);\n  var pointLight = new THREE.PointLight(0xffffff, 1, 1000);\n  pointLight.position.set(50, 200, -100);\n  scene.add(pointLight);\n}\n\nfunction update() {\n  mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);\n  stats.update();\n  orbitControls.update();\n}\n\nfunction render() {\n  renderer.render(scene, camera);\n}\n\nfunction tick() {\n  update();\n  render();\n  requestAnimationFrame(tick);\n}\n\ninit();\ntick();\n\n//# sourceURL=webpack:///./src/experiments/hello-world/index.js?");
+eval("var Stats = __webpack_require__(/*! libs/stats/r17/stats */ \"./src/libs/stats/r17/stats.js\");\nvar SCREEN_WIDTH = window.innerWidth;\nvar SCREEN_HEIGHT = window.innerHeight;\nvar VIEW_ANGLE = 45;\nvar ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;\nvar NEAR = 1;\nvar FAR = 10000;\nvar scene;\nvar camera;\nvar renderer;\nvar orbitControls;\nvar mesh;\nvar controls;\nvar stats;\nvar origin = new THREE.Vector3(0, 0, 0);\nfunction initStats() {\n    stats = new Stats();\n    stats.dom.style.position = \"absolute\";\n    stats.dom.style.left = \"0px\";\n    stats.dom.style.top = \"20px\";\n    stats.setMode(0); // 0: fps, 1: ms\n    document.getElementById(\"stats\").appendChild(stats.domElement);\n}\nfunction initControls() {\n    controls = {\n        xRotation: 0,\n        yRotation: 0,\n        zRotation: 0\n    };\n    var gui = new dat.GUI();\n    gui.domElement.parentElement.style.zIndex = 2;\n    gui.add(controls, \"xRotation\", 0, Math.PI * 2);\n    gui.add(controls, \"yRotation\", 0, Math.PI * 2);\n    gui.add(controls, \"zRotation\", 0, Math.PI * 2);\n}\nfunction init() {\n    scene = new THREE.Scene();\n    camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);\n    camera.position.set(200, 200, 200);\n    camera.lookAt(origin);\n    renderer = new THREE.WebGLRenderer({\n        antialias: true\n    });\n    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);\n    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);\n    THREEx.WindowResize(renderer, camera);\n    document.body.appendChild(renderer.domElement);\n    initStats();\n    initControls();\n    var gridHelper = new THREE.GridHelper(100, 10);\n    scene.add(gridHelper);\n    var axisHelper = new THREE.AxisHelper(100);\n    scene.add(axisHelper);\n    var geometry = new THREE.BoxGeometry(50, 50, 50);\n    var material = new THREE.MeshStandardMaterial({\n        color: 0xff0000\n    });\n    mesh = new THREE.Mesh(geometry, material);\n    scene.add(mesh);\n    var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);\n    scene.add(ambientLight);\n    var pointLight = new THREE.PointLight(0xffffff, 1, 1000);\n    pointLight.position.set(50, 200, -100);\n    scene.add(pointLight);\n}\nfunction update() {\n    mesh.rotation.set(mesh.rotation.x = controls.xRotation, mesh.rotation.y = controls.yRotation, mesh.rotation.z = controls.zRotation);\n    stats.update();\n    orbitControls.update();\n}\nfunction render() {\n    renderer.render(scene, camera);\n}\nfunction tick() {\n    update();\n    render();\n    requestAnimationFrame(tick);\n}\ninit();\ntick();\n\n\n//# sourceURL=webpack://three-experiments/./src/experiments/hello-world/index.js?");
 
 /***/ }),
 
@@ -101,11 +23,44 @@ eval("var Stats = __webpack_require__(/*! libs/stats/r17/stats */ \"./src/libs/s
 /*!*************************************!*\
   !*** ./src/libs/stats/r17/stats.js ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module) {
 
-eval("var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\n(function (global, factory) {\n  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?\n\t\t\t\t(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :\n\t\t\t\t__WEBPACK_AMD_DEFINE_FACTORY__),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;\n})(this, function () {\n  'use strict';\n  /**\n   * @author mrdoob / http://mrdoob.com/\n   */\n\n  var Stats = function Stats() {\n    var mode = 0;\n    var container = document.createElement('div');\n    container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';\n    container.addEventListener('click', function (event) {\n      event.preventDefault();\n      showPanel(++mode % container.children.length);\n    }, false); //\n\n    function addPanel(panel) {\n      container.appendChild(panel.dom);\n      return panel;\n    }\n\n    function showPanel(id) {\n      for (var i = 0; i < container.children.length; i++) {\n        container.children[i].style.display = i === id ? 'block' : 'none';\n      }\n\n      mode = id;\n    } //\n\n\n    var beginTime = (performance || Date).now(),\n        prevTime = beginTime,\n        frames = 0;\n    var fpsPanel = addPanel(new Stats.Panel('FPS', '#0ff', '#002'));\n    var msPanel = addPanel(new Stats.Panel('MS', '#0f0', '#020'));\n\n    if (self.performance && self.performance.memory) {\n      var memPanel = addPanel(new Stats.Panel('MB', '#f08', '#201'));\n    }\n\n    showPanel(0);\n    return {\n      REVISION: 16,\n      dom: container,\n      addPanel: addPanel,\n      showPanel: showPanel,\n      begin: function begin() {\n        beginTime = (performance || Date).now();\n      },\n      end: function end() {\n        frames++;\n        var time = (performance || Date).now();\n        msPanel.update(time - beginTime, 200);\n\n        if (time > prevTime + 1000) {\n          fpsPanel.update(frames * 1000 / (time - prevTime), 100);\n          prevTime = time;\n          frames = 0;\n\n          if (memPanel) {\n            var memory = performance.memory;\n            memPanel.update(memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576);\n          }\n        }\n\n        return time;\n      },\n      update: function update() {\n        beginTime = this.end();\n      },\n      // Backwards Compatibility\n      domElement: container,\n      setMode: showPanel\n    };\n  };\n\n  Stats.Panel = function (name, fg, bg) {\n    var min = Infinity,\n        max = 0,\n        round = Math.round;\n    var PR = round(window.devicePixelRatio || 1);\n    var WIDTH = 80 * PR,\n        HEIGHT = 48 * PR,\n        TEXT_X = 3 * PR,\n        TEXT_Y = 2 * PR,\n        GRAPH_X = 3 * PR,\n        GRAPH_Y = 15 * PR,\n        GRAPH_WIDTH = 74 * PR,\n        GRAPH_HEIGHT = 30 * PR;\n    var canvas = document.createElement('canvas');\n    canvas.width = WIDTH;\n    canvas.height = HEIGHT;\n    canvas.style.cssText = 'width:80px;height:48px';\n    var context = canvas.getContext('2d');\n    context.font = 'bold ' + 9 * PR + 'px Helvetica,Arial,sans-serif';\n    context.textBaseline = 'top';\n    context.fillStyle = bg;\n    context.fillRect(0, 0, WIDTH, HEIGHT);\n    context.fillStyle = fg;\n    context.fillText(name, TEXT_X, TEXT_Y);\n    context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);\n    context.fillStyle = bg;\n    context.globalAlpha = 0.9;\n    context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);\n    return {\n      dom: canvas,\n      update: function update(value, maxValue) {\n        min = Math.min(min, value);\n        max = Math.max(max, value);\n        context.fillStyle = bg;\n        context.globalAlpha = 1;\n        context.fillRect(0, 0, WIDTH, GRAPH_Y);\n        context.fillStyle = fg;\n        context.fillText(round(value) + ' ' + name + ' (' + round(min) + '-' + round(max) + ')', TEXT_X, TEXT_Y);\n        context.drawImage(canvas, GRAPH_X + PR, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT, GRAPH_X, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT);\n        context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, GRAPH_HEIGHT);\n        context.fillStyle = bg;\n        context.globalAlpha = 0.9;\n        context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round((1 - value / maxValue) * GRAPH_HEIGHT));\n      }\n    };\n  };\n\n  return Stats;\n});\n\n//# sourceURL=webpack:///./src/libs/stats/r17/stats.js?");
+eval("(function(global, factory) {\n     true ? module.exports = factory() : 0;\n})(this, function() {\n    \"use strict\";\n    /**\n * @author mrdoob / http://mrdoob.com/\n */ var Stats = function() {\n        var addPanel = //\n        function addPanel(panel) {\n            container.appendChild(panel.dom);\n            return panel;\n        };\n        var showPanel = function showPanel(id) {\n            for(var i = 0; i < container.children.length; i++){\n                container.children[i].style.display = i === id ? \"block\" : \"none\";\n            }\n            mode = id;\n        };\n        var mode = 0;\n        var container = document.createElement(\"div\");\n        container.style.cssText = \"position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000\";\n        container.addEventListener(\"click\", function(event) {\n            event.preventDefault();\n            showPanel(++mode % container.children.length);\n        }, false);\n        //\n        var beginTime = (performance || Date).now(), prevTime = beginTime, frames = 0;\n        var fpsPanel = addPanel(new Stats.Panel(\"FPS\", \"#0ff\", \"#002\"));\n        var msPanel = addPanel(new Stats.Panel(\"MS\", \"#0f0\", \"#020\"));\n        if (self.performance && self.performance.memory) {\n            var memPanel = addPanel(new Stats.Panel(\"MB\", \"#f08\", \"#201\"));\n        }\n        showPanel(0);\n        return {\n            REVISION: 16,\n            dom: container,\n            addPanel: addPanel,\n            showPanel: showPanel,\n            begin: function begin() {\n                beginTime = (performance || Date).now();\n            },\n            end: function end() {\n                frames++;\n                var time = (performance || Date).now();\n                msPanel.update(time - beginTime, 200);\n                if (time > prevTime + 1000) {\n                    fpsPanel.update(frames * 1000 / (time - prevTime), 100);\n                    prevTime = time;\n                    frames = 0;\n                    if (memPanel) {\n                        var memory = performance.memory;\n                        memPanel.update(memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576);\n                    }\n                }\n                return time;\n            },\n            update: function update() {\n                beginTime = this.end();\n            },\n            // Backwards Compatibility\n            domElement: container,\n            setMode: showPanel\n        };\n    };\n    Stats.Panel = function(name, fg, bg) {\n        var min = Infinity, max = 0, round = Math.round;\n        var PR = round(window.devicePixelRatio || 1);\n        var WIDTH = 80 * PR, HEIGHT = 48 * PR, TEXT_X = 3 * PR, TEXT_Y = 2 * PR, GRAPH_X = 3 * PR, GRAPH_Y = 15 * PR, GRAPH_WIDTH = 74 * PR, GRAPH_HEIGHT = 30 * PR;\n        var canvas = document.createElement(\"canvas\");\n        canvas.width = WIDTH;\n        canvas.height = HEIGHT;\n        canvas.style.cssText = \"width:80px;height:48px\";\n        var context = canvas.getContext(\"2d\");\n        context.font = \"bold \" + 9 * PR + \"px Helvetica,Arial,sans-serif\";\n        context.textBaseline = \"top\";\n        context.fillStyle = bg;\n        context.fillRect(0, 0, WIDTH, HEIGHT);\n        context.fillStyle = fg;\n        context.fillText(name, TEXT_X, TEXT_Y);\n        context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);\n        context.fillStyle = bg;\n        context.globalAlpha = 0.9;\n        context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);\n        return {\n            dom: canvas,\n            update: function update(value, maxValue) {\n                min = Math.min(min, value);\n                max = Math.max(max, value);\n                context.fillStyle = bg;\n                context.globalAlpha = 1;\n                context.fillRect(0, 0, WIDTH, GRAPH_Y);\n                context.fillStyle = fg;\n                context.fillText(round(value) + \" \" + name + \" (\" + round(min) + \"-\" + round(max) + \")\", TEXT_X, TEXT_Y);\n                context.drawImage(canvas, GRAPH_X + PR, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT, GRAPH_X, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT);\n                context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, GRAPH_HEIGHT);\n                context.fillStyle = bg;\n                context.globalAlpha = 0.9;\n                context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round((1 - value / maxValue) * GRAPH_HEIGHT));\n            }\n        };\n    };\n    return Stats;\n});\n\n\n//# sourceURL=webpack://three-experiments/./src/libs/stats/r17/stats.js?");
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/experiments/hello-world/index.js");
+/******/ 	
+/******/ })()
+;
