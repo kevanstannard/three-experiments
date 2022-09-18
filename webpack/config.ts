@@ -3,7 +3,6 @@ import path from "path";
 import _ from "lodash";
 import * as webpack from "webpack";
 import CopyWebpackPlugin from "copy-webpack-plugin";
-// import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 const rootDir = path.resolve(__dirname, "..");
 
@@ -38,27 +37,33 @@ export function makeConfig(
   const experimentConfigs: any[] = [];
   experiments.forEach((experiment) => {
     const experimentPath = path.join(rootDir, `src/experiments/${experiment}`);
+
     // Ensure we have a directory
     if (!fs.lstatSync(experimentPath).isDirectory()) {
       return;
     }
-    // eslint-disable-next-line global-require, import/no-dynamic-require
+
     const experimentConfig = require(`${experimentPath}/config.js`).default;
-    if (experimentConfig.public || buildType === "serve") {
+
+    const includeExperiment =
+      buildType === "serve" ||
+      (buildType === "build" && experimentConfig.public);
+
+    if (includeExperiment) {
       experimentConfig.id = experiment;
       experimentConfigs.push(experimentConfig);
+      entry[experiment] = experimentPath;
+      const plugin = new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.join(rootDir, "src/index-experiment.html"),
+            to: path.join(rootDir, `dist/experiments/${experiment}/index.html`),
+            transform: transformIndexExperiment(experiment, experimentConfig),
+          },
+        ],
+      });
+      plugins.push(plugin);
     }
-    entry[experiment] = experimentPath;
-    const plugin = new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.join(rootDir, "src/index-experiment.html"),
-          to: path.join(rootDir, `dist/experiments/${experiment}/index.html`),
-          transform: transformIndexExperiment(experiment, experimentConfig),
-        },
-      ],
-    });
-    plugins.push(plugin);
   });
 
   // Copy the static files
@@ -86,8 +91,8 @@ export function makeConfig(
     })
   );
 
-  return {
-    mode: "development",
+  const config: webpack.Configuration = {
+    mode: buildType === "build" ? "production" : "development",
     entry,
     plugins,
     output: {
@@ -96,6 +101,10 @@ export function makeConfig(
     },
     resolve: {
       modules: ["node_modules", "src"],
+      extensions: [".js", ".json", ".ts"],
+    },
+    externals: {
+      "../../libs/three/r144/three.js": "THREE",
     },
     module: {
       rules: [
@@ -116,4 +125,6 @@ export function makeConfig(
       ],
     },
   };
+
+  return config;
 }

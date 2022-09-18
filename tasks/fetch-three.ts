@@ -51,6 +51,10 @@ function downloadVersion(version: string) {
       filePath: `${versionRoot}/controls/OrbitControls.js`,
     },
     {
+      url: makeRawFileUrl(version, "/examples/jsm/libs/stats.module.js"),
+      filePath: `${versionRoot}/stats/stats.module.js`,
+    },
+    {
       url: makeRawFileUrl(
         version,
         "/examples/js/controls/TrackballControls.js"
