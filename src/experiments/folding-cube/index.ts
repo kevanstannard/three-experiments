@@ -1,6 +1,6 @@
-import { upperCase } from "lodash";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CharacterKey, characters } from "./characters";
 
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
@@ -36,6 +36,52 @@ function roundVector(vector: THREE.Vector3) {
   return new THREE.Vector3(x, y, z);
 }
 
+class Pixel extends THREE.Object3D {
+  constructor(color: string, size: number) {
+    super();
+    const geometry = new THREE.PlaneGeometry(size, size);
+    const material = new THREE.MeshBasicMaterial({
+      color: color,
+      side: THREE.DoubleSide,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    this.add(mesh);
+  }
+}
+
+export class Character extends THREE.Object3D {
+  constructor(character: CharacterKey, color: string, size: number) {
+    super();
+    const bitmap = characters[character];
+    const colCount = bitmap.length;
+    const rowCount = bitmap.reduce(
+      (acc, bits) => Math.max(acc, bits.length),
+      0
+    );
+    const pixels = [];
+    for (let row = 0; row < bitmap.length; row++) {
+      let cols = bitmap[row];
+      for (let col = 0; col < cols.length; col++) {
+        let bit = bitmap[row][col];
+        if (bit) {
+          const pixel = new Pixel(color, size);
+          const x = size * col;
+          const y = size * row * -1;
+          pixel.position.set(x, y, 0);
+          pixels.push(pixel);
+        }
+      }
+    }
+    pixels.forEach((pixel) => {
+      this.add(pixel);
+    });
+
+    const width = colCount * size;
+    const height = rowCount * size;
+    this.position.set(-width / 2, height / 2, 0);
+  }
+}
+
 class Arrow extends THREE.ArrowHelper {
   constructor(x: number, y: number, z: number) {
     super(
@@ -49,7 +95,15 @@ class Arrow extends THREE.ArrowHelper {
 class Face extends THREE.Object3D {
   mesh: THREE.Mesh;
 
-  constructor(name: string, color: string) {
+  constructor({
+    name,
+    character: characterKey,
+    color,
+  }: {
+    name: string;
+    character: CharacterKey;
+    color: string;
+  }) {
     super();
 
     this.name = name;
@@ -59,21 +113,19 @@ class Face extends THREE.Object3D {
     const planeMesh = new THREE.Mesh(planeGeom, planeMaterial);
     planeMesh.name = `${name}:Mesh`;
 
-    const colorGeom = new THREE.PlaneGeometry(0.125, 0.125);
-    const colorMaterial = new THREE.MeshBasicMaterial({
-      color: color,
-      side: THREE.DoubleSide,
-    });
-    const colorMesh = new THREE.Mesh(colorGeom, colorMaterial);
-
     const arrowX = new Arrow(1, 0, 0);
     const arrowY = new Arrow(0, 1, 0);
     const arrowZ = new Arrow(0, 0, 1);
 
+    const characterSize = 1 / 16;
+
+    const character = new Character(characterKey, color, characterSize);
+
     this.add(planeMesh);
-    this.add(colorMesh);
-    this.add(arrowY);
+    this.add(character);
+
     this.add(arrowX);
+    this.add(arrowY);
     this.add(arrowZ);
 
     this.mesh = planeMesh;
@@ -114,26 +166,30 @@ class Cuboid extends THREE.Object3D {
   constructor() {
     super();
 
-    const front = new Face("Front", "red");
+    const front = new Face({ name: "Front", character: "F", color: "red" });
     front.position.set(0, 0, 0.5);
 
-    const back = new Face("Back", "orange");
+    const back = new Face({ name: "Back", character: "K", color: "orange" });
     back.position.set(0, 0, -0.5);
     back.rotateY(Math.PI);
 
-    const right = new Face("Right", "yellow");
+    const right = new Face({ name: "Right", character: "R", color: "yellow" });
     right.rotateY(-Math.PI / 2);
     right.position.set(-0.5, 0, 0);
 
-    const left = new Face("Left", "green");
+    const left = new Face({ name: "Left", character: "L", color: "green" });
     left.rotateY(Math.PI / 2);
     left.position.set(0.5, 0, 0);
 
-    const top = new Face("Top", "blue");
+    const top = new Face({ name: "Top", character: "T", color: "blue" });
     top.rotateX(-Math.PI / 2);
     top.position.set(0, 0.5, 0);
 
-    const bottom = new Face("Bottom", "indigo");
+    const bottom = new Face({
+      name: "Bottom",
+      character: "B",
+      color: "violet",
+    });
     bottom.rotateX(Math.PI / 2);
     bottom.position.set(0, -0.5, 0);
 
