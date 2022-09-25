@@ -9,14 +9,12 @@ const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
 const NEAR = 1;
 const FAR = 10000;
 
-const BOX_SIZE = 1;
-
 const origin = new THREE.Vector3(0, 0, 0);
 
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-camera.position.set(BOX_SIZE * 4, BOX_SIZE * 2, BOX_SIZE * 8);
+camera.position.set(4, 2, 20);
 camera.lookAt(origin);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -26,13 +24,13 @@ const orbitControls = new OrbitControls(camera, renderer.domElement);
 
 document.body.appendChild(renderer.domElement);
 
-const axesHelper = new THREE.AxesHelper(BOX_SIZE / 4);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(1 / 4);
+// scene.add(axesHelper);
 
 function roundVector(vector: THREE.Vector3) {
-  const x = Math.round(vector.x * 10) / 10 || 0;
-  const y = Math.round(vector.y * 10) / 10 || 0;
-  const z = Math.round(vector.z * 10) / 10 || 0;
+  const x = Math.round(vector.x * 1000) / 1000 || 0;
+  const y = Math.round(vector.y * 1000) / 1000 || 0;
+  const z = Math.round(vector.z * 1000) / 1000 || 0;
   return new THREE.Vector3(x, y, z);
 }
 
@@ -83,11 +81,21 @@ export class Character extends THREE.Object3D {
 }
 
 class Arrow extends THREE.ArrowHelper {
-  constructor(x: number, y: number, z: number) {
+  constructor({
+    x,
+    y,
+    z,
+    size,
+  }: {
+    x: number;
+    y: number;
+    z: number;
+    size: number;
+  }) {
     super(
       new THREE.Vector3(x, y, z).normalize(),
       new THREE.Vector3(0, 0, 0),
-      0.5
+      size
     );
   }
 }
@@ -97,25 +105,34 @@ class Face extends THREE.Object3D {
 
   constructor({
     name,
+    width,
+    height,
     character: characterKey,
     color,
   }: {
     name: string;
     character: CharacterKey;
     color: string;
+    width: number;
+    height: number;
   }) {
     super();
 
     this.name = name;
 
-    const planeGeom = new THREE.PlaneGeometry(1, 1);
+    const planeGeom = new THREE.PlaneGeometry(width, height);
     const planeMaterial = new THREE.MeshBasicMaterial({ wireframe: true });
     const planeMesh = new THREE.Mesh(planeGeom, planeMaterial);
     planeMesh.name = `${name}:Mesh`;
 
-    const arrowX = new Arrow(1, 0, 0);
-    const arrowY = new Arrow(0, 1, 0);
-    const arrowZ = new Arrow(0, 0, 1);
+    const arrowX = new Arrow({ x: 1, y: 0, z: 0, size: width / 2 });
+    const arrowY = new Arrow({ x: 0, y: 1, z: 0, size: height / 2 });
+    const arrowZ = new Arrow({
+      x: 0,
+      y: 0,
+      z: 1,
+      size: Math.min(width, height) / 2,
+    });
 
     const characterSize = 1 / 16;
 
@@ -163,35 +180,77 @@ class Cuboid extends THREE.Object3D {
   top: Face;
   bottom: Face;
 
-  constructor() {
+  constructor(width: number, height: number, depth: number) {
     super();
 
-    const front = new Face({ name: "Front", character: "F", color: "red" });
-    front.position.set(0, 0, 0.5);
+    const front = new Face({
+      name: "Front",
+      width,
+      height,
+      character: "F",
+      color: "red",
+    });
+    front.position.set(0, 0, depth / 2);
 
-    const back = new Face({ name: "Back", character: "K", color: "orange" });
-    back.position.set(0, 0, -0.5);
+    const back = new Face({
+      name: "Back",
+
+      width,
+      height,
+
+      character: "K",
+      color: "orange",
+    });
+    back.position.set(0, 0, -depth / 2);
     back.rotateY(Math.PI);
 
-    const right = new Face({ name: "Right", character: "R", color: "yellow" });
+    const right = new Face({
+      name: "Right",
+
+      width: depth,
+      height,
+
+      character: "R",
+      color: "yellow",
+    });
     right.rotateY(-Math.PI / 2);
-    right.position.set(-0.5, 0, 0);
+    right.position.set(-width / 2, 0, 0);
 
-    const left = new Face({ name: "Left", character: "L", color: "green" });
+    const left = new Face({
+      name: "Left",
+
+      width: depth,
+      height,
+
+      character: "L",
+      color: "green",
+    });
     left.rotateY(Math.PI / 2);
-    left.position.set(0.5, 0, 0);
+    left.position.set(width / 2, 0, 0);
 
-    const top = new Face({ name: "Top", character: "T", color: "blue" });
+    const top = new Face({
+      name: "Top",
+
+      width,
+      height: depth,
+
+      character: "T",
+      color: "blue",
+    });
     top.rotateX(-Math.PI / 2);
-    top.position.set(0, 0.5, 0);
+    top.position.set(0, height / 2, 0);
 
     const bottom = new Face({
       name: "Bottom",
+
+      width,
+      height: depth,
+
       character: "B",
       color: "violet",
     });
     bottom.rotateX(Math.PI / 2);
-    bottom.position.set(0, -0.5, 0);
+    bottom.position.set(0, -height / 2, 0);
 
     this.add(front);
     this.add(back);
@@ -240,24 +299,24 @@ function rotateX(cuboid: Cuboid, angle: number) {
   cuboid.applyMatrix4(rotateToTheRight);
 }
 
-const cuboid1 = new Cuboid();
-cuboid1.position.set(-3, 0, 0);
+const cuboid1 = new Cuboid(1, 2, 3);
+cuboid1.position.set(-8, 0, 0);
 scene.add(cuboid1);
 
-const cuboid2 = new Cuboid();
+const cuboid2 = new Cuboid(1, 2, 3);
 rotateY(cuboid2, Math.PI / 2);
-cuboid2.position.set(-1, 0, 0);
+cuboid2.position.set(-2, 0, 0);
 
-const cuboid3 = new Cuboid();
+const cuboid3 = new Cuboid(1, 2, 3);
 rotateY(cuboid3, Math.PI / 2);
 rotateZ(cuboid3, Math.PI / 2);
-cuboid3.position.set(1, 0, 0);
+cuboid3.position.set(2, 0, 0);
 
-const cuboid4 = new Cuboid();
+const cuboid4 = new Cuboid(1, 2, 3);
 rotateY(cuboid4, Math.PI / 2);
 rotateZ(cuboid4, Math.PI / 2);
 rotateX(cuboid4, Math.PI / 2);
-cuboid4.position.set(3, 0, 0);
+cuboid4.position.set(8, 0, 0);
 
 scene.add(cuboid1);
 scene.add(cuboid2);
